@@ -3,7 +3,7 @@ extern crate futures;
 #[macro_use] extern crate serde_derive;
 
 use futures::future::Future;
-use actix_web::{actix, actix::System, client, HttpMessage};
+use actix_web::{actix::{self, *}, client, HttpMessage};
 use std::env;
 
 #[derive(Deserialize, Debug)]
@@ -20,12 +20,13 @@ struct GetMe {
     result: Me,
 }
 
-fn main() {
+
+
+fn get_me() -> impl Future<Item = GetMe, Error = ()> {
     let token = env::var("TELEGRAM_TOKEN").unwrap();
     let method = "getMe";
     let url = format!("https://api.telegram.org/bot{}/{}", token, method);
-    actix::run(||
-        client::get(url)   // <- Create request builder
+    client::get(url)   // <- Create request builder
             .header("User-Agent", "Actix-web")
             .finish().unwrap()
             .send()                               // <- Send http request
@@ -34,11 +35,18 @@ fn main() {
                 response
                     .json()
                     .map_err(|_| ())
-                    .and_then(|body: GetMe| {
-                        println!("Response: {:?}", body);
-                        System::current().stop();
-                        Ok(())
-                    })
+            })
+}
+
+fn main() {
+    let sys = System::new("example");
+    Arbiter::spawn(
+        get_me()
+            .and_then(|body: GetMe| {
+                println!("Response: {:?}", body);
+                System::current().stop();
+                Ok(())
             })
     );
+    sys.run();
 }
