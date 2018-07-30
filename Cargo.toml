@@ -1,0 +1,8 @@
+[package]
+name = "actix-telegram"
+version = "0.1.0"
+authors = ["Marat Safin <jeizsm@gmail.com>"]
+
+[dependencies]
+actix-web = { git="https://github.com/jeizsm/actix-web", branch="feature/rustls", features=["rust-tls"] }
+futures = "0.1.23"
