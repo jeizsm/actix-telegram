@@ -2,6 +2,7 @@ extern crate actix_web;
 extern crate futures;
 extern crate tokio;
 #[macro_use] extern crate serde_derive;
+extern crate serde;
 
 mod methods;
 mod types;
@@ -14,7 +15,15 @@ use tokio::timer::Interval;
 use methods::GetMe;
 
 // Define actor
-pub struct Telegram;
+pub struct Telegram {
+    token: String,
+}
+
+impl Telegram {
+    pub fn new(token: String) -> Self {
+        Telegram { token: token }
+    }
+}
 
 // Provide Actor implementation for our actor
 impl Actor for Telegram {

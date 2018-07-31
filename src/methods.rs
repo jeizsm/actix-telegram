@@ -1,36 +1,41 @@
-use std::env;
 use futures::Future;
 use actix_web::{actix::*, client, HttpMessage};
 use super::Telegram;
 use types::TelegramResponse;
+use serde::{Serialize, de::DeserializeOwned};
 
 pub trait TelegramRequest {
-    fn send(&self) -> Box<Future<Item = TelegramResponse, Error = ()>>;
+    fn send(self, token: String) -> Box<Future<Item = TelegramResponse, Error = ()>>;
 }
 
 /// Define message
+#[derive(Serialize, Debug)]
 pub struct GetMe;
 
 impl Message for GetMe {
     type Result = Result<TelegramResponse, ()>;
 }
 
+fn send_request<T, R>(token: String, method: String, item: T) -> Box<Future<Item = R, Error = ()>>
+    where R: DeserializeOwned + 'static,
+    T: Serialize {
+    let url = format!("https://api.telegram.org/bot{}/{}", token, method);
+    let future = client::post(url)
+            .header("User-Agent", "Actix-web")
+            .json(item).unwrap()
+            .send()
+            .map_err(|_| ())
+            .and_then(|response| {
+                response
+                    .json()
+                    .map_err(|_| ())
+            });
+    Box::new(future)
+}
+
 impl TelegramRequest for GetMe {
-    fn send(&self) -> Box<Future<Item = TelegramResponse, Error = ()>> {
-        let token = env::var("TELEGRAM_TOKEN").unwrap();
-        let method = "getMe";
-        let url = format!("https://api.telegram.org/bot{}/{}", token, method);
-        let a = client::get(url)   // <- Create request builder
-                .header("User-Agent", "Actix-web")
-                .finish().unwrap()
-                .send()                               // <- Send http request
-                .map_err(|_| ())
-                .and_then(|response| {                // <- server http response
-                    response
-                        .json()
-                        .map_err(|_| ())
-                });
-        Box::new(a)
+    fn send(self, token: String) -> Box<Future<Item = TelegramResponse, Error = ()>> {
+        send_request(token, "getMe".to_string(), self)
     }
 }
 
@@ -42,7 +47,7 @@ impl<T> Handler<T> for Telegram
     fn handle(&mut self, msg: T, _ctx: &mut Context<Self>) -> Self::Result {
         println!("Ping received");
 
-        msg.send()
+        msg.send(self.token.clone())
     }
 }
 
@@ -50,7 +55,7 @@ impl StreamHandler<GetMe, ()> for Telegram {
     fn handle(&mut self, item: GetMe, ctx: &mut Context<Telegram>) {
         println!("PING");
         ctx.spawn(
-            item.send().and_then(|body| {
+            item.send(self.token.clone()).and_then(|body| {
                 println!("Response: {:?}", body);
                 Ok(())
             }).into_actor(self)
