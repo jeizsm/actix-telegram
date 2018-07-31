@@ -4,6 +4,10 @@ use actix_web::{actix::*, client, HttpMessage};
 use super::Telegram;
 use types::TelegramResponse;
 
+pub trait TelegramRequest {
+    fn send(&self) -> Box<Future<Item = TelegramResponse, Error = ()>>;
+}
+
 /// Define message
 pub struct GetMe;
 
@@ -11,7 +15,7 @@ impl Message for GetMe {
     type Result = Result<TelegramResponse, ()>;
 }
 
-impl GetMe {
+impl TelegramRequest for GetMe {
     fn send(&self) -> Box<Future<Item = TelegramResponse, Error = ()>> {
         let token = env::var("TELEGRAM_TOKEN").unwrap();
         let method = "getMe";
@@ -31,10 +35,11 @@ impl GetMe {
 }
 
 /// Define handler for `GetMe` message
-impl Handler<GetMe> for Telegram {
+impl<T> Handler<T> for Telegram
+    where T: TelegramRequest + Message<Result = Result<TelegramResponse, ()>> {
     type Result = Box<Future<Item = TelegramResponse, Error = ()>>;
 
-    fn handle(&mut self, msg: GetMe, _ctx: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, msg: T, _ctx: &mut Context<Self>) -> Self::Result {
         println!("Ping received");
 
         msg.send()
@@ -42,13 +47,13 @@ impl Handler<GetMe> for Telegram {
 }
 
 impl StreamHandler<GetMe, ()> for Telegram {
-    fn handle(&mut self, item: GetMe, _ctx: &mut Context<Telegram>) {
+    fn handle(&mut self, item: GetMe, ctx: &mut Context<Telegram>) {
         println!("PING");
-        Arbiter::spawn(
+        ctx.spawn(
             item.send().and_then(|body| {
                 println!("Response: {:?}", body);
                 Ok(())
-            })
+            }).into_actor(self)
         );
     }
 
