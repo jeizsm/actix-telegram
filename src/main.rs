@@ -1,9 +1,9 @@
-extern crate actix_web;
 extern crate actix_telegram;
+extern crate actix_web;
 extern crate env_logger;
 
 use actix_telegram::TelegramBot;
-use actix_web::{actix::{System, Actor}};
+use actix_web::actix::{Actor, System};
 use std::env;
 
 fn main() {

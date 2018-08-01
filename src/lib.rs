@@ -1,17 +1,19 @@
 extern crate actix_web;
 extern crate futures;
 extern crate tokio;
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 extern crate serde;
-#[macro_use] extern crate log;
+#[macro_use]
+extern crate log;
 
 mod methods;
 mod types;
 
+use actix_web::actix::{Actor, Addr, Arbiter, AsyncContext, Context};
 use futures::Future;
-use std::time::Duration;
-use actix_web::{actix::{Actor, Addr, Context, Arbiter, AsyncContext}};
 use methods::GetUpdates;
+use std::time::Duration;
 
 pub struct TelegramBot {
     token: String,
@@ -23,7 +25,13 @@ pub struct TelegramBot {
 
 impl TelegramBot {
     pub fn new(token: String, timeout: i32) -> Self {
-        TelegramBot { token, timeout, offset: None, workers: None, threads: 1 }
+        TelegramBot {
+            token,
+            timeout,
+            offset: None,
+            workers: None,
+            threads: 1,
+        }
     }
 }
 
@@ -34,12 +42,14 @@ impl Actor for TelegramBot {
         debug!("TelegramBot is alive");
         let timeout = Duration::from_secs(self.timeout as u64);
 
-        self.workers = Some((0..self.threads).map(|i| {
-            let token = self.token.clone();
-            Arbiter::start(|_a| {
-                TelegramWorker::new(token)
+        let workers = (0..self.threads)
+            .map(|_i| {
+                let token = self.token.clone();
+                Arbiter::start(|_a| TelegramWorker::new(token))
             })
-        }).collect());
+            .collect();
+
+        self.workers = Some(workers);
 
         ctx.run_interval(timeout, |actor, ctx| {
             let get_updates = GetUpdates::new(actor.timeout, actor.offset);

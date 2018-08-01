@@ -1,26 +1,26 @@
+use actix_web::actix::{AsyncContext, Context, Handler, Message, WrapFuture};
+use actix_web::{client, HttpMessage};
+use futures::future::ok;
 use futures::Future;
-use actix_web::{actix::{Message, Handler, Context, AsyncContext, WrapFuture}, client, HttpMessage};
-use types::TelegramResponse;
-use serde::{Serialize, de::DeserializeOwned};
+use serde::{de::DeserializeOwned, Serialize};
 use types::Integer;
+use types::TelegramResponse;
 use TelegramApi;
 use TelegramBot;
-use futures::future::ok;
 
 fn send_request<T, R>(token: &str, method: String, item: &T) -> Box<Future<Item = R, Error = ()>>
-    where R: DeserializeOwned + 'static,
-    T: Serialize {
+where
+    R: DeserializeOwned + 'static,
+    T: Serialize,
+{
     let url = format!("https://api.telegram.org/bot{}/{}", token, method);
     let future = client::post(url)
-            .header("User-Agent", "Actix-web")
-            .json(item).unwrap()
-            .send()
-            .map_err(|e| debug!("{}", e))
-            .and_then(|response| {
-                response
-                    .json()
-                    .map_err(|e| debug!("{}", e))
-            });
+        .header("User-Agent", "Actix-web")
+        .json(item)
+        .unwrap()
+        .send()
+        .map_err(|e| debug!("{}", e))
+        .and_then(|response| response.json().map_err(|e| debug!("{}", e)));
     Box::new(future)
 }
 
@@ -55,7 +55,12 @@ pub struct GetUpdates {
 
 impl GetUpdates {
     pub fn new(timeout: Integer, offset: Option<Integer>) -> Self {
-        GetUpdates { offset, timeout: Some(timeout), allowed_updates: None, limit: None }
+        GetUpdates {
+            offset,
+            timeout: Some(timeout),
+            allowed_updates: None,
+            limit: None,
+        }
     }
 }
 
@@ -79,7 +84,7 @@ impl Handler<GetUpdates> for TelegramBot {
             msg.send(&self.token)
                 .map_err(|e| debug!("{:?}", e))
                 .map(|updates| debug!("{:?}", updates))
-                .into_actor(self)
+                .into_actor(self),
         );
         Box::new(ok(()))
     }
