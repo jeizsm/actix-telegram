@@ -1,26 +1,41 @@
-use TelegramRequest;
 use futures::Future;
 use actix_web::{actix::Message, client, HttpMessage};
 use types::TelegramResponse;
 use serde::{Serialize, de::DeserializeOwned};
+use types::Integer;
+
+pub trait TelegramRequest {
+    fn send(&self, token: &str) -> Box<Future<Item = TelegramResponse, Error = ()>>;
+}
 
 /// Define message
 #[derive(Serialize, Debug)]
 pub struct GetMe;
+
 #[derive(Serialize, Debug)]
 pub struct GetUpdates {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub offset: Option<i64>,
+    pub offset: Option<Integer>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub limit: Option<i64>,
+    pub limit: Option<Integer>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub timeout: Option<i64>,
+    pub timeout: Option<Integer>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_updates: Option<Vec<String>>,
 }
 
+impl GetUpdates {
+    pub fn new(timeout: Integer, offset: Option<Integer>) -> Self {
+        GetUpdates { offset, timeout: Some(timeout), allowed_updates: None, limit: None }
+    }
+}
+
 impl Message for GetMe {
     type Result = Result<TelegramResponse, ()>;
+}
+
+impl Message for GetUpdates {
+    type Result = Result<(), ()>;
 }
 
 fn send_request<T, R>(token: &str, method: String, item: &T) -> Box<Future<Item = R, Error = ()>>

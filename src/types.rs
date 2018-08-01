@@ -1,6 +1,8 @@
+pub type Integer = i32;
+
 #[derive(Deserialize, Debug)]
 pub struct User {
-    id: i64,
+    id: Integer,
     is_bot: bool,
     first_name: String,
     username: String,
@@ -14,5 +16,5 @@ pub struct TelegramResponse {
 
 #[derive(Deserialize, Debug)]
 pub struct Update {
-    update_id: i64,
+    update_id: Integer,
 }
