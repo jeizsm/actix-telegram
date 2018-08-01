@@ -8,7 +8,7 @@ use types::TelegramResponse;
 use TelegramApi;
 use TelegramBot;
 
-fn send_request<T, R>(token: &str, method: String, item: &T) -> Box<Future<Item = R, Error = ()>>
+fn send_request<T, R>(token: &str, method: &str, item: &T) -> Box<Future<Item = R, Error = ()>>
 where
     R: DeserializeOwned + 'static,
     T: Serialize,
@@ -37,7 +37,7 @@ impl Message for GetMe {
 
 impl TelegramRequest for GetMe {
     fn send(&self, token: &str) -> Box<Future<Item = TelegramResponse, Error = ()>> {
-        send_request(token, "getMe".to_string(), self)
+        send_request(token, "getMe", self)
     }
 }
 
@@ -70,7 +70,7 @@ impl Message for GetUpdates {
 
 impl TelegramRequest for GetUpdates {
     fn send(&self, token: &str) -> Box<Future<Item = TelegramResponse, Error = ()>> {
-        send_request(token, "getUpdates".to_string(), self)
+        send_request(token, "getUpdates", self)
     }
 }
 

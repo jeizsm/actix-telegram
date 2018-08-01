@@ -11,7 +11,6 @@ mod methods;
 mod types;
 
 use actix_web::actix::{Actor, Addr, Arbiter, AsyncContext, Context};
-use futures::Future;
 use methods::GetUpdates;
 use std::time::Duration;
 
@@ -75,7 +74,7 @@ impl TelegramApi {
 impl Actor for TelegramApi {
     type Context = Context<Self>;
 
-    fn started(&mut self, ctx: &mut Context<Self>) {
+    fn started(&mut self, _ctx: &mut Context<Self>) {
         debug!("TelegramApi is alive");
     }
 
@@ -97,7 +96,7 @@ impl TelegramWorker {
 impl Actor for TelegramWorker {
     type Context = Context<Self>;
 
-    fn started(&mut self, ctx: &mut Context<Self>) {
+    fn started(&mut self, _ctx: &mut Context<Self>) {
         debug!("TelegramWorker is alive");
     }
 
