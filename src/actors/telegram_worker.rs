@@ -1,18 +1,22 @@
-use actix::{Message};
-use actix::{Actor, Context, Handler};
+use actix::{Actor, Context, Handler, Message};
 use types::Update;
 
 pub struct TelegramWorker {
-    apps: Box<Fn(Update)>,
+    apps: Vec<Box<Fn(Update) -> Result<(), Update>>>,
 }
 
 impl TelegramWorker {
     pub fn new() -> TelegramWorker {
         let app = |a| {
             debug!("TelegramWorker.App {:?}", a);
+            Ok(())
+        };
+        let second_app = |a| {
+            debug!("TelegramWorker.App {:?}", a);
+            Err(a)
         };
         TelegramWorker {
-            apps: Box::new(app),
+            apps: vec![Box::new(second_app), Box::new(app)],
         }
     }
 }
@@ -32,9 +36,20 @@ impl Actor for TelegramWorker {
 impl Handler<Update> for TelegramWorker {
     type Result = Result<(), ()>;
 
-    fn handle(&mut self, msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, mut msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
-        (self.apps)(msg);
+        for app in &self.apps {
+            msg = match (app)(msg) {
+                Ok(()) => {
+                    debug!("ok");
+                    return Ok(());
+                }
+                Err(msg) => {
+                    debug!("next");
+                    msg
+                }
+            };
+        }
         Ok(())
     }
 }

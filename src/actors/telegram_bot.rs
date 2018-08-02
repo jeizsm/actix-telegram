@@ -1,12 +1,10 @@
-use actix::{ActorFuture, WrapFuture};
-use actix::{Actor, Addr, Arbiter, AsyncContext, Context, StreamHandler};
-use actix_web::{client, HttpMessage};
-use futures::{Future,Stream};
-use std::time::{Duration, Instant};
-use tokio::timer::Interval;
 use super::telegram_worker::TelegramWorker;
-use tokio::timer;
+use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
+use actix_web::{client, HttpMessage};
+use futures::{Future, Stream};
 use methods::GetUpdates;
+use std::time::{Duration, Instant};
+use tokio::timer::{self, Interval};
 use types::TelegramResponse;
 
 #[derive(Serialize, Debug)]
@@ -17,7 +15,7 @@ pub struct TelegramBot {
     timeout: Duration,
     offset: Option<i32>,
     workers: Vec<Addr<TelegramWorker>>,
-    threads: u8,
+    threads: usize,
 }
 
 impl TelegramBot {
@@ -77,8 +75,8 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
             |response: TelegramResponse, actor, _ctx| {
                 debug!("response received {:?}", response);
                 actor.offset = response.result.last().map(|i| i.update_id + 1);
-                for result in response.result {
-                    actor.workers[0].do_send(result);
+                for (i, result) in response.result.into_iter().enumerate() {
+                    actor.workers[i % actor.threads].do_send(result);
                 }
             },
         );

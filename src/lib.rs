@@ -8,8 +8,8 @@ extern crate serde;
 #[macro_use]
 extern crate log;
 
+mod actors;
 pub mod methods;
 pub mod types;
-mod actors;
 
 pub use actors::{TelegramApi, TelegramBot};

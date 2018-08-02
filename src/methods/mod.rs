@@ -1,12 +1,12 @@
 mod get_me;
 mod get_updates;
 
-use serde::{Serialize, de::DeserializeOwned};
-pub use self::get_updates::GetUpdates;
 pub use self::get_me::GetMe;
-use futures::Future;
-use types::TelegramResponse;
+pub use self::get_updates::GetUpdates;
 use actix_web::{client, HttpMessage};
+use futures::Future;
+use serde::{de::DeserializeOwned, Serialize};
+use types::TelegramResponse;
 
 pub trait TelegramRequest {
     fn send(&self, token: &str) -> Box<Future<Item = TelegramResponse, Error = ()>>;

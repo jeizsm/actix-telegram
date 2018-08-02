@@ -1,8 +1,8 @@
-use types::TelegramResponse;
-use actix::Message;
-use futures::Future;
 use super::send_request;
 use super::TelegramRequest;
+use actix::Message;
+use futures::Future;
+use types::TelegramResponse;
 
 #[derive(Serialize, Debug)]
 pub struct GetMe;

@@ -1,7 +1,7 @@
 use actix::Message;
-use types::{Integer, TelegramResponse};
-use std::time::Duration;
 use serde::{Serialize, Serializer};
+use std::time::Duration;
+use types::{Integer, TelegramResponse};
 
 #[derive(Debug, Serialize)]
 pub struct UpdateId(i32);
@@ -21,7 +21,7 @@ pub struct GetUpdates {
 
 impl GetUpdates {
     pub fn new(timeout: Duration, offset: Option<i32>) -> Self {
-        let offset = offset.map(|offset| UpdateId(offset));
+        let offset = offset.map(UpdateId);
         GetUpdates {
             offset,
             timeout: Some(timeout),
@@ -36,7 +36,11 @@ impl Message for GetUpdates {
 }
 
 fn serialize_duration<S>(duration: &Option<Duration>, serializer: S) -> Result<S::Ok, S::Error>
-    where S: Serializer
+where
+    S: Serializer,
 {
-    duration.as_ref().map(|duration| duration.as_secs()).serialize(serializer)
+    duration
+        .as_ref()
+        .map(|duration| duration.as_secs())
+        .serialize(serializer)
 }
