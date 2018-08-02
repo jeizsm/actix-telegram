@@ -11,36 +11,29 @@ extern crate log;
 mod methods;
 mod types;
 
-use actix::{Actor, Addr, Arbiter, AsyncContext, Context};
-use actix_web::client::{self, ClientRequestBuilder};
-use futures::Stream;
-use methods::PollUpdates;
+use actix::{ActorFuture, Message, WrapFuture};
+use actix::{Actor, Addr, Arbiter, AsyncContext, Context, Handler, StreamHandler};
+use actix_web::{client, HttpMessage};
+use futures::{Future,Stream};
 use std::time::{Duration, Instant};
 use tokio::timer::Interval;
+use types::Update;
 
 pub struct TelegramBot {
     token: String,
     timeout: i32,
     offset: Option<i32>,
-    client: ClientRequestBuilder,
-    workers: Option<Vec<Addr<TelegramWorker>>>,
+    workers: Vec<Addr<TelegramWorker>>,
     threads: u8,
 }
 
 impl TelegramBot {
     pub fn new(token: String, timeout: i32) -> Self {
-        let url = format!("https://api.telegram.org/bot{}/getUpdates", token);
-        let mut client = client::post(url);
-        client
-            .header("User-Agent", "actix-web")
-            .timeout(Duration::from_secs(timeout as u64 + 1));
-
         TelegramBot {
             token,
             timeout,
             offset: None,
-            client,
-            workers: None,
+            workers: Vec::new(),
             threads: 1,
         }
     }
@@ -54,12 +47,9 @@ impl Actor for TelegramBot {
         let timeout = Duration::from_secs(self.timeout as u64);
 
         let workers = (0..self.threads)
-            .map(|_i| {
-                let token = self.token.clone();
-                Arbiter::start(|_a| TelegramWorker::new(token))
-            })
+            .map(|_i| Arbiter::start(|_a| TelegramWorker::new()))
             .collect();
-        self.workers = Some(workers);
+        self.workers = workers;
 
         let stream = Interval::new(Instant::now(), timeout).map(|_| PollUpdates);
         ctx.add_stream(stream);
@@ -93,12 +83,17 @@ impl Actor for TelegramApi {
 }
 
 pub struct TelegramWorker {
-    token: String,
+    apps: Box<Fn(Update)>,
 }
 
 impl TelegramWorker {
-    fn new(token: String) -> TelegramWorker {
-        TelegramWorker { token }
+    fn new() -> TelegramWorker {
+        let app = |a| {
+            debug!("TelegramWorker.App {:?}", a);
+        };
+        TelegramWorker {
+            apps: Box::new(app),
+        }
     }
 }
 
@@ -112,4 +107,55 @@ impl Actor for TelegramWorker {
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
         debug!("TelegramWorker is stopped");
     }
+}
+
+#[derive(Serialize, Debug)]
+pub struct PollUpdates;
+
+impl StreamHandler<PollUpdates, tokio::timer::Error> for TelegramBot {
+    fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
+        let msg = methods::GetUpdates::new(self.timeout, self.offset);
+        debug!("TelegramBot.GetUpdates {:?}", msg);
+
+        let url = format!("https://api.telegram.org/bot{}/getUpdates", self.token);
+        let mut client = client::post(url);
+        client
+            .header("User-Agent", "actix-web")
+            .timeout(Duration::from_secs(self.timeout as u64 + 1));
+
+        let future = client
+            .json(msg)
+            .unwrap()
+            .send()
+            .map_err(|e| debug!("request error {:?}", e))
+            .and_then(|response| {
+                response
+                    .json()
+                    .map_err(|e| debug!("parsing json error {:?}", e))
+            });
+        let actor_future = future.into_actor(self).map(
+            |response: types::TelegramResponse, actor, _ctx| {
+                debug!("response received {:?}", response);
+                actor.offset = response.result.last().map(|i| i.update_id + 1);
+                for result in response.result {
+                    actor.workers[0].do_send(result);
+                }
+            },
+        );
+        ctx.wait(actor_future);
+    }
+}
+
+impl Handler<Update> for TelegramWorker {
+    type Result = Result<(), ()>;
+
+    fn handle(&mut self, msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
+        debug!("TelegramWorker.Update received {:?}", msg);
+        (self.apps)(msg);
+        Ok(())
+    }
+}
+
+impl Message for Update {
+    type Result = Result<(), ()>;
 }
