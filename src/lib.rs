@@ -1,3 +1,4 @@
+extern crate actix;
 extern crate actix_web;
 extern crate futures;
 extern crate tokio;
@@ -10,24 +11,35 @@ extern crate log;
 mod methods;
 mod types;
 
-use actix_web::actix::{Actor, Addr, Arbiter, AsyncContext, Context};
-use methods::GetUpdates;
-use std::time::Duration;
+use actix::{Actor, Addr, Arbiter, AsyncContext, Context};
+use actix_web::client::{self, ClientRequestBuilder};
+use futures::Stream;
+use methods::PollUpdates;
+use std::time::{Duration, Instant};
+use tokio::timer::Interval;
 
 pub struct TelegramBot {
     token: String,
     timeout: i32,
     offset: Option<i32>,
+    client: ClientRequestBuilder,
     workers: Option<Vec<Addr<TelegramWorker>>>,
     threads: u8,
 }
 
 impl TelegramBot {
     pub fn new(token: String, timeout: i32) -> Self {
+        let url = format!("https://api.telegram.org/bot{}/getUpdates", token);
+        let mut client = client::post(url);
+        client
+            .header("User-Agent", "actix-web")
+            .timeout(Duration::from_secs(timeout as u64 + 1));
+
         TelegramBot {
             token,
             timeout,
             offset: None,
+            client,
             workers: None,
             threads: 1,
         }
@@ -47,13 +59,10 @@ impl Actor for TelegramBot {
                 Arbiter::start(|_a| TelegramWorker::new(token))
             })
             .collect();
-
         self.workers = Some(workers);
 
-        ctx.run_interval(timeout, |actor, ctx| {
-            let get_updates = GetUpdates::new(actor.timeout, actor.offset);
-            ctx.address().do_send(get_updates);
-        });
+        let stream = Interval::new(Instant::now(), timeout).map(|_| PollUpdates);
+        ctx.add_stream(stream);
     }
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {

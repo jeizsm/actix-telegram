@@ -2,19 +2,19 @@ pub type Integer = i32;
 
 #[derive(Deserialize, Debug)]
 pub struct User {
-    id: Integer,
-    is_bot: bool,
-    first_name: String,
-    username: String,
+    pub id: Integer,
+    pub is_bot: bool,
+    pub first_name: String,
+    pub username: String,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct TelegramResponse {
-    ok: bool,
-    result: Vec<Update>,
+    pub ok: bool,
+    pub result: Vec<Update>,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Update {
-    update_id: Integer,
+    pub update_id: Integer,
 }

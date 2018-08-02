@@ -1,10 +1,9 @@
-use actix_web::actix::{AsyncContext, Context, Handler, Message, WrapFuture};
+use actix::{ActorFuture, AsyncContext, Context, Handler, Message, StreamHandler, WrapFuture};
 use actix_web::{client, HttpMessage};
-use futures::future::ok;
 use futures::Future;
 use serde::{de::DeserializeOwned, Serialize};
-use types::Integer;
-use types::TelegramResponse;
+use tokio::timer::Error;
+use types::{Integer, TelegramResponse};
 use TelegramApi;
 use TelegramBot;
 
@@ -19,8 +18,8 @@ where
         .json(item)
         .unwrap()
         .send()
-        .map_err(|e| debug!("{}", e))
-        .and_then(|response| response.json().map_err(|e| debug!("{}", e)));
+        .map_err(|e| debug!("{:?}", e))
+        .and_then(|response| response.json().map_err(|e| debug!("{:?}", e)));
     Box::new(future)
 }
 
@@ -65,7 +64,7 @@ impl GetUpdates {
 }
 
 impl Message for GetUpdates {
-    type Result = Result<(), ()>;
+    type Result = Result<TelegramResponse, ()>;
 }
 
 impl TelegramRequest for GetUpdates {
@@ -74,18 +73,27 @@ impl TelegramRequest for GetUpdates {
     }
 }
 
-impl Handler<GetUpdates> for TelegramBot {
-    type Result = Box<Future<Item = (), Error = ()>>;
+#[derive(Serialize, Debug)]
+pub struct PollUpdates;
 
-    fn handle(&mut self, msg: GetUpdates, ctx: &mut Context<Self>) -> Self::Result {
-        debug!("GetUpdates received");
+impl StreamHandler<PollUpdates, Error> for TelegramBot {
+    fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
+        debug!("TelegramBot.GetUpdates received");
+        let msg = GetUpdates::new(self.timeout, self.offset);
         debug!("{:?}", msg);
-        ctx.spawn(
-            msg.send(&self.token)
-                .map_err(|e| debug!("{:?}", e))
-                .map(|updates| debug!("{:?}", updates))
-                .into_actor(self),
+
+        let future = self.client
+            .json(msg)
+            .unwrap()
+            .send()
+            .map_err(|e| debug!("{:?}", e))
+            .and_then(|response| response.json().map_err(|e| debug!("{:?}", e)));
+        let actor_future = future.into_actor(self).map(
+            |response: TelegramResponse, actor, _ctx| {
+                debug!("{:?}", response);
+                actor.offset = response.result.last().map(|i| i.update_id + 1);
+            },
         );
-        Box::new(ok(()))
+        ctx.wait(actor_future);
     }
 }
