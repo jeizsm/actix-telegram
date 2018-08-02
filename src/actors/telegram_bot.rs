@@ -52,7 +52,8 @@ impl Actor for TelegramBot {
 
 impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
     fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
-        let msg = GetUpdates::new(self.timeout, self.offset);
+        let timeout = self.timeout.as_secs() as u16 - 1;
+        let msg = GetUpdates::new(timeout, self.offset);
         debug!("TelegramBot.GetUpdates {:?}", msg);
 
         let url = format!("https://api.telegram.org/bot{}/getUpdates", self.token);
@@ -80,6 +81,6 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                 }
             },
         );
-        ctx.wait(actor_future);
+        ctx.spawn(actor_future);
     }
 }
