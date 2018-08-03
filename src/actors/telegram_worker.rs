@@ -1,12 +1,14 @@
-use actix::{Actor, Context, Handler, Message};
+use actix::{Actor, Context, Handler, Message, Addr};
 use types::Update;
+use super::telegram_api::TelegramApi;
 
 pub struct TelegramWorker {
     apps: Vec<Box<Fn(Update) -> Result<(), Update>>>,
+    telegram_api: Addr<TelegramApi>,
 }
 
 impl TelegramWorker {
-    pub fn new() -> TelegramWorker {
+    pub fn new(telegram_api: Addr<TelegramApi>) -> TelegramWorker {
         let app = |a| {
             debug!("TelegramWorker.App {:?}", a);
             Ok(())
@@ -17,6 +19,7 @@ impl TelegramWorker {
         };
         TelegramWorker {
             apps: vec![Box::new(second_app), Box::new(app)],
+            telegram_api: telegram_api,
         }
     }
 }

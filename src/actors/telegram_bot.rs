@@ -1,7 +1,6 @@
-use super::telegram_worker::TelegramWorker;
+use super::{telegram_api::TelegramApi, telegram_worker::TelegramWorker};
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
-use actix_web::{client, HttpMessage};
-use futures::{Future, Stream};
+use futures::Stream;
 use methods::GetUpdates;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
@@ -14,6 +13,7 @@ pub struct TelegramBot {
     token: String,
     timeout: Duration,
     offset: Option<i32>,
+    telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
 }
@@ -24,6 +24,7 @@ impl TelegramBot {
             token,
             timeout,
             offset: None,
+            telegram_api: None,
             workers: Vec::new(),
             threads: 1,
         }
@@ -36,13 +37,17 @@ impl Actor for TelegramBot {
     fn started(&mut self, ctx: &mut Context<Self>) {
         debug!("TelegramBot is alive");
 
+        let telegram_api = TelegramApi::new(self.token.clone(), self.timeout).start();
         let workers = (0..self.threads)
-            .map(|_i| Arbiter::start(|_a| TelegramWorker::new()))
+            .map(|_i| {
+                let clone = telegram_api.clone();
+                Arbiter::start(|_a| TelegramWorker::new(clone))
+            })
             .collect();
         self.workers = workers;
+        self.telegram_api = Some(telegram_api);
 
         ctx.set_mailbox_capacity(1);
-
         let stream = Interval::new(Instant::now(), Duration::from_secs(1)).map(|_| PollUpdates);
         ctx.add_stream(stream);
     }
@@ -58,31 +63,19 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
         let msg = GetUpdates::new(timeout, self.offset);
         debug!("TelegramBot.GetUpdates {:?}", msg);
 
-        let url = format!("https://api.telegram.org/bot{}/getUpdates", self.token);
-        let mut client = client::post(url);
-        client
-            .header("User-Agent", "actix-web")
-            .timeout(self.timeout);
-
-        let future = client
-            .json(msg)
-            .unwrap()
-            .send()
-            .map_err(|e| debug!("request error {:?}", e))
-            .and_then(|response| {
-                response
-                    .json()
-                    .map_err(|e| debug!("parsing json error {:?}", e))
-            });
-        let actor_future = future.into_actor(self).map(
-            |response: TelegramResponse, actor, _ctx| {
+        let telegram_api = self.telegram_api.as_ref().unwrap();
+        let actor_future = telegram_api
+            .send(msg)
+            .into_actor(self)
+            .map(|response: Result<TelegramResponse, ()>, actor, _ctx| {
                 debug!("response received {:?}", response);
+                let response = response.unwrap();
                 actor.offset = response.result.last().map(|i| i.update_id + 1);
                 for (i, result) in response.result.into_iter().enumerate() {
-                    actor.workers[i % actor.threads].send(result);
+                    actor.workers[i % actor.threads].do_send(result);
                 }
-            },
-        );
+            })
+            .map_err(|e, _actor, _ctx| debug!("mailbox error {:?}", e));
         ctx.wait(actor_future);
     }
 }

@@ -1,5 +1,9 @@
-use actix::Message;
+use actix::{Context, Handler, Message};
+use actix_web::{client, HttpMessage};
+use actors::TelegramApi;
+use futures::Future;
 use std::num::{NonZeroU16, NonZeroU32, NonZeroU8};
+use std::time::Duration;
 use types::TelegramResponse;
 
 #[derive(Debug, Serialize)]
@@ -35,4 +39,30 @@ impl GetUpdates {
 
 impl Message for GetUpdates {
     type Result = Result<TelegramResponse, ()>;
+}
+
+impl Handler<GetUpdates> for TelegramApi {
+    type Result = Box<Future<Item = TelegramResponse, Error = ()>>;
+
+    fn handle(&mut self, msg: GetUpdates, _ctx: &mut Context<Self>) -> Self::Result {
+        let url = format!("https://api.telegram.org/bot{}/getUpdates", self.token);
+        let mut client = client::post(url);
+        client.header("User-Agent", "actix-web").timeout(
+            msg.timeout.map_or(self.timeout, |timeout| {
+                Duration::from_secs(timeout.get() as u64)
+            }),
+        );
+
+        let future = client
+            .json(msg)
+            .unwrap()
+            .send()
+            .map_err(|e| debug!("request error {:?}", e))
+            .and_then(|response| {
+                response
+                    .json()
+                    .map_err(|e| debug!("parsing json error {:?}", e))
+            });
+        Box::new(future)
+    }
 }

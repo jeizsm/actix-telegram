@@ -1,12 +1,14 @@
 use actix::{Actor, Context};
+use std::time::Duration;
 
 pub struct TelegramApi {
-    token: String,
+    pub(crate) token: String,
+    pub(crate) timeout: Duration,
 }
 
 impl TelegramApi {
-    fn new(token: String) -> TelegramApi {
-        TelegramApi { token }
+    pub fn new(token: String, timeout: Duration) -> TelegramApi {
+        TelegramApi { token, timeout }
     }
 }
 
