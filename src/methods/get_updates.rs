@@ -1,6 +1,6 @@
 use actix::Message;
+use std::num::{NonZeroU16, NonZeroU32, NonZeroU8};
 use types::TelegramResponse;
-use std::num::{NonZeroU8, NonZeroU32, NonZeroU16};
 
 #[derive(Debug, Serialize)]
 struct UpdateId(NonZeroU32);
@@ -19,8 +19,9 @@ pub struct GetUpdates {
 
 impl GetUpdates {
     pub fn new(timeout: u16, offset: Option<i32>) -> Self {
-        let timeout = unsafe { Some(NonZeroU16::new_unchecked(timeout)) } ;
-        let offset = unsafe { offset.map(|offset| UpdateId(NonZeroU32::new_unchecked(offset as u32))) };
+        let timeout = unsafe { Some(NonZeroU16::new_unchecked(timeout)) };
+        let offset =
+            unsafe { offset.map(|offset| UpdateId(NonZeroU32::new_unchecked(offset as u32))) };
         let allowed_updates = None;
         let limit = None;
         GetUpdates {

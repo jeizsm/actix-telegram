@@ -41,7 +41,9 @@ impl Actor for TelegramBot {
             .collect();
         self.workers = workers;
 
-        let stream = Interval::new(Instant::now(), self.timeout).map(|_| PollUpdates);
+        ctx.set_mailbox_capacity(1);
+
+        let stream = Interval::new(Instant::now(), Duration::from_secs(1)).map(|_| PollUpdates);
         ctx.add_stream(stream);
     }
 
@@ -77,10 +79,10 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                 debug!("response received {:?}", response);
                 actor.offset = response.result.last().map(|i| i.update_id + 1);
                 for (i, result) in response.result.into_iter().enumerate() {
-                    actor.workers[i % actor.threads].do_send(result);
+                    actor.workers[i % actor.threads].send(result);
                 }
             },
         );
-        ctx.spawn(actor_future);
+        ctx.wait(actor_future);
     }
 }

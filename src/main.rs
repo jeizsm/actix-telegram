@@ -11,6 +11,6 @@ fn main() {
     env_logger::init();
     let sys = System::new("example");
     let token = env::var("TELEGRAM_TOKEN").unwrap();
-    let _telegram = TelegramBot::new(token, Duration::from_secs(5)).start();
+    let _telegram = TelegramBot::new(token, Duration::from_secs(30)).start();
     sys.run();
 }
