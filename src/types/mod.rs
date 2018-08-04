@@ -1,7 +1,13 @@
 use std::num::NonZeroU32;
 
-#[derive(Deserialize, Debug)]
-pub struct UserId(pub i32);
+#[derive(Serialize, Deserialize, Debug, NewType)]
+pub struct UserId(i32);
+
+#[derive(Serialize, Deserialize, Debug, NewType)]
+pub struct ChatId(i64);
+
+#[derive(Serialize, Deserialize, Debug, NewType)]
+pub struct MessageId(i32);
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 pub struct UpdateId(NonZeroU32);
@@ -28,7 +34,9 @@ pub struct User {
     pub id: UserId,
     pub is_bot: bool,
     pub first_name: String,
-    pub username: String,
+    pub last_name: Option<String>,
+    pub username: Option<String>,
+    pub language_code: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]

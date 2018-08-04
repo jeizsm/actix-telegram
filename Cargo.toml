@@ -6,6 +6,7 @@ authors = ["Marat Safin <jeizsm@gmail.com>"]
 [dependencies]
 actix = "0.7.3"
 actix-web = { version="0.7.3", features=["rust-tls"] }
+actix-telegram-derive = { path="../actix-telegram-derive" }
 futures = "0.1.23"
 serde = "1.0.70"
 serde_derive = "1.0.70"
