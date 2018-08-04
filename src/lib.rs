@@ -8,7 +8,7 @@ extern crate serde;
 #[macro_use]
 extern crate log;
 
-mod actors;
+pub mod actors;
 pub mod methods;
 pub mod types;
 

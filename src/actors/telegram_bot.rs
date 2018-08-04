@@ -1,7 +1,11 @@
-use super::{TelegramApi, TelegramWorker};
+use super::{
+    telegram_worker::{App, TelegramWorker},
+    TelegramApi,
+};
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
 use methods::GetUpdates;
+use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
 use types::TelegramResponse;
@@ -16,10 +20,11 @@ pub struct TelegramBot {
     telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
+    apps: Arc<App>,
 }
 
 impl TelegramBot {
-    pub fn new(token: String, timeout: Duration) -> Self {
+    pub fn new(token: String, timeout: Duration, apps: App) -> Self {
         TelegramBot {
             token,
             timeout,
@@ -27,6 +32,7 @@ impl TelegramBot {
             telegram_api: None,
             workers: Vec::new(),
             threads: 1,
+            apps: Arc::new(apps),
         }
     }
 }
@@ -41,7 +47,8 @@ impl Actor for TelegramBot {
         let workers = (0..self.threads)
             .map(|_i| {
                 let clone = telegram_api.clone();
-                Arbiter::start(|_a| TelegramWorker::new(clone))
+                let arc = self.apps.clone();
+                Arbiter::start(move |_a| TelegramWorker::new(clone, arc))
             })
             .collect();
         self.workers = workers;
@@ -68,8 +75,8 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
             .send(msg)
             .into_actor(self)
             .map(|response: Result<TelegramResponse, ()>, actor, _ctx| {
-                debug!("response received {:?}", response);
                 let response = response.unwrap();
+                debug!("response received {:?}", response);
                 actor.offset = response.result.last().map(|i| i.update_id + 1);
                 for (i, result) in response.result.into_iter().enumerate() {
                     actor.workers[i % actor.threads].do_send(result);
