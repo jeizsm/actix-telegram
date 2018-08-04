@@ -3,12 +3,12 @@ use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
 use types::Update;
 
-pub struct App(Box<Fn(Update) -> Result<(), Update> + Sync + Send + 'static>);
+pub struct App(Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static>);
 
 impl App {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(Update) -> Result<(), Update> + Sync + Send + 'static,
+        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static,
     {
         App(Box::new(f))
     }
@@ -43,7 +43,7 @@ impl Handler<Update> for TelegramWorker {
     fn handle(&mut self, mut msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
         for app in self.apps.iter() {
-            msg = match (app.0)(msg) {
+            msg = match (app.0)(msg, &self.telegram_api) {
                 Ok(()) => {
                     debug!("ok");
                     return Ok(());

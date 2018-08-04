@@ -28,7 +28,7 @@ dependencies = [
 
 [[package]]
 name = "actix-telegram"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
  "actix 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 0.7.3 (registry+https://github.com/rust-lang/crates.io-index)",
