@@ -24,7 +24,8 @@ pub struct TelegramBot {
 }
 
 impl TelegramBot {
-    pub fn new(token: String, timeout: Duration, apps: Vec<App>) -> Self {
+    pub fn new(token: String, timeout: u16, apps: Vec<App>) -> Self {
+        let timeout = Duration::from_secs(u64::from(timeout));
         TelegramBot {
             token,
             timeout,
@@ -43,7 +44,7 @@ impl Actor for TelegramBot {
     fn started(&mut self, ctx: &mut Context<Self>) {
         debug!("TelegramBot is alive");
 
-        let telegram_api = TelegramApi::new(self.token.clone(), self.timeout).start();
+        let telegram_api = TelegramApi::new(self.token.clone(), self.timeout.as_secs() as u16).start();
         let workers = (0..self.threads)
             .map(|_i| {
                 let clone = telegram_api.clone();
@@ -66,7 +67,7 @@ impl Actor for TelegramBot {
 
 impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
     fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
-        let timeout = self.timeout.as_secs() as u16 - 1;
+        let timeout = self.timeout.as_secs() as u16;
         let msg = GetUpdates::new(timeout, self.offset);
         debug!("TelegramBot.GetUpdates {:?}", msg);
 

@@ -8,7 +8,7 @@ extern crate log;
 use actix_telegram::actors::telegram_worker::App;
 use actix_telegram::TelegramBot;
 use actix_web::actix::{Actor, System};
-use std::{env, time::Duration};
+use std::env;
 
 fn main() {
     env_logger::init();
@@ -23,6 +23,6 @@ fn main() {
         Ok(())
     });
 
-    let _telegram = TelegramBot::new(token, Duration::from_secs(30), vec![second_app, app]).start();
+    let _telegram = TelegramBot::new(token, 30, vec![second_app, app]).start();
     sys.run();
 }

@@ -46,7 +46,7 @@ impl Handler<GetUpdates> for TelegramApi {
 
     fn handle(&mut self, msg: GetUpdates, _ctx: &mut Context<Self>) -> Self::Result {
         let timeout = msg.timeout.map_or(self.timeout, |timeout| {
-            Duration::from_secs(u64::from(timeout.get()))
+            Duration::from_secs(u64::from(timeout.get()) + 5)
         });
 
         send_request(&self.token, "getUpdates", timeout, &msg)
