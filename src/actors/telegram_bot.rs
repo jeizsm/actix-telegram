@@ -8,7 +8,6 @@ use methods::GetUpdates;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
-use types::TelegramResponse;
 
 #[derive(Serialize, Debug)]
 struct PollUpdates;
@@ -44,7 +43,8 @@ impl Actor for TelegramBot {
     fn started(&mut self, ctx: &mut Context<Self>) {
         debug!("TelegramBot is alive");
 
-        let telegram_api = TelegramApi::new(self.token.clone(), self.timeout.as_secs() as u16).start();
+        let telegram_api =
+            TelegramApi::new(self.token.clone(), self.timeout.as_secs() as u16).start();
         let workers = (0..self.threads)
             .map(|_i| {
                 let clone = telegram_api.clone();
@@ -75,15 +75,18 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
         let actor_future = telegram_api
             .send(msg)
             .into_actor(self)
-            .map(|response: Result<TelegramResponse, ()>, actor, _ctx| {
-                let response = response.unwrap();
-                debug!("response received {:?}", response);
-                actor.offset = response.result.last().map(|i| i.update_id + 1);
-                for (i, result) in response.result.into_iter().enumerate() {
-                    actor.workers[i % actor.threads].do_send(result);
-                }
+            .map(|response, actor, _ctx| {
+                let _ = response
+                    .map(|response| {
+                        debug!("response received {:?}", response);
+                        actor.offset = response.result.last().map(|i| i.update_id + 1);
+                        for (i, result) in response.result.into_iter().enumerate() {
+                            actor.workers[i % actor.threads].do_send(result);
+                        }
+                    })
+                    .map_err(|e| error!("response error {:?}", e));
             })
-            .map_err(|e, _actor, _ctx| debug!("mailbox error {:?}", e));
+            .map_err(|e, _actor, _ctx| error!("mailbox error {:?}", e));
         ctx.wait(actor_future);
     }
 }

@@ -34,11 +34,11 @@ where
         .json(item)
         .unwrap()
         .send()
-        .map_err(|e| debug!("request error {:?}", e))
+        .map_err(|e| error!("request error {:?}", e))
         .and_then(|response| {
             response
                 .json()
-                .map_err(|e| debug!("parsing json error {:?}", e))
+                .map_err(|e| error!("parsing json error {:?}", e))
         });
     Box::new(future)
 }

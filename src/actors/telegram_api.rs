@@ -8,7 +8,7 @@ pub struct TelegramApi {
 
 impl TelegramApi {
     pub fn new(token: String, timeout: u16) -> TelegramApi {
-        let timeout = Duration::from_secs(timeout as u64);
+        let timeout = Duration::from_secs(u64::from(timeout));
         TelegramApi { token, timeout }
     }
 }
