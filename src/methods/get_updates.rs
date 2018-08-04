@@ -4,7 +4,7 @@ use actors::TelegramApi;
 use futures::Future;
 use std::num::{NonZeroU16, NonZeroU8};
 use std::time::Duration;
-use types::{TelegramResponse, UpdateId};
+use types::{Update, UpdateId};
 
 #[derive(Serialize, Debug)]
 pub struct GetUpdates {
@@ -33,11 +33,11 @@ impl GetUpdates {
 }
 
 impl Message for GetUpdates {
-    type Result = Result<TelegramResponse, ()>;
+    type Result = Result<Vec<Update>, ()>;
 }
 
 impl Handler<GetUpdates> for TelegramApi {
-    type Result = Box<Future<Item = TelegramResponse, Error = ()>>;
+    type Result = Box<Future<Item = Vec<Update>, Error = ()>>;
 
     fn handle(&mut self, msg: GetUpdates, _ctx: &mut Context<Self>) -> Self::Result {
         let timeout = msg.timeout.map_or(self.timeout, |timeout| {

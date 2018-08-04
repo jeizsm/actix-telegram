@@ -1,6 +1,6 @@
 [package]
 name = "actix-telegram"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 
 [dependencies]

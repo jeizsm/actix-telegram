@@ -17,17 +17,18 @@ impl UpdateId {
 }
 
 #[derive(Deserialize, Debug)]
+pub struct TelegramResponse<T> {
+    pub ok: bool,
+    pub description: Option<String>,
+    pub result: Option<T>,
+}
+
+#[derive(Deserialize, Debug)]
 pub struct User {
     pub id: UserId,
     pub is_bot: bool,
     pub first_name: String,
     pub username: String,
-}
-
-#[derive(Deserialize, Debug)]
-pub struct TelegramResponse {
-    pub ok: bool,
-    pub result: Vec<Update>,
 }
 
 #[derive(Deserialize, Debug)]

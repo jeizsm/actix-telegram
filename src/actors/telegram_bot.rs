@@ -81,10 +81,9 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                     .map(|response| {
                         debug!("response received {:?}", response);
                         actor.offset = response
-                            .result
                             .last()
                             .map(|i| UpdateId::new(i.update_id.get() + 1));
-                        for (i, result) in response.result.into_iter().enumerate() {
+                        for (i, result) in response.into_iter().enumerate() {
                             actor.workers[i % actor.threads].do_send(result);
                         }
                     })

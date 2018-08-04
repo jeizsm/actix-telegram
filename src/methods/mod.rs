@@ -7,6 +7,7 @@ use actix_web::{client, HttpMessage};
 use futures::Future;
 use serde::{de::DeserializeOwned, Serialize};
 use std::time::Duration;
+use types::TelegramResponse;
 
 fn send_request<T, R>(
     token: &str,
@@ -29,7 +30,20 @@ where
         .and_then(|response| {
             response
                 .json()
-                .map_err(|e| error!("parsing json error {:?}", e))
+                .then(|response: Result<TelegramResponse<R>, _>| match response {
+                    Ok(response) => {
+                        if response.ok {
+                            Ok(response.result.unwrap())
+                        } else {
+                            error!("telegram error {:?}", response.description);
+                            Err(())
+                        }
+                    }
+                    Err(e) => {
+                        error!("parsing json error {:?}", e);
+                        Err(())
+                    }
+                })
         });
     Box::new(future)
 }
