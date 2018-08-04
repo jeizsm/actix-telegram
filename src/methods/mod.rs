@@ -7,15 +7,6 @@ use actix_web::{client, HttpMessage};
 use futures::Future;
 use serde::{de::DeserializeOwned, Serialize};
 use std::time::Duration;
-use types::TelegramResponse;
-
-pub trait TelegramRequest {
-    fn send(
-        &self,
-        token: &str,
-        timeout: Duration,
-    ) -> Box<Future<Item = TelegramResponse, Error = ()>>;
-}
 
 fn send_request<T, R>(
     token: &str,
