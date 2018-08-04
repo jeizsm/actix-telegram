@@ -14,7 +14,7 @@ fn main() {
     env_logger::init();
     let sys = System::new("example");
     let token = env::var("TELEGRAM_TOKEN").unwrap();
-    let app = App::new(|a| {
+    let app = App::new(|_a| {
         debug!("{}", "test");
         Ok(())
     });

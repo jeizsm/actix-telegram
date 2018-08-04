@@ -21,14 +21,6 @@ pub struct TelegramWorker {
 
 impl TelegramWorker {
     pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<App>) -> TelegramWorker {
-        let app = App::new(|a| {
-            debug!("TelegramWorker.App {:?}", a);
-            Ok(())
-        });
-        let second_app = App::new(|a| {
-            debug!("TelegramWorker.App {:?}", a);
-            Err(a)
-        });
         TelegramWorker { apps, telegram_api }
     }
 }
