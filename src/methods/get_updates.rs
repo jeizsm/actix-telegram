@@ -2,12 +2,9 @@ use super::send_request;
 use actix::{Context, Handler, Message};
 use actors::TelegramApi;
 use futures::Future;
-use std::num::{NonZeroU16, NonZeroU32, NonZeroU8};
+use std::num::{NonZeroU16, NonZeroU8};
 use std::time::Duration;
-use types::TelegramResponse;
-
-#[derive(Debug, Serialize)]
-struct UpdateId(NonZeroU32);
+use types::{TelegramResponse, UpdateId};
 
 #[derive(Serialize, Debug)]
 pub struct GetUpdates {
@@ -22,10 +19,8 @@ pub struct GetUpdates {
 }
 
 impl GetUpdates {
-    pub fn new(timeout: u16, offset: Option<i32>) -> Self {
+    pub fn new(timeout: u16, offset: Option<UpdateId>) -> Self {
         let timeout = unsafe { Some(NonZeroU16::new_unchecked(timeout)) };
-        let offset =
-            unsafe { offset.map(|offset| UpdateId(NonZeroU32::new_unchecked(offset as u32))) };
         let allowed_updates = None;
         let limit = None;
         GetUpdates {

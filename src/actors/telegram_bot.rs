@@ -8,6 +8,7 @@ use methods::GetUpdates;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
+use types::UpdateId;
 
 #[derive(Serialize, Debug)]
 struct PollUpdates;
@@ -15,7 +16,7 @@ struct PollUpdates;
 pub struct TelegramBot {
     token: String,
     timeout: Duration,
-    offset: Option<i32>,
+    offset: Option<UpdateId>,
     telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
@@ -79,7 +80,10 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                 let _ = response
                     .map(|response| {
                         debug!("response received {:?}", response);
-                        actor.offset = response.result.last().map(|i| i.update_id + 1);
+                        actor.offset = response
+                            .result
+                            .last()
+                            .map(|i| UpdateId::new(i.update_id.get() + 1));
                         for (i, result) in response.result.into_iter().enumerate() {
                             actor.workers[i % actor.threads].do_send(result);
                         }
