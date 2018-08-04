@@ -20,11 +20,11 @@ pub struct TelegramBot {
     telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
-    apps: Arc<App>,
+    apps: Arc<Vec<App>>,
 }
 
 impl TelegramBot {
-    pub fn new(token: String, timeout: Duration, apps: App) -> Self {
+    pub fn new(token: String, timeout: Duration, apps: Vec<App>) -> Self {
         TelegramBot {
             token,
             timeout,

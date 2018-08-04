@@ -14,11 +14,15 @@ fn main() {
     env_logger::init();
     let sys = System::new("example");
     let token = env::var("TELEGRAM_TOKEN").unwrap();
+    let second_app = App::new(|msg| {
+        debug!("{}", "next");
+        Err(msg)
+    });
     let app = App::new(|_a| {
         debug!("{}", "test");
         Ok(())
     });
 
-    let _telegram = TelegramBot::new(token, Duration::from_secs(30), app).start();
+    let _telegram = TelegramBot::new(token, Duration::from_secs(30), vec![second_app, app]).start();
     sys.run();
 }

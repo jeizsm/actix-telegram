@@ -15,12 +15,12 @@ impl App {
 }
 
 pub struct TelegramWorker {
-    apps: Arc<App>,
+    apps: Arc<Vec<App>>,
     telegram_api: Addr<TelegramApi>,
 }
 
 impl TelegramWorker {
-    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<App>) -> TelegramWorker {
+    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<Vec<App>>) -> TelegramWorker {
         TelegramWorker { apps, telegram_api }
     }
 }
@@ -40,21 +40,20 @@ impl Actor for TelegramWorker {
 impl Handler<Update> for TelegramWorker {
     type Result = Result<(), ()>;
 
-    fn handle(&mut self, msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, mut msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
-        (&self.apps.0)(msg).unwrap();
-        // for app in &self.apps {
-        //     msg = match (app.0)(msg) {
-        //         Ok(()) => {
-        //             debug!("ok");
-        //             return Ok(());
-        //         }
-        //         Err(msg) => {
-        //             debug!("next");
-        //             msg
-        //         }
-        //     };
-        // }
+        for app in self.apps.iter() {
+            msg = match (app.0)(msg) {
+                Ok(()) => {
+                    debug!("ok");
+                    return Ok(());
+                }
+                Err(msg) => {
+                    debug!("next");
+                    msg
+                }
+            };
+        }
         Ok(())
     }
 }
