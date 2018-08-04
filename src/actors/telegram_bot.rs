@@ -1,4 +1,4 @@
-use super::{telegram_api::TelegramApi, telegram_worker::TelegramWorker};
+use super::{TelegramApi, TelegramWorker};
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
 use methods::GetUpdates;

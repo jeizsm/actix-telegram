@@ -1,6 +1,6 @@
 use super::send_request;
-use super::TelegramRequest;
-use actix::Message;
+use actix::{Context, Handler, Message};
+use actors::TelegramApi;
 use futures::Future;
 use types::TelegramResponse;
 
@@ -11,8 +11,10 @@ impl Message for GetMe {
     type Result = Result<TelegramResponse, ()>;
 }
 
-impl TelegramRequest for GetMe {
-    fn send(&self, token: &str) -> Box<Future<Item = TelegramResponse, Error = ()>> {
-        send_request(token, "getMe", self)
+impl Handler<GetMe> for TelegramApi {
+    type Result = Box<Future<Item = TelegramResponse, Error = ()>>;
+
+    fn handle(&mut self, msg: GetMe, _ctx: &mut Context<Self>) -> Self::Result {
+        send_request(&self.token, "getMe", self.timeout, &msg)
     }
 }
