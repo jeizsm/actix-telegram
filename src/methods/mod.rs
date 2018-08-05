@@ -1,49 +1,118 @@
-mod get_me;
 mod get_updates;
-
-pub use self::get_me::GetMe;
 pub use self::get_updates::GetUpdates;
-use actix_web::{client, HttpMessage};
-use futures::Future;
-use serde::{de::DeserializeOwned, Serialize};
-use std::time::Duration;
-use types::TelegramResponse;
-
-fn send_request<T, R>(
-    token: &str,
-    method: &str,
-    timeout: Duration,
-    item: &T,
-) -> Box<Future<Item = R, Error = ()>>
-where
-    R: DeserializeOwned + 'static,
-    T: Serialize,
-{
-    let url = format!("https://api.telegram.org/bot{}/{}", token, method);
-    let future = client::post(url)
-        .header("User-Agent", "Actix-web")
-        .timeout(timeout)
-        .json(item)
-        .unwrap()
-        .send()
-        .map_err(|e| error!("request error {:?}", e))
-        .and_then(|response| {
-            response
-                .json()
-                .then(|response: Result<TelegramResponse<R>, _>| match response {
-                    Ok(response) => {
-                        if response.ok {
-                            Ok(response.result.unwrap())
-                        } else {
-                            error!("telegram error {:?}", response.description);
-                            Err(())
-                        }
-                    }
-                    Err(e) => {
-                        error!("parsing json error {:?}", e);
-                        Err(())
-                    }
-                })
-        });
-    Box::new(future)
-}
+mod set_webhook;
+pub use self::set_webhook::SetWebhook;
+mod send_message;
+pub use self::send_message::SendMessage;
+mod forward_message;
+pub use self::forward_message::ForwardMessage;
+mod send_photo;
+pub use self::send_photo::SendPhoto;
+mod send_audio;
+pub use self::send_audio::SendAudio;
+mod send_document;
+pub use self::send_document::SendDocument;
+mod send_video;
+pub use self::send_video::SendVideo;
+mod send_animation;
+pub use self::send_animation::SendAnimation;
+mod send_voice;
+pub use self::send_voice::SendVoice;
+mod send_video_note;
+pub use self::send_video_note::SendVideoNote;
+mod send_media_group;
+pub use self::send_media_group::SendMediaGroup;
+mod send_location;
+pub use self::send_location::SendLocation;
+mod edit_message_live_location;
+pub use self::edit_message_live_location::EditMessageLiveLocation;
+mod stop_message_live_location;
+pub use self::stop_message_live_location::StopMessageLiveLocation;
+mod send_venue;
+pub use self::send_venue::SendVenue;
+mod send_contact;
+pub use self::send_contact::SendContact;
+mod send_chat_action;
+pub use self::send_chat_action::SendChatAction;
+mod get_user_profile_photos;
+pub use self::get_user_profile_photos::GetUserProfilePhotos;
+mod get_file;
+pub use self::get_file::GetFile;
+mod kick_chat_member;
+pub use self::kick_chat_member::KickChatMember;
+mod unban_chat_member;
+pub use self::unban_chat_member::UnbanChatMember;
+mod restrict_chat_member;
+pub use self::restrict_chat_member::RestrictChatMember;
+mod promote_chat_member;
+pub use self::promote_chat_member::PromoteChatMember;
+mod export_chat_invite_link;
+pub use self::export_chat_invite_link::ExportChatInviteLink;
+mod set_chat_photo;
+pub use self::set_chat_photo::SetChatPhoto;
+mod delete_chat_photo;
+pub use self::delete_chat_photo::DeleteChatPhoto;
+mod set_chat_title;
+pub use self::set_chat_title::SetChatTitle;
+mod set_chat_description;
+pub use self::set_chat_description::SetChatDescription;
+mod pin_chat_message;
+pub use self::pin_chat_message::PinChatMessage;
+mod unpin_chat_message;
+pub use self::unpin_chat_message::UnpinChatMessage;
+mod leave_chat;
+pub use self::leave_chat::LeaveChat;
+mod get_chat;
+pub use self::get_chat::GetChat;
+mod get_chat_administrators;
+pub use self::get_chat_administrators::GetChatAdministrators;
+mod get_chat_members_count;
+pub use self::get_chat_members_count::GetChatMembersCount;
+mod get_chat_member;
+pub use self::get_chat_member::GetChatMember;
+mod set_chat_sticker_set;
+pub use self::set_chat_sticker_set::SetChatStickerSet;
+mod delete_chat_sticker_set;
+pub use self::delete_chat_sticker_set::DeleteChatStickerSet;
+mod answer_callback_query;
+pub use self::answer_callback_query::AnswerCallbackQuery;
+mod edit_message_text;
+pub use self::edit_message_text::EditMessageText;
+mod edit_message_caption;
+pub use self::edit_message_caption::EditMessageCaption;
+mod edit_message_media;
+pub use self::edit_message_media::EditMessageMedia;
+mod edit_message_reply_markup;
+pub use self::edit_message_reply_markup::EditMessageReplyMarkup;
+mod delete_message;
+pub use self::delete_message::DeleteMessage;
+mod send_sticker;
+pub use self::send_sticker::SendSticker;
+mod get_sticker_set;
+pub use self::get_sticker_set::GetStickerSet;
+mod upload_sticker_file;
+pub use self::upload_sticker_file::UploadStickerFile;
+mod create_new_sticker_set;
+pub use self::create_new_sticker_set::CreateNewStickerSet;
+mod add_sticker_to_set;
+pub use self::add_sticker_to_set::AddStickerToSet;
+mod set_sticker_position_in_set;
+pub use self::set_sticker_position_in_set::SetStickerPositionInSet;
+mod delete_sticker_from_set;
+pub use self::delete_sticker_from_set::DeleteStickerFromSet;
+mod answer_inline_query;
+pub use self::answer_inline_query::AnswerInlineQuery;
+mod send_invoice;
+pub use self::send_invoice::SendInvoice;
+mod answer_shipping_query;
+pub use self::answer_shipping_query::AnswerShippingQuery;
+mod answer_pre_checkout_query;
+pub use self::answer_pre_checkout_query::AnswerPreCheckoutQuery;
+mod set_passport_data_errors;
+pub use self::set_passport_data_errors::SetPassportDataErrors;
+mod send_game;
+pub use self::send_game::SendGame;
+mod set_game_score;
+pub use self::set_game_score::SetGameScore;
+mod get_game_high_scores;
+pub use self::get_game_high_scores::GetGameHighScores;
