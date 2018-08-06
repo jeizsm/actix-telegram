@@ -3,11 +3,18 @@ use super::*;
 /// This object represents a video file.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Video {
-    file_id: String,
-    width: Integer,
-    height: Integer,
-    duration: Integer,
-    thumb: Option<PhotoSize>,
-    mime_type: Option<String>,
-    file_size: Option<Integer>,
+    /// Unique identifier for this file
+    pub file_id: String,
+    /// Video width as defined by sender
+    pub width: Integer,
+    /// Video height as defined by sender
+    pub height: Integer,
+    /// Duration of the video in seconds as defined by sender
+    pub duration: Integer,
+    /// Optional. Video thumbnail
+    pub thumb: Option<PhotoSize>,
+    /// Optional. Mime type of a file as defined by sender
+    pub mime_type: Option<String>,
+    /// Optional. File size
+    pub file_size: Option<Integer>,
 }

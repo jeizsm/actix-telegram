@@ -3,10 +3,16 @@ use super::*;
 /// This object represents a Telegram user or bot.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
-    id: Integer,
-    is_bot: bool,
-    first_name: String,
-    last_name: Option<String>,
-    username: Option<String>,
-    language_code: Option<String>,
+    /// Unique identifier for this user or bot
+    pub id: Integer,
+    /// True, if this user is a bot
+    pub is_bot: bool,
+    /// User‘s or bot’s first name
+    pub first_name: String,
+    /// Optional. User‘s or bot’s last name
+    pub last_name: Option<String>,
+    /// Optional. User‘s or bot’s username
+    pub username: Option<String>,
+    /// Optional. IETF language tag of the user's language
+    pub language_code: Option<String>,
 }

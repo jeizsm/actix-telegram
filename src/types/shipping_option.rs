@@ -3,7 +3,10 @@ use super::*;
 /// This object represents one shipping option.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ShippingOption {
-    id: String,
-    title: String,
-    prices: Vec<LabeledPrice>,
+    /// Shipping option identifier
+    pub id: String,
+    /// Option title
+    pub title: String,
+    /// List of price portions
+    pub prices: Vec<LabeledPrice>,
 }

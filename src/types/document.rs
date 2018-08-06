@@ -3,9 +3,14 @@ use super::*;
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Document {
-    file_id: String,
-    thumb: Option<PhotoSize>,
-    file_name: Option<String>,
-    mime_type: Option<String>,
-    file_size: Option<Integer>,
+    /// Unique file identifier
+    pub file_id: String,
+    /// Optional. Document thumbnail as defined by sender
+    pub thumb: Option<PhotoSize>,
+    /// Optional. Original filename as defined by sender
+    pub file_name: Option<String>,
+    /// Optional. MIME type of the file as defined by sender
+    pub mime_type: Option<String>,
+    /// Optional. File size
+    pub file_size: Option<Integer>,
 }

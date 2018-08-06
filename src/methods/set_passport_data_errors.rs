@@ -4,6 +4,8 @@ use super::super::types::*;
 /// Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SetPassportDataErrors {
-    user_id: Integer,
-    errors: Vec<PassportElementError>,
+    /// User identifier
+    pub user_id: Option<Integer>,
+    /// A JSON-serialized array describing the errors
+    pub errors: Option<Vec<PassportElementError>>,
 }

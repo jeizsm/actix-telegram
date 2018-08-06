@@ -3,8 +3,12 @@ use super::*;
 /// This object represents a sticker set.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct StickerSet {
-    name: String,
-    title: String,
-    contains_masks: bool,
-    stickers: Vec<Sticker>,
+    /// Sticker set name
+    pub name: String,
+    /// Sticker set title
+    pub title: String,
+    /// True, if the sticker set contains masks
+    pub contains_masks: bool,
+    /// List of all set stickers
+    pub stickers: Vec<Sticker>,
 }

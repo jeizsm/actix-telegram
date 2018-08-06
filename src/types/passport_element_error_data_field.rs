@@ -3,9 +3,15 @@ use super::*;
 /// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PassportElementErrorDataField {
-    source: String,
-    ty: String,
-    field_name: String,
-    data_hash: String,
-    message: String,
+    /// Error source, must be data
+    pub source: String,
+    /// The section of the user's Telegram Passport which has the error, one of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”
+    #[serde(rename = "type")]
+    pub ty: String,
+    /// Name of the data field which has the error
+    pub field_name: String,
+    /// Base64-encoded data hash
+    pub data_hash: String,
+    /// Error message
+    pub message: String,
 }

@@ -3,8 +3,13 @@ use super::*;
 /// Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PassportElementErrorFrontSide {
-    source: String,
-    ty: String,
-    file_hash: String,
-    message: String,
+    /// Error source, must be front_side
+    pub source: String,
+    /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
+    #[serde(rename = "type")]
+    pub ty: String,
+    /// Base64-encoded hash of the file with the front side of the document
+    pub file_hash: String,
+    /// Error message
+    pub message: String,
 }
