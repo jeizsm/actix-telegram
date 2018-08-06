@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a venue.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Venue {
     location: Location,

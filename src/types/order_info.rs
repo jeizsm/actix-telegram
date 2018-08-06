@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents information about an order.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct OrderInfo {
     name: Option<String>,

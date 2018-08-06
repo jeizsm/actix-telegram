@@ -1,5 +1,6 @@
 use super::*;
 
+/// Represents a video to be sent.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InputMediaVideo {
     ty: String,

@@ -1,5 +1,6 @@
 use super::*;
 
+/// Contains information about the current status of a webhook.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct WebhookInfo {
     url: String,

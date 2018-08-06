@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send .webp stickers. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendSticker {
     chat_id: ChatId,

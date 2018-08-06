@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object contains basic information about a successful payment.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SuccessfulPayment {
     currency: String,

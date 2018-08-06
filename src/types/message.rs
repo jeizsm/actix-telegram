@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a message.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Message {
     message_id: Integer,

@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents an incoming update.At most one of the optional parameters can be present in any given update.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Update {
     update_id: Integer,

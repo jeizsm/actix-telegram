@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send information about a venue. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendVenue {
     chat_id: ChatId,

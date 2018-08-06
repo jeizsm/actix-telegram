@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents an audio file to be treated as music by the Telegram clients.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Audio {
     file_id: String,

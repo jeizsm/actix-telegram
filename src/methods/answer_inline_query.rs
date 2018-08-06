@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are allowed.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AnswerInlineQuery {
     inline_query_id: String,

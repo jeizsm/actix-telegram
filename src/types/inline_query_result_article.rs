@@ -1,5 +1,6 @@
 use super::*;
 
+/// Represents a link to an article or web page.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InlineQueryResultArticle {
     ty: String,

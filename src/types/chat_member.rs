@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object contains information about one member of a chat.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatMember {
     user: User,

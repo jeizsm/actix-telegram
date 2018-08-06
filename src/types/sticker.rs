@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a sticker.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Sticker {
     file_id: String,

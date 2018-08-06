@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send photos. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendPhoto {
     chat_id: ChatId,

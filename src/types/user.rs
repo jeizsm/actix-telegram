@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a Telegram user or bot.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct User {
     id: Integer,

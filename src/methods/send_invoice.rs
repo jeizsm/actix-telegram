@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send invoices. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendInvoice {
     chat_id: Integer,

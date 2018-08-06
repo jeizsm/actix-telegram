@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a phone contact.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Contact {
     phone_number: String,

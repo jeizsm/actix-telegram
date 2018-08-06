@@ -1,5 +1,6 @@
 use super::*;
 
+/// Represents a photo to be sent.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InputMediaPhoto {
     ty: String,

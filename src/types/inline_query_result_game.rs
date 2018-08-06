@@ -1,5 +1,6 @@
 use super::*;
 
+/// Represents a Game.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InlineQueryResultGame {
     ty: String,

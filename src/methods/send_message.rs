@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send text messages. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendMessage {
     chat_id: ChatId,

@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object contains information about an incoming pre-checkout query.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct PreCheckoutQuery {
     id: String,

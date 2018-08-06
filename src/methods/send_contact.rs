@@ -1,5 +1,6 @@
 use super::super::types::*;
 
+/// Use this method to send phone contacts. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendContact {
     chat_id: ChatId,

@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents a video file.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Video {
     file_id: String,

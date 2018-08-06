@@ -1,5 +1,6 @@
 use super::*;
 
+/// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InlineKeyboardButton {
     text: String,
