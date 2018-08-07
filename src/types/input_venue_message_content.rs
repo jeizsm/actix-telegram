@@ -1,6 +1,6 @@
 use super::*;
 
-/// Represents the content of a venue message to be sent as the result of an inline query. 
+/// Represents the content of a venue message to be sent as the result of an inline query.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InputVenueMessageContent {
     /// Latitude of the venue in degrees
