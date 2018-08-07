@@ -1,4 +1,4 @@
-use super::super::*;
+use super::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub enum Voice {

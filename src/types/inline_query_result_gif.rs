@@ -5,27 +5,27 @@ use super::*;
 pub struct InlineQueryResultGif {
     /// Type of the result, must be gif
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
     /// A valid URL for the GIF file. File size must not exceed 1MB
     pub gif_url: String,
-    /// Optional. Width of the GIF
+    /// Width of the GIF
     pub gif_width: Option<Integer>,
-    /// Optional. Height of the GIF
+    /// Height of the GIF
     pub gif_height: Option<Integer>,
-    /// Optional. Duration of the GIF
+    /// Duration of the GIF
     pub gif_duration: Option<Integer>,
     /// URL of the static thumbnail for the result (jpeg or gif)
     pub thumb_url: String,
-    /// Optional. Title for the result
+    /// Title for the result
     pub title: Option<String>,
-    /// Optional. Caption of the GIF file to be sent, 0-200 characters
+    /// Caption of the GIF file to be sent, 0-200 characters
     pub caption: Option<String>,
-    /// Optional. Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
     pub parse_mode: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the GIF animation
+    /// Content of the message to be sent instead of the GIF animation
     pub input_message_content: Option<InputMessageContent>,
 }

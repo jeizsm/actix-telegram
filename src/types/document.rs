@@ -5,12 +5,12 @@ use super::*;
 pub struct Document {
     /// Unique file identifier
     pub file_id: String,
-    /// Optional. Document thumbnail as defined by sender
+    /// Document thumbnail as defined by sender
     pub thumb: Option<PhotoSize>,
-    /// Optional. Original filename as defined by sender
+    /// Original filename as defined by sender
     pub file_name: Option<String>,
-    /// Optional. MIME type of the file as defined by sender
+    /// MIME type of the file as defined by sender
     pub mime_type: Option<String>,
-    /// Optional. File size
+    /// File size
     pub file_size: Option<Integer>,
 }

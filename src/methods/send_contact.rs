@@ -1,14 +1,14 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to send phone contacts. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendContact {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Contact's phone number
-    pub phone_number: Option<String>,
+    pub phone_number: String,
     /// Contact's first name
-    pub first_name: Option<String>,
+    pub first_name: String,
     /// Contact's last name
     pub last_name: Option<String>,
     /// Additional data about the contact in the form of a vCard, 0-2048 bytes

@@ -7,7 +7,7 @@ pub struct PassportElementErrorDataField {
     pub source: String,
     /// The section of the user's Telegram Passport which has the error, one of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Name of the data field which has the error
     pub field_name: String,
     /// Base64-encoded data hash

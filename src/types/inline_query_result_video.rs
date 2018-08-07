@@ -8,7 +8,7 @@ use super::*;
 pub struct InlineQueryResultVideo {
     /// Type of the result, must be video
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
     /// A valid URL for the embedded video player or video file
@@ -19,20 +19,20 @@ pub struct InlineQueryResultVideo {
     pub thumb_url: String,
     /// Title for the result
     pub title: String,
-    /// Optional. Caption of the video to be sent, 0-200 characters
+    /// Caption of the video to be sent, 0-200 characters
     pub caption: Option<String>,
-    /// Optional. Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
     pub parse_mode: Option<String>,
-    /// Optional. Video width
+    /// Video width
     pub video_width: Option<Integer>,
-    /// Optional. Video height
+    /// Video height
     pub video_height: Option<Integer>,
-    /// Optional. Video duration in seconds
+    /// Video duration in seconds
     pub video_duration: Option<Integer>,
-    /// Optional. Short description of the result
+    /// Short description of the result
     pub description: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the video. This field is required if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
+    /// Content of the message to be sent instead of the video. This field is required if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
     pub input_message_content: Option<InputMessageContent>,
 }

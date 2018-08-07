@@ -9,12 +9,12 @@ pub struct WebhookInfo {
     pub has_custom_certificate: bool,
     /// Number of updates awaiting delivery
     pub pending_update_count: Integer,
-    /// Optional. Unix time for the most recent error that happened when trying to deliver an update via webhook
+    /// Unix time for the most recent error that happened when trying to deliver an update via webhook
     pub last_error_date: Option<Integer>,
-    /// Optional. Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
+    /// Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
     pub last_error_message: Option<String>,
-    /// Optional. Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
+    /// Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
     pub max_connections: Option<Integer>,
-    /// Optional. A list of update types the bot is subscribed to. Defaults to all update types
+    /// A list of update types the bot is subscribed to. Defaults to all update types
     pub allowed_updates: Option<Vec<String>>,
 }

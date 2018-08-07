@@ -11,12 +11,12 @@ pub struct Animation {
     pub height: Integer,
     /// Duration of the video in seconds as defined by sender
     pub duration: Integer,
-    /// Optional. Animation thumbnail as defined by sender
+    /// Animation thumbnail as defined by sender
     pub thumb: Option<PhotoSize>,
-    /// Optional. Original animation filename as defined by sender
+    /// Original animation filename as defined by sender
     pub file_name: Option<String>,
-    /// Optional. MIME type of the file as defined by sender
+    /// MIME type of the file as defined by sender
     pub mime_type: Option<String>,
-    /// Optional. File size
+    /// File size
     pub file_size: Option<Integer>,
 }

@@ -9,6 +9,6 @@ pub struct PhotoSize {
     pub width: Integer,
     /// Photo height
     pub height: Integer,
-    /// Optional. File size
+    /// File size
     pub file_size: Option<Integer>,
 }

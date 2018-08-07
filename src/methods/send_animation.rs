@@ -1,12 +1,12 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendAnimation {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Animation to send. Pass a file_id as String to send an animation that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an animation from the Internet, or upload a new animation using multipart/form-data. More info on Sending Files »
-    pub animation: Option<Animation>,
+    pub animation: Animation,
     /// Duration of sent animation in seconds
     pub duration: Option<Integer>,
     /// Animation width

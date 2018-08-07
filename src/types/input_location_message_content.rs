@@ -7,6 +7,6 @@ pub struct InputLocationMessageContent {
     pub latitude: Float,
     /// Longitude of the location in degrees
     pub longitude: Float,
-    /// Optional. Period in seconds for which the location can be updated, should be between 60 and 86400.
+    /// Period in seconds for which the location can be updated, should be between 60 and 86400.
     pub live_period: Option<Integer>,
 }

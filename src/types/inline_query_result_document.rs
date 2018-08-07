@@ -5,29 +5,29 @@ use super::*;
 pub struct InlineQueryResultDocument {
     /// Type of the result, must be document
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
     /// Title for the result
     pub title: String,
-    /// Optional. Caption of the document to be sent, 0-200 characters
+    /// Caption of the document to be sent, 0-200 characters
     pub caption: Option<String>,
-    /// Optional. Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
     pub parse_mode: Option<String>,
     /// A valid URL for the file
     pub document_url: String,
     /// Mime type of the content of the file, either “application/pdf” or “application/zip”
     pub mime_type: String,
-    /// Optional. Short description of the result
+    /// Short description of the result
     pub description: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the file
+    /// Content of the message to be sent instead of the file
     pub input_message_content: Option<InputMessageContent>,
-    /// Optional. URL of the thumbnail (jpeg only) for the file
+    /// URL of the thumbnail (jpeg only) for the file
     pub thumb_url: Option<String>,
-    /// Optional. Thumbnail width
+    /// Thumbnail width
     pub thumb_width: Option<Integer>,
-    /// Optional. Thumbnail height
+    /// Thumbnail height
     pub thumb_height: Option<Integer>,
 }

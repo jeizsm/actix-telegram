@@ -9,14 +9,14 @@ pub struct Sticker {
     pub width: Integer,
     /// Sticker height
     pub height: Integer,
-    /// Optional. Sticker thumbnail in the .webp or .jpg format
+    /// Sticker thumbnail in the .webp or .jpg format
     pub thumb: Option<PhotoSize>,
-    /// Optional. Emoji associated with the sticker
+    /// Emoji associated with the sticker
     pub emoji: Option<String>,
-    /// Optional. Name of the sticker set to which the sticker belongs
+    /// Name of the sticker set to which the sticker belongs
     pub set_name: Option<String>,
-    /// Optional. For mask stickers, the position where the mask should be placed
+    /// For mask stickers, the position where the mask should be placed
     pub mask_position: Option<MaskPosition>,
-    /// Optional. File size
+    /// File size
     pub file_size: Option<Integer>,
 }

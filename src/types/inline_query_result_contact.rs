@@ -5,25 +5,25 @@ use super::*;
 pub struct InlineQueryResultContact {
     /// Type of the result, must be contact
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 Bytes
     pub id: String,
     /// Contact's phone number
     pub phone_number: String,
     /// Contact's first name
     pub first_name: String,
-    /// Optional. Contact's last name
+    /// Contact's last name
     pub last_name: Option<String>,
-    /// Optional. Additional data about the contact in the form of a vCard, 0-2048 bytes
+    /// Additional data about the contact in the form of a vCard, 0-2048 bytes
     pub vcard: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the contact
+    /// Content of the message to be sent instead of the contact
     pub input_message_content: Option<InputMessageContent>,
-    /// Optional. Url of the thumbnail for the result
+    /// Url of the thumbnail for the result
     pub thumb_url: Option<String>,
-    /// Optional. Thumbnail width
+    /// Thumbnail width
     pub thumb_width: Option<Integer>,
-    /// Optional. Thumbnail height
+    /// Thumbnail height
     pub thumb_height: Option<Integer>,
 }

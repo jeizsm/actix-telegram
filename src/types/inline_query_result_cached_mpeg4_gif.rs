@@ -5,19 +5,19 @@ use super::*;
 pub struct InlineQueryResultCachedMpeg4Gif {
     /// Type of the result, must be mpeg4_gif
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 bytes
     pub id: String,
     /// A valid file identifier for the MP4 file
     pub mpeg4_file_id: String,
-    /// Optional. Title for the result
+    /// Title for the result
     pub title: Option<String>,
-    /// Optional. Caption of the MPEG-4 file to be sent, 0-200 characters
+    /// Caption of the MPEG-4 file to be sent, 0-200 characters
     pub caption: Option<String>,
-    /// Optional. Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
     pub parse_mode: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the video animation
+    /// Content of the message to be sent instead of the video animation
     pub input_message_content: Option<InputMessageContent>,
 }

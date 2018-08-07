@@ -1,13 +1,13 @@
-use super::super::types::*;
+use super::*;
 
 /// For sending voice messages, use the sendVoice method instead.
 /// Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .mp3 format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendAudio {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one using multipart/form-data. More info on Sending Files »
-    pub audio: Option<Audio>,
+    pub audio: Audio,
     /// Audio caption, 0-200 characters
     pub caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

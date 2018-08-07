@@ -11,10 +11,10 @@ pub struct Video {
     pub height: Integer,
     /// Duration of the video in seconds as defined by sender
     pub duration: Integer,
-    /// Optional. Video thumbnail
+    /// Video thumbnail
     pub thumb: Option<PhotoSize>,
-    /// Optional. Mime type of a file as defined by sender
+    /// Mime type of a file as defined by sender
     pub mime_type: Option<String>,
-    /// Optional. File size
+    /// File size
     pub file_size: Option<Integer>,
 }

@@ -9,10 +9,10 @@ pub struct User {
     pub is_bot: bool,
     /// User‘s or bot’s first name
     pub first_name: String,
-    /// Optional. User‘s or bot’s last name
+    /// User‘s or bot’s last name
     pub last_name: Option<String>,
-    /// Optional. User‘s or bot’s username
+    /// User‘s or bot’s username
     pub username: Option<String>,
-    /// Optional. IETF language tag of the user's language
+    /// IETF language tag of the user's language
     pub language_code: Option<String>,
 }

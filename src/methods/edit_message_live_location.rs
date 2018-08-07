@@ -1,4 +1,4 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to edit live location messages sent by the bot or via the bot (for inline bots). A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message was sent by the bot, the edited Message is returned, otherwise True is returned.
 #[derive(Serialize, Deserialize, Debug)]
@@ -10,9 +10,9 @@ pub struct EditMessageLiveLocation {
     /// Required if chat_id and message_id are not specified. Identifier of the inline message
     pub inline_message_id: Option<String>,
     /// Latitude of new location
-    pub latitude: Option<Float>,
+    pub latitude: Float,
     /// Longitude of new location
-    pub longitude: Option<Float>,
+    pub longitude: Float,
     /// A JSON-serialized object for a new inline keyboard.
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }

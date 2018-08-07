@@ -1,18 +1,18 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to send information about a venue. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendVenue {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Latitude of the venue
-    pub latitude: Option<Float>,
+    pub latitude: Float,
     /// Longitude of the venue
-    pub longitude: Option<Float>,
+    pub longitude: Float,
     /// Name of the venue
-    pub title: Option<String>,
+    pub title: String,
     /// Address of the venue
-    pub address: Option<String>,
+    pub address: String,
     /// Foursquare identifier of the venue
     pub foursquare_id: Option<String>,
     /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)

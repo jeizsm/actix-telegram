@@ -7,7 +7,7 @@ pub struct PassportElementErrorReverseSide {
     pub source: String,
     /// The section of the user's Telegram Passport which has the issue, one of “driver_license”, “identity_card”
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Base64-encoded hash of the file with the reverse side of the document
     pub file_hash: String,
     /// Error message

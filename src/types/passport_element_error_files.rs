@@ -7,7 +7,7 @@ pub struct PassportElementErrorFiles {
     pub source: String,
     /// The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// List of base64-encoded file hashes
     pub file_hashes: Vec<String>,
     /// Error message

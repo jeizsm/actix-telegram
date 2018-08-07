@@ -1,4 +1,4 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.
 #[derive(Serialize, Deserialize, Debug)]

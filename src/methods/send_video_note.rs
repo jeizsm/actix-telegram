@@ -1,12 +1,12 @@
-use super::super::types::*;
+use super::*;
 
 /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendVideoNote {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More info on Sending Files ». Sending video notes by a URL is currently unsupported
-    pub video_note: Option<VideoNote>,
+    pub video_note: VideoNote,
     /// Duration of sent video in seconds
     pub duration: Option<Integer>,
     /// Video width and height

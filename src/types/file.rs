@@ -8,8 +8,8 @@ use super::*;
 pub struct File {
     /// Unique identifier for this file
     pub file_id: String,
-    /// Optional. File size, if known
+    /// File size, if known
     pub file_size: Option<Integer>,
-    /// Optional. File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
+    /// File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
     pub file_path: Option<String>,
 }

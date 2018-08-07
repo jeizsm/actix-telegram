@@ -1,4 +1,4 @@
-use super::super::types::*;
+use super::*;
 
 /// 
 /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
@@ -7,7 +7,7 @@ use super::super::types::*;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SetChatPhoto {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// New chat photo, uploaded using multipart/form-data
-    pub photo: Option<InputFile>,
+    pub photo: InputFile,
 }

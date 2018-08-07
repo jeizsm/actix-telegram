@@ -5,7 +5,7 @@ use super::*;
 pub struct InlineQueryResultVenue {
     /// Type of the result, must be venue
     #[serde(rename = "type")]
-    pub ty: String,
+    pub type_: String,
     /// Unique identifier for this result, 1-64 Bytes
     pub id: String,
     /// Latitude of the venue location in degrees
@@ -16,18 +16,18 @@ pub struct InlineQueryResultVenue {
     pub title: String,
     /// Address of the venue
     pub address: String,
-    /// Optional. Foursquare identifier of the venue if known
+    /// Foursquare identifier of the venue if known
     pub foursquare_id: Option<String>,
-    /// Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+    /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
     pub foursquare_type: Option<String>,
-    /// Optional. Inline keyboard attached to the message
+    /// Inline keyboard attached to the message
     pub reply_markup: Option<InlineKeyboardMarkup>,
-    /// Optional. Content of the message to be sent instead of the venue
+    /// Content of the message to be sent instead of the venue
     pub input_message_content: Option<InputMessageContent>,
-    /// Optional. Url of the thumbnail for the result
+    /// Url of the thumbnail for the result
     pub thumb_url: Option<String>,
-    /// Optional. Thumbnail width
+    /// Thumbnail width
     pub thumb_width: Option<Integer>,
-    /// Optional. Thumbnail height
+    /// Thumbnail height
     pub thumb_height: Option<Integer>,
 }

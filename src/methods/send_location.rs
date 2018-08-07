@@ -1,14 +1,14 @@
-use super::super::types::*;
+use super::*;
 
 /// Use this method to send point on the map. On success, the sent Message is returned.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SendLocation {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Latitude of the location
-    pub latitude: Option<Float>,
+    pub latitude: Float,
     /// Longitude of the location
-    pub longitude: Option<Float>,
+    pub longitude: Float,
     /// Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400.
     pub live_period: Option<Integer>,
     /// Sends the message silently. Users will receive a notification with no sound.

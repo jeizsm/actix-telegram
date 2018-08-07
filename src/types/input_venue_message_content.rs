@@ -11,8 +11,8 @@ pub struct InputVenueMessageContent {
     pub title: String,
     /// Address of the venue
     pub address: String,
-    /// Optional. Foursquare identifier of the venue, if known
+    /// Foursquare identifier of the venue, if known
     pub foursquare_id: Option<String>,
-    /// Optional. Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+    /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
     pub foursquare_type: Option<String>,
 }

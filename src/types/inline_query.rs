@@ -7,7 +7,7 @@ pub struct InlineQuery {
     pub id: String,
     /// Sender
     pub from: User,
-    /// Optional. Sender location, only for bots that request user location
+    /// Sender location, only for bots that request user location
     pub location: Option<Location>,
     /// Text of the query (up to 512 characters)
     pub query: String,

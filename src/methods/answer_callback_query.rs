@@ -1,4 +1,4 @@
-use super::super::types::*;
+use super::*;
 
 /// 
 /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via @Botfather and accept the terms. Otherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.
@@ -7,7 +7,7 @@ use super::super::types::*;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AnswerCallbackQuery {
     /// Unique identifier for the query to be answered
-    pub callback_query_id: Option<String>,
+    pub callback_query_id: String,
     /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
     pub text: Option<String>,
     /// If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.

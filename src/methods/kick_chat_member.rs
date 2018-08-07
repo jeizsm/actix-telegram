@@ -1,4 +1,4 @@
-use super::super::types::*;
+use super::*;
 
 /// 
 /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
@@ -7,9 +7,9 @@ use super::super::types::*;
 #[derive(Serialize, Deserialize, Debug)]
 pub struct KickChatMember {
     /// Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
-    pub chat_id: Option<ChatId>,
+    pub chat_id: ChatId,
     /// Unique identifier of the target user
-    pub user_id: Option<Integer>,
+    pub user_id: Integer,
     /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
     pub until_date: Option<Integer>,
 }

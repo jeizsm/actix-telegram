@@ -1,11 +1,11 @@
-use super::super::types::*;
+use super::*;
 
 /// If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path in the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot‘s token, you can be pretty sure it’s us.
 /// Use this method to specify a url and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct SetWebhook {
     /// HTTPS url to send updates to. Use an empty string to remove webhook integration
-    pub url: Option<String>,
+    pub url: String,
     /// Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details.
     pub certificate: Option<InputFile>,
     /// Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot‘s server, and higher values to increase your bot’s throughput.
