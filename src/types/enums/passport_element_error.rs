@@ -1,6 +1,7 @@
 use super::*;
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
 pub enum PassportElementError {
     PassportElementErrorDataField(PassportElementErrorDataField),
     PassportElementErrorFrontSide(PassportElementErrorFrontSide),
