@@ -1,8 +1,8 @@
-use super::*;
+use types::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(untagged)]
-pub enum VideoNote {
+pub enum InputFileOrString {
     InputFile(InputFile),
     String(String),
 }

@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents information about an order.
 #[derive(Serialize, Deserialize, Debug)]

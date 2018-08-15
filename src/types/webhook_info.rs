@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Contains information about the current status of a webhook.
 #[derive(Serialize, Deserialize, Debug)]

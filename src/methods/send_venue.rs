@@ -1,11 +1,11 @@
-use super::*;
+use types::*;
 
 /// Use this method to send information about a venue. On success, the sent Message is returned.
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendVenue {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: ChatId,
+    pub chat_id: ChatIdOrUsername,
     /// Latitude of the venue
     pub latitude: Float,
     /// Longitude of the venue

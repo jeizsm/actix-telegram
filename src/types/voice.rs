@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a voice note.
 #[derive(Serialize, Deserialize, Debug)]

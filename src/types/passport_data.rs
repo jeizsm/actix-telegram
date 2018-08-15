@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Contains information about Telegram Passport data shared with the bot by the user.
 #[derive(Serialize, Deserialize, Debug)]

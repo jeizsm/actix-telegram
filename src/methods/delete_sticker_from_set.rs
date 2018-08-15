@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Use this method to delete a sticker from a set created by the bot. Returns True on success.
 #[derive(Serialize, Debug, TelegramApi)]

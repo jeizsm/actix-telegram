@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object contains basic information about an invoice.
 #[derive(Serialize, Deserialize, Debug)]

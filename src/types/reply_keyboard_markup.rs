@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 #[derive(Serialize, Deserialize, Debug)]

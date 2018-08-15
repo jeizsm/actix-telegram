@@ -1,4 +1,4 @@
-use super::User;
+use types::User;
 
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "User"]

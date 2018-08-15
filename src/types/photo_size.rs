@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
 #[derive(Serialize, Deserialize, Debug)]

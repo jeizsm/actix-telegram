@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set. Returns True on success.
 #[derive(Serialize, Debug, TelegramApi)]
@@ -11,7 +11,7 @@ pub struct CreateNewStickerSet {
     /// Sticker set title, 1-64 characters
     pub title: String,
     /// Png image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More info on Sending Files »
-    pub png_sticker: PngSticker,
+    pub png_sticker: InputFileOrString,
     /// One or more emoji corresponding to the sticker
     pub emojis: String,
     /// Pass True, if a set of mask stickers should be created

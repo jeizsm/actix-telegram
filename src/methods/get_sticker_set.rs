@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Use this method to get a sticker set. On success, a StickerSet object is returned.
 #[derive(Serialize, Debug, TelegramApi)]

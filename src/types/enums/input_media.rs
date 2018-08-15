@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(untagged)]

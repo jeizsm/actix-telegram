@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Represents a link to an article or web page.
 #[derive(Serialize, Deserialize, Debug)]

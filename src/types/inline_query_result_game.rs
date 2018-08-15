@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Represents a Game.
 #[derive(Serialize, Deserialize, Debug)]

@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a chat.
 #[derive(Serialize, Deserialize, Debug)]

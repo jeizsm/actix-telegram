@@ -1,11 +1,11 @@
-use super::*;
+use types::*;
 
 /// Use this method to send text messages. On success, the sent Message is returned.
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendMessage {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: ChatId,
+    pub chat_id: ChatIdOrUsername,
     /// Text of the message to be sent
     pub text: String,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in your bot's message.

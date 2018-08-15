@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a portion of the price for goods or services.
 #[derive(Serialize, Deserialize, Debug)]

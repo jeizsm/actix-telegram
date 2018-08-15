@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a Telegram user or bot.
 #[derive(Serialize, Deserialize, Debug)]

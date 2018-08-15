@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Contains information about why a request was unsuccessful.
 #[derive(Serialize, Deserialize, Debug)]

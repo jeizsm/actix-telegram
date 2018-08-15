@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a phone contact.
 #[derive(Serialize, Deserialize, Debug)]

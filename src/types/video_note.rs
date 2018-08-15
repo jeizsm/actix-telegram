@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a video message (available in Telegram apps as of v.4.0).
 #[derive(Serialize, Deserialize, Debug)]

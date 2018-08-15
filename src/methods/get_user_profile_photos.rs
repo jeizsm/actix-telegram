@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
 #[derive(Serialize, Debug, TelegramApi)]

@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents one shipping option.
 #[derive(Serialize, Deserialize, Debug)]

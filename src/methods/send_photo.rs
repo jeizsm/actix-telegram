@@ -1,13 +1,13 @@
-use super::*;
+use types::*;
 
 /// Use this method to send photos. On success, the sent Message is returned.
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendPhoto {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: ChatId,
+    pub chat_id: ChatIdOrUsername,
     /// Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo using multipart/form-data. More info on Sending Files »
-    pub photo: Photo,
+    pub photo: InputFileOrString,
     /// Photo caption (may also be used when resending photos by file_id), 0-200 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,

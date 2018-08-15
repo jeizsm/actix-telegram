@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object contains information about an incoming pre-checkout query.
 #[derive(Serialize, Deserialize, Debug)]

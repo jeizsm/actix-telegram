@@ -1,13 +1,13 @@
-use super::*;
+use types::*;
 
 /// Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .ogg file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendVoice {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: ChatId,
+    pub chat_id: ChatIdOrUsername,
     /// Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More info on Sending Files »
-    pub voice: Voice,
+    pub voice: InputFileOrString,
     /// Voice message caption, 0-200 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,

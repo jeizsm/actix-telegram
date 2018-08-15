@@ -1,11 +1,11 @@
-use super::*;
+use types::*;
 
 /// Use this method to send phone contacts. On success, the sent Message is returned.
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendContact {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    pub chat_id: ChatId,
+    pub chat_id: ChatIdOrUsername,
     /// Contact's phone number
     pub phone_number: String,
     /// Contact's first name

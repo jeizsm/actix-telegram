@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a point on the map.
 #[derive(Serialize, Deserialize, Debug)]

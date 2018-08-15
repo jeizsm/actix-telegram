@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a sticker set.
 #[derive(Serialize, Deserialize, Debug)]

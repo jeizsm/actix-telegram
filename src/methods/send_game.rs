@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// Use this method to send a game. On success, the sent Message is returned.
 #[derive(Serialize, Debug, TelegramApi)]

@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a venue.
 #[derive(Serialize, Deserialize, Debug)]

@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
 #[derive(Serialize, Deserialize, Debug)]

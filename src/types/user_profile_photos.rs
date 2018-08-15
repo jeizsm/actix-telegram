@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represent a user's profile pictures.
 #[derive(Serialize, Deserialize, Debug)]

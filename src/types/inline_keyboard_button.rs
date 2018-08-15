@@ -1,4 +1,4 @@
-use super::*;
+use types::*;
 
 /// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
 #[derive(Serialize, Deserialize, Debug)]
