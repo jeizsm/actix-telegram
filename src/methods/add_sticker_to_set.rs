@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to add a new sticker to a set created by the bot. Returns True on success.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "True"]
 pub struct AddStickerToSet {
     /// User identifier of sticker set owner
     pub user_id: Integer,

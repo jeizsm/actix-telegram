@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to send a game. On success, the sent Message is returned.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "Message"]
 pub struct SendGame {
     /// Unique identifier for the target chat
     pub chat_id: Integer,

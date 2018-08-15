@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to send invoices. On success, the sent Message is returned.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "Message"]
 pub struct SendInvoice {
     /// Unique identifier for the target private chat
     pub chat_id: Integer,

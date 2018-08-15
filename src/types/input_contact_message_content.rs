@@ -1,5 +1,3 @@
-use super::*;
-
 /// Represents the content of a contact message to be sent as the result of an inline query.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct InputContactMessageContent {

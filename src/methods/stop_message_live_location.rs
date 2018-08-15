@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to stop updating a live location message sent by the bot or via the bot (for inline bots) before live_period expires. On success, if the message was sent by the bot, the sent Message is returned, otherwise True is returned.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "MessageOrTrue"]
 pub struct StopMessageLiveLocation {
     /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
     pub chat_id: Option<ChatId>,

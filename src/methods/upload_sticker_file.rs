@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to upload a .png file with a sticker for later use in createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File on success.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "File"]
 pub struct UploadStickerFile {
     /// User identifier of sticker file owner
     pub user_id: Integer,

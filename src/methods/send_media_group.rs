@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to send a group of photos or videos as an album. On success, an array of the sent Messages is returned.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "Vec<Message>"]
 pub struct SendMediaGroup {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
     pub chat_id: ChatId,

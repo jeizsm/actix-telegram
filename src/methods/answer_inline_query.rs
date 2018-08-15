@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are allowed.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "True"]
 pub struct AnswerInlineQuery {
     /// Unique identifier for the answered query
     pub inline_query_id: String,

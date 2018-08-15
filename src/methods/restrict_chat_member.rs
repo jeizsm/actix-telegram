@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate admin rights. Pass True for all boolean parameters to lift restrictions from a user. Returns True on success.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "True"]
 pub struct RestrictChatMember {
     /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
     pub chat_id: ChatId,

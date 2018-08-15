@@ -1,5 +1,3 @@
-use super::*;
-
 /// This object represents a shipping address.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ShippingAddress {

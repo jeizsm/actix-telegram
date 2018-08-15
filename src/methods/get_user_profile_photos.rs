@@ -1,7 +1,8 @@
 use super::*;
 
 /// Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug, TelegramApi)]
+#[return_type = "UserProfilePhotos"]
 pub struct GetUserProfilePhotos {
     /// Unique identifier of the target user
     pub user_id: Integer,

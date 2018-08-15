@@ -1,5 +1,3 @@
-use super::*;
-
 /// This object represents a chat photo.
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ChatPhoto {
