@@ -8,6 +8,7 @@ pub struct InlineQuery {
     /// Sender
     pub from: User,
     /// Sender location, only for bots that request user location
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
     /// Text of the query (up to 512 characters)
     pub query: String,

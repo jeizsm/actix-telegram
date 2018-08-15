@@ -13,13 +13,18 @@ pub struct InlineQueryResultVoice {
     /// Recording title
     pub title: String,
     /// Caption, 0-200 characters
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
     /// Recording duration in seconds
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub voice_duration: Option<Integer>,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the voice recording
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
 }

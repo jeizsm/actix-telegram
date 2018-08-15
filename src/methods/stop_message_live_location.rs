@@ -5,11 +5,15 @@ use super::*;
 #[return_type = "MessageOrTrue"]
 pub struct StopMessageLiveLocation {
     /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<ChatId>,
     /// Required if inline_message_id is not specified. Identifier of the sent message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<Integer>,
     /// Required if chat_id and message_id are not specified. Identifier of the inline message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
     /// A JSON-serialized object for a new inline keyboard.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
 }

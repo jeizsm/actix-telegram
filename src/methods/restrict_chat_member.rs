@@ -9,13 +9,18 @@ pub struct RestrictChatMember {
     /// Unique identifier of the target user
     pub user_id: Integer,
     /// Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub until_date: Option<Integer>,
     /// Pass True, if the user can send text messages, contacts, locations and venues
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub can_send_messages: Option<bool>,
     /// Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub can_send_media_messages: Option<bool>,
     /// Pass True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub can_send_other_messages: Option<bool>,
     /// Pass True, if the user may add web page previews to their messages, implies can_send_media_messages
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub can_add_web_page_previews: Option<bool>,
 }

@@ -15,7 +15,9 @@ pub struct CreateNewStickerSet {
     /// One or more emoji corresponding to the sticker
     pub emojis: String,
     /// Pass True, if a set of mask stickers should be created
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub contains_masks: Option<bool>,
     /// A JSON-serialized object for position where the mask should be placed on faces
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mask_position: Option<MaskPosition>,
 }

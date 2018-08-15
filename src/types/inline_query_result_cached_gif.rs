@@ -11,13 +11,18 @@ pub struct InlineQueryResultCachedGif {
     /// A valid file identifier for the GIF file
     pub gif_file_id: String,
     /// Title for the result
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     /// Caption of the GIF file to be sent, 0-200 characters
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the GIF animation
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
 }

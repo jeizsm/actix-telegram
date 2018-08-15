@@ -11,7 +11,9 @@ pub struct InlineQueryResultCachedSticker {
     /// A valid file identifier of the sticker
     pub sticker_file_id: String,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the sticker
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
 }

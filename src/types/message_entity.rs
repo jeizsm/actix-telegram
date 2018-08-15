@@ -11,7 +11,9 @@ pub struct MessageEntity {
     /// Length of the entity in UTF-16 code units
     pub length: Integer,
     /// For “text_link” only, url that will be opened after user taps on the text
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// For “text_mention” only, the mentioned user
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<User>,
 }

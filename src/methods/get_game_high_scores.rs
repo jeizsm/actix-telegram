@@ -9,9 +9,12 @@ pub struct GetGameHighScores {
     /// Target user id
     pub user_id: Integer,
     /// Required if inline_message_id is not specified. Unique identifier for the target chat
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub chat_id: Option<Integer>,
     /// Required if inline_message_id is not specified. Identifier of the sent message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<Integer>,
     /// Required if chat_id and message_id are not specified. Identifier of the inline message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_message_id: Option<String>,
 }

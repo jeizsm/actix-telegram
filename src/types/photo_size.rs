@@ -10,5 +10,6 @@ pub struct PhotoSize {
     /// Photo height
     pub height: Integer,
     /// File size
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<Integer>,
 }

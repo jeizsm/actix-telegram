@@ -15,15 +15,21 @@ pub struct InlineQueryResultLocation {
     /// Location title
     pub title: String,
     /// Period in seconds for which the location can be updated, should be between 60 and 86400.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub live_period: Option<Integer>,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the location
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
     /// Url of the thumbnail for the result
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_url: Option<String>,
     /// Thumbnail width
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_width: Option<Integer>,
     /// Thumbnail height
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_height: Option<Integer>,
 }

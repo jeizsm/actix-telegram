@@ -12,7 +12,9 @@ pub struct InputVenueMessageContent {
     /// Address of the venue
     pub address: String,
     /// Foursquare identifier of the venue, if known
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub foursquare_id: Option<String>,
     /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub foursquare_type: Option<String>,
 }

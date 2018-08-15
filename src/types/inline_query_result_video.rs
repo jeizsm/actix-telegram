@@ -19,19 +19,27 @@ pub struct InlineQueryResultVideo {
     /// Title for the result
     pub title: String,
     /// Caption of the video to be sent, 0-200 characters
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
     /// Video width
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub video_width: Option<Integer>,
     /// Video height
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub video_height: Option<Integer>,
     /// Video duration in seconds
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub video_duration: Option<Integer>,
     /// Short description of the result
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the video. This field is required if InlineQueryResultVideo is used to send an HTML-page as a result (e.g., a YouTube video).
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
 }

@@ -1,4 +1,4 @@
-#![recursion_limit="128"]
+#![recursion_limit = "128"]
 
 extern crate proc_macro;
 extern crate syn;
@@ -6,8 +6,8 @@ extern crate syn;
 extern crate quote;
 extern crate proc_macro2;
 
-use syn::{Data, Fields, DeriveInput, Meta};
 use proc_macro::TokenStream;
+use syn::{Data, DeriveInput, Fields, Meta};
 
 #[proc_macro_derive(NewType)]
 pub fn new_type_macro_derive(input: TokenStream) -> TokenStream {
@@ -15,20 +15,18 @@ pub fn new_type_macro_derive(input: TokenStream) -> TokenStream {
 
     let name = input.ident;
     let newtype = match input.data {
-        Data::Struct(test) => {
-            match test.fields {
-                Fields::Unnamed(fields) => {
-                    let unnamed = fields.unnamed;
-                    if unnamed.len() > 1 || unnamed.len() == 0 {
-                        panic!("works only on newtypes")
-                    } else {
-                        unnamed.first().unwrap().into_value().clone()
-                    }
-                },
-                _ => panic!("works only on unnamed structs")
+        Data::Struct(test) => match test.fields {
+            Fields::Unnamed(fields) => {
+                let unnamed = fields.unnamed;
+                if unnamed.len() > 1 || unnamed.len() == 0 {
+                    panic!("works only on newtypes")
+                } else {
+                    unnamed.first().unwrap().into_value().clone()
+                }
             }
+            _ => panic!("works only on unnamed structs"),
         },
-        _ => panic!("works only on struct")
+        _ => panic!("works only on struct"),
     };
 
     let expanded = quote! {
@@ -46,10 +44,13 @@ pub fn new_type_macro_derive(input: TokenStream) -> TokenStream {
     expanded.into()
 }
 
-
 #[proc_macro_derive(TelegramApi, attributes(return_type))]
 pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
     let input: DeriveInput = syn::parse2(input.into()).unwrap();
+    match input.data {
+        Data::Struct(_) => (),
+        _ => panic!("works only on struct"),
+    }
     let name = input.ident;
     let mut string_name = name.to_string();
     let lowercase = &string_name[0..1].to_lowercase();
@@ -66,7 +67,7 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
                 } else {
                     None
                 }
-            },
+            }
             _ => None,
         }
     });

@@ -21,6 +21,6 @@ pub enum InlineQueryResult {
     InlineQueryResultMpeg4Gif(InlineQueryResultMpeg4Gif),
     InlineQueryResultPhoto(InlineQueryResultPhoto),
     InlineQueryResultVenue(InlineQueryResultVenue),
-    InlineQueryResultVideo(Box<InlineQueryResultVideo>),
+    InlineQueryResultVideo(InlineQueryResultVideo),
     InlineQueryResultVoice(InlineQueryResultVoice),
 }

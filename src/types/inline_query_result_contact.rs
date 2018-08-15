@@ -13,17 +13,24 @@ pub struct InlineQueryResultContact {
     /// Contact's first name
     pub first_name: String,
     /// Contact's last name
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub last_name: Option<String>,
     /// Additional data about the contact in the form of a vCard, 0-2048 bytes
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub vcard: Option<String>,
     /// Inline keyboard attached to the message
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_markup: Option<InlineKeyboardMarkup>,
     /// Content of the message to be sent instead of the contact
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub input_message_content: Option<InputMessageContent>,
     /// Url of the thumbnail for the result
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_url: Option<String>,
     /// Thumbnail width
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_width: Option<Integer>,
     /// Thumbnail height
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb_height: Option<Integer>,
 }

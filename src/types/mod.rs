@@ -76,6 +76,7 @@ mod successful_payment;
 mod update;
 mod user;
 mod user_profile_photos;
+mod utils;
 mod venue;
 mod video;
 mod video_note;
@@ -159,22 +160,23 @@ pub use self::successful_payment::SuccessfulPayment;
 pub use self::update::Update;
 pub use self::user::User;
 pub use self::user_profile_photos::UserProfilePhotos;
+pub use self::utils::*;
 pub use self::venue::Venue;
 pub use self::video::Video;
 pub use self::video_note::VideoNote;
 pub use self::voice::Voice;
 pub use self::webhook_info::WebhookInfo;
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, NewType)]
 pub struct Integer(i64);
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, NewType)]
 pub struct True(bool);
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, NewType)]
 pub struct Float(f64);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CallbackGame;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, NewType)]
 pub struct InputFile(String);

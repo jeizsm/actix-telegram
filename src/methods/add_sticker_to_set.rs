@@ -13,5 +13,6 @@ pub struct AddStickerToSet {
     /// One or more emoji corresponding to the sticker
     pub emojis: String,
     /// A JSON-serialized object for position where the mask should be placed on faces
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mask_position: Option<MaskPosition>,
 }

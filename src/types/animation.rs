@@ -12,11 +12,15 @@ pub struct Animation {
     /// Duration of the video in seconds as defined by sender
     pub duration: Integer,
     /// Animation thumbnail as defined by sender
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub thumb: Option<PhotoSize>,
     /// Original animation filename as defined by sender
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
     /// MIME type of the file as defined by sender
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub mime_type: Option<String>,
     /// File size
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub file_size: Option<Integer>,
 }
