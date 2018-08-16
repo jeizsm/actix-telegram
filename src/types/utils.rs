@@ -28,3 +28,6 @@ pub struct TelegramResponse<T> {
     pub description: Option<String>,
     pub result: Option<T>,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct InputFile;

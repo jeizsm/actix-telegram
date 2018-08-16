@@ -177,6 +177,3 @@ pub struct Float(f64);
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CallbackGame;
-
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct InputFile(String);
