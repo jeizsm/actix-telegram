@@ -1,5 +1,8 @@
 use actix::{Actor, Context};
-use actix_web::{client::{self, MultipartForm}, HttpMessage};
+use actix_web::{
+    client::{self, MultipartForm},
+    HttpMessage,
+};
 use futures::Future;
 use serde::{de::DeserializeOwned, Serialize};
 use std::time::Duration;

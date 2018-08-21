@@ -1,7 +1,7 @@
-use std::num::NonZeroU32;
-use std::io::Read;
 use serde::ser::{Serialize, Serializer};
 use std::fmt::{self, Debug, Formatter};
+use std::io::Read;
+use std::num::NonZeroU32;
 use std::path::Path;
 
 #[derive(Serialize, Deserialize, Debug, NewType)]
@@ -50,7 +50,7 @@ impl Serialize for InputFile {
             InputFile::Memory { name, .. } => {
                 let attach = format!("attach://{}", name);
                 serializer.serialize_str(&attach)
-            },
+            }
             InputFile::Disk { path } => {
                 let path: &Path = path.as_ref();
                 let field_name = path.file_name().unwrap().to_str().unwrap();
@@ -64,9 +64,7 @@ impl Serialize for InputFile {
 impl Debug for InputFile {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
-            InputFile::Disk { path } => {
-                write!(f, "InputFile {{ path: {} }}", path)
-            },
+            InputFile::Disk { path } => write!(f, "InputFile {{ path: {} }}", path),
             InputFile::Memory { name, len, .. } => {
                 write!(f, "InputFile {{ name: {}, len: {:?} }}", name, len)
             }
