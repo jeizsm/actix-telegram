@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a photo to be sent.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InputMediaPhoto {
     /// Type of the result, must be photo
     #[serde(rename = "type")]

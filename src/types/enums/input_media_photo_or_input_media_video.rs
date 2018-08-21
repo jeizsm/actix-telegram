@@ -1,6 +1,6 @@
 use types::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 #[serde(untagged)]
 pub enum InputMediaPhotoOrInputMediaVideo {
     InputMediaPhoto(InputMediaPhoto),

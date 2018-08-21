@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an audio file to be treated as music to be sent.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InputMediaAudio {
     /// Type of the result, must be audio
     #[serde(rename = "type")]

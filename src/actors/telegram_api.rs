@@ -1,5 +1,5 @@
 use actix::{Actor, Context};
-use actix_web::{client, HttpMessage};
+use actix_web::{client::{self, MultipartForm}, HttpMessage};
 use futures::Future;
 use serde::{de::DeserializeOwned, Serialize};
 use std::time::Duration;
@@ -28,9 +28,45 @@ impl TelegramApi {
     {
         let url = format!("https://api.telegram.org/bot{}/{}", token, method);
         let future = client::post(url)
-            .header("UserAgent", "Actixweb")
             .timeout(timeout)
             .json(item)
+            .unwrap()
+            .send()
+            .map_err(|e| error!("request error {:?}", e))
+            .and_then(|response| {
+                response
+                    .json()
+                    .then(|response: Result<TelegramResponse<R>, _>| match response {
+                        Ok(response) => {
+                            if response.ok {
+                                Ok(response.result.unwrap())
+                            } else {
+                                error!("telegram error {:?}", response.description);
+                                Err(())
+                            }
+                        }
+                        Err(e) => {
+                            error!("parsing json error {:?}", e);
+                            Err(())
+                        }
+                    })
+            });
+        Box::new(future)
+    }
+
+    pub fn send_multipart_request<R>(
+        token: &str,
+        method: &str,
+        timeout: Duration,
+        item: MultipartForm,
+    ) -> Box<Future<Item = R, Error = ()>>
+    where
+        R: DeserializeOwned + 'static,
+    {
+        let url = format!("https://api.telegram.org/bot{}/{}", token, method);
+        let future = client::post(url)
+            .timeout(timeout)
+            .multipart(item)
             .unwrap()
             .send()
             .map_err(|e| error!("request error {:?}", e))
