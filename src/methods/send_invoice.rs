@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to send invoices. On success, the sent Message is returned.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendInvoice {
     /// Unique identifier for the target private chat

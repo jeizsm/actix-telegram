@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PassportElementErrorDataField {
     /// Error source, must be data
     pub source: String,

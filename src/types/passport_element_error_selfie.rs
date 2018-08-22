@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PassportElementErrorSelfie {
     /// Error source, must be selfie
     pub source: String,

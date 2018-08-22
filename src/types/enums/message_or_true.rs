@@ -1,6 +1,6 @@
 use types::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum MessageOrTrue {
     Message(Message),

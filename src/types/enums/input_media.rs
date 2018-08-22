@@ -1,6 +1,6 @@
 use types::*;
 
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 #[serde(untagged)]
 pub enum InputMedia {
     InputMediaAnimation(InputMediaAnimation),

@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a link to an article or web page.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InlineQueryResultArticle {
     /// Type of the result, must be article
     #[serde(rename = "type")]

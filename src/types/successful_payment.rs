@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object contains basic information about a successful payment.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct SuccessfulPayment {
     /// Three-letter ISO 4217 currency code
     pub currency: String,

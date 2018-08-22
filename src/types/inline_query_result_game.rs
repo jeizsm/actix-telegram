@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a Game.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InlineQueryResultGame {
     /// Type of the result, must be game
     #[serde(rename = "type")]

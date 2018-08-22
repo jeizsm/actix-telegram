@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a general file to be sent.
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 pub struct InputMediaDocument {
     /// Type of the result, must be document
     #[serde(rename = "type")]

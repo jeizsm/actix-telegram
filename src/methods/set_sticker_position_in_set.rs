@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to move a sticker in a set created by the bot to a specific position . Returns True on success.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "True"]
 pub struct SetStickerPositionInSet {
     /// File identifier of the sticker

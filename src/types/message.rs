@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a message.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Message {
     /// Unique message identifier inside this chat
     pub message_id: Integer,

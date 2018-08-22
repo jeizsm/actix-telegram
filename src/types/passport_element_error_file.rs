@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PassportElementErrorFile {
     /// Error source, must be file
     pub source: String,

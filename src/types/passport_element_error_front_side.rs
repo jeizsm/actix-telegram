@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PassportElementErrorFrontSide {
     /// Error source, must be front_side
     pub source: String,

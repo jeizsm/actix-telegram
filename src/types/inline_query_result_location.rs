@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InlineQueryResultLocation {
     /// Type of the result, must be location
     #[serde(rename = "type")]

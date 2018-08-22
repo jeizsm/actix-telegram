@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a video to be sent.
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 pub struct InputMediaVideo {
     /// Type of the result, must be video
     #[serde(rename = "type")]

@@ -1,7 +1,7 @@
 use types::*;
 
 /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendVideoNote {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)

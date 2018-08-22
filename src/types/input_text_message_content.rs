@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents the content of a text message to be sent as the result of an inline query.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InputTextMessageContent {
     /// Text of the message to be sent, 1-4096 characters
     pub message_text: String,

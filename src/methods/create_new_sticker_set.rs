@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set. Returns True on success.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "True"]
 pub struct CreateNewStickerSet {
     /// User identifier of created sticker set owner

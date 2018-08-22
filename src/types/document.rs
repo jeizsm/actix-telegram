@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Document {
     /// Unique file identifier
     pub file_id: String,

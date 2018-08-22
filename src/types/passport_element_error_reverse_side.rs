@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PassportElementErrorReverseSide {
     /// Error source, must be reverse_side
     pub source: String,

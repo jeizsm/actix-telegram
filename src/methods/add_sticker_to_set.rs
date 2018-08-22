@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to add a new sticker to a set created by the bot. Returns True on success.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "True"]
 pub struct AddStickerToSet {
     /// User identifier of sticker set owner

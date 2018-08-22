@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents one row of the high scores table for a game.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct GameHighScore {
     /// Position in high score table for the game
     pub position: Integer,

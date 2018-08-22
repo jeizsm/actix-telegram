@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents one shipping option.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ShippingOption {
     /// Shipping option identifier
     pub id: String,

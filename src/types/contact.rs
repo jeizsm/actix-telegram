@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a phone contact.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Contact {
     /// Contact's phone number
     pub phone_number: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ReplyKeyboardMarkup {
     /// Array of button rows, each represented by an Array of KeyboardButton objects
     pub keyboard: Vec<Vec<KeyboardButton>>,

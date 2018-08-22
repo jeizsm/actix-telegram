@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InlineQueryResultCachedPhoto {
     /// Type of the result, must be photo
     #[serde(rename = "type")]

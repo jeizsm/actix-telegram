@@ -1,7 +1,7 @@
 use types::*;
 
 /// Contains information about the current status of a webhook.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WebhookInfo {
     /// Webhook URL, may be empty if webhook is not set up
     pub url: String,

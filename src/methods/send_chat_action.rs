@@ -5,7 +5,7 @@ use types::*;
 /// Example: The ImageBot needs some time to process a request and upload the image. Instead of sending a text message along the lines of “Retrieving image, please wait…”, the bot may use sendChatAction with action = upload_photo. The user will see a “sending photo” status for the bot.
 ///
 /// We only recommend using this method when a response from the bot will take a noticeable amount of time to arrive.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "True"]
 pub struct SendChatAction {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)

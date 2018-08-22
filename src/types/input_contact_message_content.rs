@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents the content of a contact message to be sent as the result of an inline query.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct InputContactMessageContent {
     /// Contact's phone number
     pub phone_number: String,

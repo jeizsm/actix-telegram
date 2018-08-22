@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a video file.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Video {
     /// Unique identifier for this file
     pub file_id: String,

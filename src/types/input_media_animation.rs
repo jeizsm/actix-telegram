@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
-#[derive(Serialize, Debug)]
+#[derive(Debug, Serialize)]
 pub struct InputMediaAnimation {
     /// Type of the result, must be animation
     #[serde(rename = "type")]

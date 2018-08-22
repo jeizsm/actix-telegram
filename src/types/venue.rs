@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a venue.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Venue {
     /// Venue location
     pub location: Location,

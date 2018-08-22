@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a chat photo.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct ChatPhoto {
     /// Unique file identifier of small (160x160) chat photo. This file_id can be used only for photo download.
     pub small_file_id: String,

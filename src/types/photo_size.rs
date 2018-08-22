@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PhotoSize {
     /// Unique identifier for this file
     pub file_id: String,

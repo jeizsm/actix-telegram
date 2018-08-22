@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are allowed.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "True"]
 pub struct AnswerInlineQuery {
     /// Unique identifier for the answered query

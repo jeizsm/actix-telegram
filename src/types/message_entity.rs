@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct MessageEntity {
     /// Type of the entity. Can be mention (@username), hashtag, cashtag, bot_command, url, email, phone_number, bold (bold text), italic (italic text), code (monowidth string), pre (monowidth block), text_link (for clickable text URLs), text_mention (for users without usernames)
     #[serde(rename = "type")]

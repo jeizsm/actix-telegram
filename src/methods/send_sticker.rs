@@ -1,7 +1,7 @@
 use types::*;
 
 /// Use this method to send .webp stickers. On success, the sent Message is returned.
-#[derive(Serialize, Debug, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi)]
 #[return_type = "Message"]
 pub struct SendSticker {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
