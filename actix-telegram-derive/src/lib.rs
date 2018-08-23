@@ -208,35 +208,35 @@ impl ToTokens for FileFields {
             let field_name = &field.field_name;
             let quote = match field.field_type.to_string().as_str() {
                 "InputFile" => {
-                    let input_file = quote_input_file(field.is_optional);
+                    let expanded = expand_input_file_field(field.is_optional);
                     quote! {
                         match msg.#field_name {
-                            #input_file
+                            #expanded
                         }
                     }
                 },
                 "InputFileOrString" => {
-                    let input_file = quote_input_file_or_string(field.is_optional);
+                    let expanded = expand_input_file_or_string_field(field.is_optional);
                     quote! {
                         match msg.#field_name {
-                            #input_file
+                            #expanded
                         }
                     }
                 }
                 "InputMedia" => {
-                    let input_media = quote_input_media(field.is_optional);
+                    let expanded = expand_input_media_field(field.is_optional);
                     quote! {
                         match msg.#field_name {
-                            #input_media
+                            #expanded
                         }
                     }
                 },
                 _ => {
-                    let input_media = quote_input_media_photo_or_video(field.is_optional);
+                    let expanded = expand_input_media_photo_or_video_field(field.is_optional);
                     quote! {
                         for media in msg.#field_name {
                             match media {
-                                #input_media
+                                #expanded
                             }
                         }
                     }
@@ -247,9 +247,9 @@ impl ToTokens for FileFields {
     }
 }
 
-fn quote_input_media_photo_or_video(_is_optional: bool) -> proc_macro2::TokenStream {
-    let match_media = quote_input_file_or_string(false);
-    let match_thumb = quote_input_file_or_string(true);
+fn expand_input_media_photo_or_video_field(_is_optional: bool) -> proc_macro2::TokenStream {
+    let match_media = expand_input_file_or_string_field(false);
+    let match_thumb = expand_input_file_or_string_field(true);
     quote! {
         InputMediaPhotoOrInputMediaVideo::InputMediaPhoto(input_media) => {
             match input_media.media {
@@ -267,9 +267,9 @@ fn quote_input_media_photo_or_video(_is_optional: bool) -> proc_macro2::TokenStr
     }
 }
 
-fn quote_input_media(_is_optional: bool) -> proc_macro2::TokenStream {
-    let match_media = quote_input_file_or_string(false);
-    let match_thumb = quote_input_file_or_string(true);
+fn expand_input_media_field(_is_optional: bool) -> proc_macro2::TokenStream {
+    let match_media = expand_input_file_or_string_field(false);
+    let match_thumb = expand_input_file_or_string_field(true);
     quote! {
         InputMedia::InputMediaAnimation(input_media) => {
             match input_media.media {
@@ -311,13 +311,13 @@ fn quote_input_media(_is_optional: bool) -> proc_macro2::TokenStream {
     }
 }
 
-fn quote_input_file_or_string(is_optional: bool) -> proc_macro2::TokenStream {
-    let input_file = quote_input_file(false);
+fn expand_input_file_or_string_field(is_optional: bool) -> proc_macro2::TokenStream {
+    let expanded = expand_input_file_field(false);
     if is_optional {
         quote! {
             Some(InputFileOrString::InputFile(input_file)) => {
                 match input_file {
-                    #input_file
+                    #expanded
                 }
             },
             Some(InputFileOrString::String(_)) => {
@@ -329,7 +329,7 @@ fn quote_input_file_or_string(is_optional: bool) -> proc_macro2::TokenStream {
         quote! {
             InputFileOrString::InputFile(input_file) => {
                 match input_file {
-                    #input_file
+                    #expanded
                 }
             },
             InputFileOrString::String(_) => {
@@ -339,26 +339,35 @@ fn quote_input_file_or_string(is_optional: bool) -> proc_macro2::TokenStream {
     }
 }
 
-fn quote_input_file(is_optional: bool) -> proc_macro2::TokenStream {
+fn expand_input_file_field(is_optional: bool) -> proc_macro2::TokenStream {
     if is_optional {
         quote! {
-            Some(InputFile::Memory { name, source, len }) => {
-                form.add_reader2(&name, source, Some(name.as_str()), None, len);
+            Some(InputFile::Memory { name, source, len, mime }) => {
+                form.add_reader2(&name, source, Some(name.as_str()), mime, len);
             },
-            Some(InputFile::Disk { path }) => {
-                form.add_file(&path, &path).unwrap();
+            Some(InputFile::Disk { path, mime }) => {
+                let path: &Path = path.as_ref();
+                let field_name = path.file_name().unwrap().to_str().unwrap();
+                match mime {
+                    Some(mime) => form.add_file_with_mime(field_name, &path, mime).unwrap(),
+                    None => form.add_file(field_name, &path).unwrap(),
+                }
+
             },
             None => (),
         }
     } else {
         quote! {
-            InputFile::Memory { name, source, len } => {
-                form.add_reader2(&name, source, Some(name.as_str()), None, len);
+            InputFile::Memory { name, source, len, mime } => {
+                form.add_reader2(&name, source, Some(name.as_str()), mime, len);
             },
-            InputFile::Disk { path } => {
+            InputFile::Disk { path, mime } => {
                 let path: &Path = path.as_ref();
                 let field_name = path.file_name().unwrap().to_str().unwrap();
-                form.add_file(field_name, path).unwrap();
+                match mime {
+                    Some(mime) => form.add_file_with_mime(field_name, &path, mime).unwrap(),
+                    None => form.add_file(field_name, &path).unwrap(),
+                }
             }
         }
     }

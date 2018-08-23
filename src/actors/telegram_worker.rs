@@ -3,7 +3,9 @@ use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
 use types::Update;
 
-pub struct App(Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static>);
+type UpdateFunction = Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static;
+
+pub struct App(Box<UpdateFunction>);
 
 impl App {
     pub fn new<F>(f: F) -> Self
