@@ -10,7 +10,6 @@ extern crate serde_json;
 extern crate log;
 #[macro_use]
 extern crate actix_telegram_derive;
-extern crate mime;
 
 mod actors;
 pub mod methods;

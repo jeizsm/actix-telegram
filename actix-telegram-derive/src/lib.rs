@@ -342,32 +342,25 @@ fn expand_input_file_or_string_field(is_optional: bool) -> proc_macro2::TokenStr
 fn expand_input_file_field(is_optional: bool) -> proc_macro2::TokenStream {
     if is_optional {
         quote! {
-            Some(InputFile::Memory { name, source, len, mime }) => {
-                form.add_reader2(&name, source, Some(name.as_str()), mime, len);
+            Some(InputFile::Memory { name, source, len }) => {
+                form.add_reader2(&name, source, Some(name.as_str()), None, len);
             },
-            Some(InputFile::Disk { path, mime }) => {
+            Some(InputFile::Disk { path }) => {
                 let path: &Path = path.as_ref();
                 let field_name = path.file_name().unwrap().to_str().unwrap();
-                match mime {
-                    Some(mime) => form.add_file_with_mime(field_name, &path, mime).unwrap(),
-                    None => form.add_file(field_name, &path).unwrap(),
-                }
-
+                form.add_file(field_name, &path).unwrap();
             },
             None => (),
         }
     } else {
         quote! {
-            InputFile::Memory { name, source, len, mime } => {
-                form.add_reader2(&name, source, Some(name.as_str()), mime, len);
+            InputFile::Memory { name, source, len } => {
+                form.add_reader2(&name, source, Some(name.as_str()), None, len);
             },
-            InputFile::Disk { path, mime } => {
+            InputFile::Disk { path } => {
                 let path: &Path = path.as_ref();
                 let field_name = path.file_name().unwrap().to_str().unwrap();
-                match mime {
-                    Some(mime) => form.add_file_with_mime(field_name, &path, mime).unwrap(),
-                    None => form.add_file(field_name, &path).unwrap(),
-                }
+                form.add_file(field_name, &path).unwrap();
             }
         }
     }

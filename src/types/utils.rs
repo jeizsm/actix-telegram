@@ -3,7 +3,6 @@ use std::fmt::{self, Debug, Formatter};
 use std::io::Read;
 use std::num::NonZeroU32;
 use std::path::Path;
-use mime::Mime;
 
 #[derive(Serialize, Deserialize, Debug, NewType)]
 pub struct UserId(i32);
@@ -39,11 +38,9 @@ pub enum InputFile {
         name: String,
         source: Box<Read + Send>,
         len: Option<u64>,
-        mime: Option<Mime>,
     },
     Disk {
         path: String,
-        mime: Option<Mime>,
     },
 }
 
@@ -67,9 +64,9 @@ impl Serialize for InputFile {
 impl Debug for InputFile {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
-            InputFile::Disk { path, mime } => write!(f, "InputFile {{ path: {}, mime: {:?} }}", path, mime),
-            InputFile::Memory { name, len, mime, .. } => {
-                write!(f, "InputFile {{ name: {}, len: {:?}, mime: {:?} }}", name, len, mime)
+            InputFile::Disk { path } => write!(f, "InputFile {{ path: {} }}", path),
+            InputFile::Memory { name, len, .. } => {
+                write!(f, "InputFile {{ name: {}, len: {:?} }}", name, len)
             }
         }
     }

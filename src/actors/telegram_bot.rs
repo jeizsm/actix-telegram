@@ -1,7 +1,7 @@
 use super::{App, TelegramApi, TelegramWorker};
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
-use methods::GetUpdates;
+use methods::OptimizedGetUpdates;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
@@ -66,7 +66,7 @@ impl Actor for TelegramBot {
 impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
     fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
         let timeout = self.timeout.as_secs() as u16;
-        let msg = GetUpdates::new(timeout, self.offset);
+        let msg = OptimizedGetUpdates::new(timeout, self.offset);
         debug!("TelegramBot.GetUpdates {:?}", msg);
 
         let telegram_api = self.telegram_api.as_ref().unwrap();
