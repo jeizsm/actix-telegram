@@ -1,11 +1,11 @@
 [package]
 name = "actix-telegram"
-version = "0.0.5"
+version = "0.1.0"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 
 [dependencies]
 actix = "0.7.3"
-actix-web = { git = "https://github.com/jeizsm/actix-web.git", features=["rust-tls"] }
+actix-web = { version="0.7.3", features=["rust-tls"] }
 actix-telegram-derive = { path="./actix-telegram-derive" }
 futures = "0.1.23"
 serde = "1.0.70"
@@ -14,3 +14,4 @@ serde_json = "1.0.24"
 tokio = "0.1.7"
 log = "0.4.3"
 env_logger = "0.5.11"
+multipart-rfc7578 = { version="0.6.0", features=["actix-web"] }

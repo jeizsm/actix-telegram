@@ -68,7 +68,7 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
     let request = match file_fields {
         Some(fields) => {
             quote! {
-                let mut form = MultipartForm::default();
+                let mut form = Form::default();
                 let value = serde_json::to_value(&msg).unwrap();
                 let object = value.as_object().unwrap();
 
@@ -98,7 +98,7 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
         use futures::Future;
 
         #[allow(unused_imports)]
-        use actix_web::client::MultipartForm;
+        use multipart_rfc7578::Form;
         #[allow(unused_imports)]
         use serde_json::{self, Value};
         #[allow(unused_imports)]

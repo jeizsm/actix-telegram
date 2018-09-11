@@ -16,19 +16,19 @@ fn main() {
     let sys = System::new("example");
     let token = env::var("TELEGRAM_TOKEN").unwrap();
     let second_app = App::new(|msg, _| {
-        debug!("{}", "next");
+        println!("{}", "next");
         Err(msg)
     });
-    let app = App::new(|_a, telegram_api| {
+    let app = App::new(|msg, telegram_api| {
+        println!("{:?}", msg);
         Arbiter::spawn(
             telegram_api
                 .send(GetMe)
-                .map(|response| debug!("{:?}", response.unwrap()))
+                .map(|response| println!("{:?}", response.unwrap()))
                 .map_err(|e| {
                     println!("Actor is probably died: {}", e);
                 }),
         );
-        debug!("{}", "test");
         Ok(())
     });
 

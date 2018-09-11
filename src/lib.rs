@@ -10,6 +10,7 @@ extern crate serde_json;
 extern crate log;
 #[macro_use]
 extern crate actix_telegram_derive;
+extern crate multipart_rfc7578;
 
 mod actors;
 pub mod methods;
