@@ -1,13 +1,10 @@
 use actix::{Actor, Context};
-use actix_web::{
-    client,
-    HttpMessage,
-};
+use actix_web::{client, HttpMessage};
 use futures::Future;
+use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
 use std::time::Duration;
 use types::TelegramResponse;
-use multipart_rfc7578::{Form, SetBody};
 
 pub struct TelegramApi {
     pub(crate) token: String,
@@ -68,8 +65,9 @@ impl TelegramApi {
         R: DeserializeOwned + 'static,
     {
         let url = format!("https://api.telegram.org/bot{}/{}", token, method);
-        let mut client = client::post(url);
-        let future = item.set_body(client.timeout(timeout))
+        let mut request = client::post(url);
+        let future = item
+            .set_body(request.timeout(timeout))
             .unwrap()
             .send()
             .map_err(|e| error!("request error {:?}", e))

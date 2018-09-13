@@ -4,14 +4,14 @@ version = "0.1.0"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 
 [dependencies]
-actix = "0.7.3"
-actix-web = { version="0.7.3", features=["rust-tls"] }
+actix = "0.7.4"
+actix-web = { version = "0.7.7", features=["rust-tls"] }
 actix-telegram-derive = { path="./actix-telegram-derive" }
-futures = "0.1.23"
-serde = "1.0.70"
-serde_derive = "1.0.70"
-serde_json = "1.0.24"
-tokio = "0.1.7"
-log = "0.4.3"
-env_logger = "0.5.11"
-multipart-rfc7578 = { version="0.6.0", features=["actix-web"] }
+multipart-rfc7578 = { version = "0.6.0", features=["actix-web"] }
+futures = "0.1.24"
+serde = "1.0.78"
+serde_derive = "1.0.78"
+serde_json = "1.0.27"
+tokio = "0.1.8"
+log = "0.4.5"
+env_logger = "0.5.13"

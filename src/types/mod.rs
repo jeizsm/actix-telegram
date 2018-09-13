@@ -166,14 +166,5 @@ pub use self::video::Video;
 pub use self::video_note::VideoNote;
 pub use self::voice::Voice;
 pub use self::webhook_info::WebhookInfo;
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct Integer(i64);
-
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct True(bool);
-
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct Float(f64);
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CallbackGame;

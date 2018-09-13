@@ -4,14 +4,9 @@ use std::io::Read;
 use std::num::NonZeroU32;
 use std::path::Path;
 
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct UserId(i32);
-
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct ChatId(i64);
-
-#[derive(Serialize, Deserialize, Debug, NewType)]
-pub struct MessageId(i32);
+pub type Integer = i64;
+pub type True = bool;
+pub type Float = f64;
 
 #[derive(Debug, Serialize, Deserialize, Clone, Copy)]
 pub struct UpdateId(NonZeroU32);
