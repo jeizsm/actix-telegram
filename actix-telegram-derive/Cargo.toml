@@ -2,6 +2,9 @@
 name = "actix-telegram-derive"
 version = "0.1.0"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
+description = "derive for actix-telegram"
+repository = "https://github.com/jeizsm/actix-telegram"
+license = "MIT"
 
 [lib]
 proc-macro = true

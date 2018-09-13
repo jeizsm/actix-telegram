@@ -1,12 +1,15 @@
 [package]
 name = "actix-telegram"
-version = "0.1.0"
+version = "0.1.0-alpha"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
+description = "telegram bot api lib based on actix"
+repository = "https://github.com/jeizsm/actix-telegram"
+license = "MIT"
 
 [dependencies]
 actix = "0.7.4"
 actix-web = { version = "0.7.7", features=["rust-tls"] }
-actix-telegram-derive = { path="./actix-telegram-derive" }
+actix-telegram-derive = { path="./actix-telegram-derive", version="0.1.0" }
 multipart-rfc7578 = { version = "0.6.0", features=["actix-web"] }
 futures = "0.1.24"
 serde = "1.0.78"
