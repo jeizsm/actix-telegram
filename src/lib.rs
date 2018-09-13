@@ -11,9 +11,10 @@ extern crate log;
 #[macro_use]
 extern crate actix_telegram_derive;
 extern crate multipart_rfc7578;
+extern crate rustls;
 
-mod actors;
+pub mod actors;
 pub mod methods;
 pub mod types;
 
-pub use actors::{App, TelegramApi, TelegramBot};
+pub use actors::{App, TelegramApi, TelegramBot, TelegramServer};

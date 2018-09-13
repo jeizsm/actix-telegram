@@ -7,7 +7,6 @@ use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
 use types::UpdateId;
 
-#[derive(Serialize, Debug)]
 struct PollUpdates;
 
 pub struct TelegramBot {
@@ -33,6 +32,11 @@ impl TelegramBot {
             apps: Arc::new(apps),
         }
     }
+
+    pub fn workers(mut self, num: usize) -> Self {
+        self.threads = num;
+        self
+    }
 }
 
 impl Actor for TelegramBot {
@@ -48,8 +52,7 @@ impl Actor for TelegramBot {
                 let clone = telegram_api.clone();
                 let arc = self.apps.clone();
                 Arbiter::start(move |_a| TelegramWorker::new(clone, arc))
-            })
-            .collect();
+            }).collect();
         self.workers = workers;
         self.telegram_api = Some(telegram_api);
 
@@ -64,7 +67,7 @@ impl Actor for TelegramBot {
 }
 
 impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
-    fn handle(&mut self, _msg: PollUpdates, ctx: &mut Context<Self>) {
+    fn handle(&mut self, _: PollUpdates, ctx: &mut Context<Self>) {
         let timeout = self.timeout.as_secs() as u16;
         let msg = OptimizedGetUpdates::new(timeout, self.offset);
         debug!("TelegramBot.GetUpdates {:?}", msg);
@@ -83,10 +86,8 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                         for (i, result) in response.into_iter().enumerate() {
                             actor.workers[i % actor.threads].do_send(result);
                         }
-                    })
-                    .map_err(|e| error!("response error {:?}", e));
-            })
-            .map_err(|e, _actor, _ctx| error!("mailbox error {:?}", e));
+                    }).map_err(|e| error!("response error {:?}", e));
+            }).map_err(|e, _actor, _ctx| error!("mailbox error {:?}", e));
         ctx.wait(actor_future);
     }
 }
