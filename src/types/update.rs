@@ -2,34 +2,142 @@ use super::*;
 
 /// This object represents an incoming update.At most one of the optional parameters can be present in any given update.
 #[derive(Serialize, Deserialize, Debug)]
-pub struct Update {
+#[serde(untagged)]
+pub enum Update {
+    Message(MessageUpdate),
+    EditedMessage(EditedMessageUpdate),
+    ChannelPost(ChannelPostUpdate),
+    EditedChannelPost(EditedChannelPostUpdate),
+    InlineQuery(InlineQueryUpdate),
+    ChosenInlineResult(ChosenInlineResultUpdate),
+    CallbackQuery(CallbackQueryUpdate),
+    ShippingQuery(ShippingQueryUpdate),
+    PreCheckoutQuery(PreCheckoutQueryUpdate),
+    Unknown(UnknownUpdate),
+}
+
+pub enum UpdateKind {
+    Message(Message),
+    InlineQuery(InlineQuery),
+    ChosenInlineResult(ChosenInlineResult),
+    CallbackQuery(CallbackQuery),
+    ShippingQuery(ShippingQuery),
+    PreCheckoutQuery(PreCheckoutQuery),
+    Unknown,
+}
+
+impl Update {
+    #[inline]
+    pub fn update_id(&self) -> UpdateId {
+        match self {
+            Update::Message(update) => update.update_id,
+            Update::EditedMessage(update) => update.update_id,
+            Update::ChannelPost(update) => update.update_id,
+            Update::EditedChannelPost(update) => update.update_id,
+            Update::InlineQuery(update) => update.update_id,
+            Update::ChosenInlineResult(update) => update.update_id,
+            Update::CallbackQuery(update) => update.update_id,
+            Update::ShippingQuery(update) => update.update_id,
+            Update::PreCheckoutQuery(update) => update.update_id,
+            Update::Unknown(update) => update.update_id,
+        }
+    }
+
+    #[inline]
+    pub fn kind(self) -> UpdateKind {
+        match self {
+            Update::Message(update) => UpdateKind::Message(update.message),
+            Update::EditedMessage(update) => UpdateKind::Message(update.edited_message),
+            Update::ChannelPost(update) => UpdateKind::Message(update.channel_post),
+            Update::EditedChannelPost(update) => UpdateKind::Message(update.edited_channel_post),
+            Update::InlineQuery(update) => UpdateKind::InlineQuery(update.inline_query),
+            Update::ChosenInlineResult(update) => {
+                UpdateKind::ChosenInlineResult(update.chosen_inline_result)
+            }
+            Update::CallbackQuery(update) => UpdateKind::CallbackQuery(update.callback_query),
+            Update::ShippingQuery(update) => UpdateKind::ShippingQuery(update.shipping_query),
+            Update::PreCheckoutQuery(update) => {
+                UpdateKind::PreCheckoutQuery(update.pre_checkout_query)
+            }
+            Update::Unknown(_) => UpdateKind::Unknown,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct MessageUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
     /// New incoming message of any kind — text, photo, sticker, etc.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub message: Option<Message>,
+    pub message: Message,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EditedMessageUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New version of a message that is known to the bot and was edited
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub edited_message: Option<Message>,
+    pub edited_message: Message,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ChannelPostUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New incoming channel post of any kind — text, photo, sticker, etc.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub channel_post: Option<Message>,
+    pub channel_post: Message,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EditedChannelPostUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New version of a channel post that is known to the bot and was edited
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub edited_channel_post: Option<Message>,
+    pub edited_channel_post: Message,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct InlineQueryUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New incoming inline query
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub inline_query: Option<InlineQuery>,
+    pub inline_query: InlineQuery,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ChosenInlineResultUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub chosen_inline_result: Option<ChosenInlineResult>,
+    pub chosen_inline_result: ChosenInlineResult,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CallbackQueryUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New incoming callback query
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub callback_query: Option<CallbackQuery>,
+    pub callback_query: CallbackQuery,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct ShippingQueryUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New incoming shipping query. Only for invoices with flexible price
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub shipping_query: Option<ShippingQuery>,
+    pub shipping_query: ShippingQuery,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct PreCheckoutQueryUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
     /// New incoming pre-checkout query. Contains full information about checkout
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub pre_checkout_query: Option<PreCheckoutQuery>,
+    pub pre_checkout_query: PreCheckoutQuery,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct UnknownUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
 }
