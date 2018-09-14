@@ -11,7 +11,7 @@ pub struct SendVideoNote {
     /// Duration of sent video in seconds
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<Integer>,
-    /// Video width and height
+    /// Video width and height, i.e. diameter of the video message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub length: Option<Integer>,
     /// Thumbnail of the file sent. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail‘s width and height should not exceed 90. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can’t be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »

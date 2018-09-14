@@ -9,4 +9,7 @@ pub enum PassportElementError {
     PassportElementErrorSelfie(PassportElementErrorSelfie),
     PassportElementErrorFile(PassportElementErrorFile),
     PassportElementErrorFiles(PassportElementErrorFiles),
+    PassportElementErrorTranslationFile(PassportElementErrorTranslationFile),
+    PassportElementErrorTranslationFiles(PassportElementErrorTranslationFiles),
+    PassportElementErrorUnspecified(PassportElementErrorUnspecified),
 }

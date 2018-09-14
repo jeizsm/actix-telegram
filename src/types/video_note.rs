@@ -5,7 +5,7 @@ use types::*;
 pub struct VideoNote {
     /// Unique identifier for this file
     pub file_id: String,
-    /// Video width and height as defined by sender
+    /// Video width and height (diameter of the video message) as defined by sender
     pub length: Integer,
     /// Duration of the video in seconds as defined by sender
     pub duration: Integer,

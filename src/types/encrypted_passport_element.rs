@@ -6,7 +6,7 @@ pub struct EncryptedPassportElement {
     /// Element type. One of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”, “phone_number”, “email”.
     #[serde(rename = "type")]
     pub type_: String,
-    /// Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “identity_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
     /// User's verified phone number, available only for “phone_number” type
@@ -27,4 +27,9 @@ pub struct EncryptedPassportElement {
     /// Encrypted file with the selfie of the user holding a document, provided by the user; available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selfie: Option<PassportFile>,
+    /// Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub translation: Option<Vec<PassportFile>>,
+    /// Base64-encoded element hash for using in PassportElementErrorUnspecified
+    pub hash: String,
 }
