@@ -18,6 +18,9 @@ pub enum Update {
 
 pub enum UpdateKind {
     Message(Message),
+    EditedMessage(Message),
+    ChannelPost(Message),
+    EditedChannelPost(Message),
     InlineQuery(InlineQuery),
     ChosenInlineResult(ChosenInlineResult),
     CallbackQuery(CallbackQuery),
@@ -47,9 +50,11 @@ impl Update {
     pub fn kind(self) -> UpdateKind {
         match self {
             Update::Message(update) => UpdateKind::Message(update.message),
-            Update::EditedMessage(update) => UpdateKind::Message(update.edited_message),
-            Update::ChannelPost(update) => UpdateKind::Message(update.channel_post),
-            Update::EditedChannelPost(update) => UpdateKind::Message(update.edited_channel_post),
+            Update::EditedMessage(update) => UpdateKind::EditedMessage(update.edited_message),
+            Update::ChannelPost(update) => UpdateKind::ChannelPost(update.channel_post),
+            Update::EditedChannelPost(update) => {
+                UpdateKind::EditedChannelPost(update.edited_channel_post)
+            }
             Update::InlineQuery(update) => UpdateKind::InlineQuery(update.inline_query),
             Update::ChosenInlineResult(update) => {
                 UpdateKind::ChosenInlineResult(update.chosen_inline_result)
