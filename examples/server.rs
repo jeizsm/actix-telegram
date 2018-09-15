@@ -43,7 +43,7 @@ fn main() {
         .start();
     Arbiter::spawn(
         telegram_server
-            .send(ServerSetWebhook::new())
+            .send(ServerSetWebhook::new().allowed_updates(vec![AllowedUpdate::EditedMessage]))
             .map(|response| println!("{:?}", response.unwrap()))
             .map_err(|e| {
                 println!("Actor is probably died: {}", e);

@@ -66,3 +66,17 @@ impl Debug for InputFile {
         }
     }
 }
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AllowedUpdate {
+    Message,
+    EditedMessage,
+    ChannelPost,
+    EditedChannelPost,
+    InlineQuery,
+    ChosenInlineResult,
+    CallbackQuery,
+    ShippingQuery,
+    PreCheckoutQuery,
+}

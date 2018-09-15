@@ -15,7 +15,7 @@ use std::fs::File;
 use std::io::BufReader;
 use std::num::NonZeroU8;
 use std::sync::Arc;
-use types::{InputFile, True, Update};
+use types::{AllowedUpdate, InputFile, True, Update};
 
 struct ReqState {
     telegram_api: Addr<TelegramApi>,
@@ -135,7 +135,7 @@ impl Actor for TelegramServer {
 
 pub struct ServerSetWebhook {
     max_connections: Option<NonZeroU8>,
-    allowed_updates: Option<Vec<String>>,
+    allowed_updates: Option<Vec<AllowedUpdate>>,
 }
 
 impl ServerSetWebhook {
@@ -151,7 +151,7 @@ impl ServerSetWebhook {
         self
     }
 
-    pub fn allowed_updates(mut self, updates: Vec<String>) -> Self {
+    pub fn allowed_updates(mut self, updates: Vec<AllowedUpdate>) -> Self {
         self.allowed_updates = Some(updates);
         self
     }
