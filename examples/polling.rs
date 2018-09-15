@@ -2,7 +2,6 @@ extern crate actix_telegram;
 extern crate actix_web;
 extern crate env_logger;
 extern crate serde_json;
-#[macro_use]
 extern crate log;
 extern crate futures;
 
