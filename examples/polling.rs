@@ -1,9 +1,9 @@
 extern crate actix_telegram;
 extern crate actix_web;
 extern crate env_logger;
-extern crate serde_json;
-extern crate log;
 extern crate futures;
+extern crate log;
+extern crate serde_json;
 
 use actix_telegram::{methods::GetMe, App, TelegramBot};
 use actix_web::actix::{Actor, Arbiter, System};

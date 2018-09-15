@@ -8,7 +8,7 @@ license = "MIT"
 
 [dependencies]
 actix = "0.7.4"
-actix-web = { version = "0.7.7", features=["rust-tls"] }
+actix-web = { version = "0.7.7" }
 actix-telegram-derive = { path="./actix-telegram-derive", version="0.1.0" }
 multipart-rfc7578 = { version = "0.6.0", features=["actix-web"] }
 futures = "0.1.24"
@@ -18,4 +18,14 @@ serde_json = "1.0.27"
 tokio = "0.1.8"
 log = "0.4.5"
 env_logger = "0.5.13"
-rustls = "0.13.1"
+rustls = { version = "0.13.1", optional = true }
+openssl = { version = "0.10.12", optional = true }
+native-tls = { version = "0.2.1", optional = true }
+
+[features]
+default = ["tls-server", "rust-tls"]
+server = []
+tls-server = ["server"]
+rust-tls = ["rustls", "actix-web/rust-tls"]
+alpn = ["openssl", "actix-web/alpn"]
+tls = ["native-tls", "actix-web/tls"]

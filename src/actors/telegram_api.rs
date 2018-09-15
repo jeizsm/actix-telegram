@@ -3,6 +3,7 @@ use actix_web::{client, HttpMessage};
 use futures::Future;
 use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
+use std::fmt::Debug;
 use std::time::Duration;
 use types::TelegramResponse;
 
@@ -24,7 +25,7 @@ impl TelegramApi {
         item: &T,
     ) -> Box<Future<Item = R, Error = ()>>
     where
-        R: DeserializeOwned + 'static,
+        R: DeserializeOwned + Debug + 'static,
         T: Serialize,
     {
         let url = format!("https://api.telegram.org/bot{}/{}", token, method);
@@ -39,6 +40,7 @@ impl TelegramApi {
                     .json()
                     .then(|response: Result<TelegramResponse<R>, _>| match response {
                         Ok(response) => {
+                            debug!("response {:?}", response);
                             if response.ok {
                                 Ok(response.result.unwrap())
                             } else {
@@ -62,7 +64,7 @@ impl TelegramApi {
         item: Form,
     ) -> Box<Future<Item = R, Error = ()>>
     where
-        R: DeserializeOwned + 'static,
+        R: DeserializeOwned + Debug + 'static,
     {
         let url = format!("https://api.telegram.org/bot{}/{}", token, method);
         let mut request = client::post(url);
@@ -76,6 +78,7 @@ impl TelegramApi {
                     .json()
                     .then(|response: Result<TelegramResponse<R>, _>| match response {
                         Ok(response) => {
+                            debug!("response {:?}", response);
                             if response.ok {
                                 Ok(response.result.unwrap())
                             } else {

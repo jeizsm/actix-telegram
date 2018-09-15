@@ -1,26 +1,24 @@
+#[cfg(feature = "tls-server")]
+mod tls_server;
+mod types;
+
+use self::types::ReqState;
 use super::{App, TelegramApi};
-use actix::{Actor, Addr, Context, Handler, Message};
+use actix::{Actor, Addr, Context, Handler};
 use actix_web::{
     http::Method,
-    server::{HttpHandler, HttpServer, Server},
+    server::{HttpServer, Server},
     App as ActixApp, HttpResponse, Json, State,
 };
 use futures::Future;
 use methods::SetWebhook;
-use rustls::{
-    internal::pemfile::{certs, rsa_private_keys},
-    NoClientAuth, ServerConfig,
-};
-use std::fs::File;
-use std::io::BufReader;
-use std::num::NonZeroU8;
 use std::sync::Arc;
-use types::{AllowedUpdate, InputFile, True, Update};
+use types::{True, Update};
 
-struct ReqState {
-    telegram_api: Addr<TelegramApi>,
-    apps: Arc<Vec<App>>,
-}
+pub use self::types::ServerSetWebhook;
+
+#[cfg(feature = "tls-server")]
+pub use self::tls_server::*;
 
 pub struct TelegramServer {
     addr: String,
@@ -30,8 +28,8 @@ pub struct TelegramServer {
     threads: usize,
     apps: Arc<Vec<App>>,
     server: Option<Addr<Server>>,
-    certificate: Option<String>,
-    key: Option<String>,
+    #[cfg(feature = "tls-server")]
+    certificate: Option<CertAndKey>,
 }
 
 impl TelegramServer {
@@ -44,8 +42,8 @@ impl TelegramServer {
             apps: Arc::new(apps),
             server: None,
             token,
+            #[cfg(feature = "tls-server")]
             certificate: None,
-            key: None,
         }
     }
 
@@ -68,9 +66,9 @@ impl TelegramServer {
         self.url.as_ref().map_or(&self.token, |url| url)
     }
 
-    pub fn certificate_and_key(mut self, certificate: String, key: String) -> Self {
+    #[cfg(feature = "tls-server")]
+    pub fn certificate_and_key(mut self, certificate: CertAndKey) -> Self {
         self.certificate = Some(certificate);
-        self.key = Some(key);
         self
     }
 }
@@ -111,15 +109,22 @@ impl Actor for TelegramServer {
         if let Some(host) = self.host.clone() {
             server = server.server_hostname(host);
         }
-        match (self.certificate.as_ref(), self.key.as_ref()) {
-            (Some(certificate), Some(key)) => {
-                let cert_file = &mut BufReader::new(File::open(certificate).unwrap());
-                let key_file = &mut BufReader::new(File::open(key).unwrap());
-                server = set_cert_for_server(server, self.addr.clone(), cert_file, key_file)
+        #[cfg(feature = "tls-server")]
+        {
+            match self.certificate.as_ref() {
+                Some(certificate) => {
+                    server = server
+                        .bind_with(self.addr.clone(), certificate.get_acceptor())
+                        .unwrap();
+                }
+                _ => {
+                    server = server.bind(self.addr.clone()).unwrap();
+                }
             }
-            _ => {
-                server = server.bind(self.addr.clone()).unwrap();
-            }
+        }
+        #[cfg(not(feature = "tls-server"))]
+        {
+            server = server.bind(self.addr.clone()).unwrap();
         }
         self.server = Some(server.start());
     }
@@ -127,51 +132,6 @@ impl Actor for TelegramServer {
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
         debug!("TelegramServer is stopped");
     }
-}
-
-fn set_cert_for_server<H>(
-    server: HttpServer<H>,
-    addr: String,
-    cert_file: &mut BufReader<File>,
-    key_file: &mut BufReader<File>,
-) -> HttpServer<H>
-where
-    H: HttpHandler,
-{
-    let cert_chain = certs(cert_file).unwrap();
-    let mut keys = rsa_private_keys(key_file).unwrap();
-    let mut config = ServerConfig::new(NoClientAuth::new());
-    config.set_single_cert(cert_chain, keys.remove(0)).unwrap();
-    server.bind_rustls(addr, config).unwrap()
-}
-
-#[derive(Default)]
-pub struct ServerSetWebhook {
-    max_connections: Option<NonZeroU8>,
-    allowed_updates: Option<Vec<AllowedUpdate>>,
-}
-
-impl ServerSetWebhook {
-    pub fn new() -> Self {
-        Self {
-            max_connections: None,
-            allowed_updates: None,
-        }
-    }
-
-    pub fn max_connections(mut self, num: u8) -> Self {
-        self.max_connections = unsafe { Some(NonZeroU8::new_unchecked(num)) };
-        self
-    }
-
-    pub fn allowed_updates(mut self, updates: Vec<AllowedUpdate>) -> Self {
-        self.allowed_updates = Some(updates);
-        self
-    }
-}
-
-impl Message for ServerSetWebhook {
-    type Result = Result<True, ()>;
 }
 
 impl Handler<ServerSetWebhook> for TelegramServer {
@@ -183,18 +143,28 @@ impl Handler<ServerSetWebhook> for TelegramServer {
             .host
             .as_ref()
             .map_or(String::new(), |host| format!("{}/{}", host, self.url()));
+        #[cfg(feature = "tls-server")]
+        let certificate = if msg.send_certificate {
+            self
+                .certificate
+                .as_ref()
+                .map(|certificate| certificate.cert.input_file())
+        } else {
+            None
+        };
+        #[cfg(not(feature = "tls-server"))]
+        let certificate = None;
         let set_webhook = SetWebhook {
             url,
-            certificate: self.certificate.as_ref().map(|path| InputFile::Disk {
-                path: path.to_owned(),
-            }),
+            certificate,
             max_connections: msg.max_connections,
             allowed_updates: msg.allowed_updates,
         };
+        println!("set webhook {:?}", set_webhook);
         Box::new(
             telegram_api
                 .send(set_webhook)
-                .map_err(|_| ())
+                .map_err(|err| debug!("err {:?}", err))
                 .and_then(|response| response),
         )
     }

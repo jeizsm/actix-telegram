@@ -9,7 +9,7 @@ pub struct SetWebhook {
     /// HTTPS url to send updates to. Use an empty string to remove webhook integration
     pub url: String,
     /// Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide for details.
-    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(skip_serializing)]
     pub certificate: Option<InputFile>,
     /// Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults to 40. Use lower values to limit the load on your bot‘s server, and higher values to increase your bot’s throughput.
     #[serde(skip_serializing_if = "Option::is_none")]

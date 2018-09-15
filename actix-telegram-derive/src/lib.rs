@@ -7,8 +7,8 @@ extern crate quote;
 extern crate proc_macro2;
 
 use proc_macro::TokenStream;
+use quote::ToTokens;
 use syn::*;
-use quote::{ToTokens};
 
 #[proc_macro_derive(NewType)]
 pub fn new_type_macro_derive(input: TokenStream) -> TokenStream {
@@ -54,15 +54,28 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
     let attributes = input.attrs;
     let return_type = return_type(attributes);
 
-    let file_fields = match input.data {
-        Data::Struct(data_struct) => match data_struct.fields {
-            Fields::Named(fields) => {
-                file_fields(fields)
+    let file_fields: Option<Box<ToTokens>> = match struct_name.to_string().as_str() {
+        "SetWebhook" => Some(Box::new(quote! {
+            match msg.certificate {
+                Some(InputFile::Memory { name, source, len }) => {
+                    form.add_reader2("certificate", source, Some(name.as_str()), None, len);
+                },
+                Some(InputFile::Disk { path }) => {
+                    let path: &Path = path.as_ref();
+                    let field_name = path.file_name().unwrap().to_str().unwrap();
+                    form.add_file("certificate", &path).unwrap();
+                },
+                None => (),
             }
-            Fields::Unit => None,
-            _ => unreachable!()
+        })),
+        _ => match input.data {
+            Data::Struct(data_struct) => match data_struct.fields {
+                Fields::Named(fields) => file_fields(fields),
+                Fields::Unit => None,
+                _ => unreachable!(),
+            },
+            _ => unreachable!(),
         },
-        _ => unreachable!(),
     };
 
     let request = match file_fields {
@@ -121,72 +134,72 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
 }
 
 fn return_type(attributes: Vec<Attribute>) -> Type {
-    let mut return_type = attributes.into_iter().filter_map(|attribute| {
-        match attribute.interpret_meta() {
-            Some(Meta::NameValue(meta)) => {
-                if meta.ident == "return_type" {
-                    match meta.lit {
-                        syn::Lit::Str(a) => Some(a.parse::<syn::Type>().unwrap()),
-                        _ => unreachable!(),
+    let mut return_type =
+        attributes
+            .into_iter()
+            .filter_map(|attribute| match attribute.interpret_meta() {
+                Some(Meta::NameValue(meta)) => {
+                    if meta.ident == "return_type" {
+                        match meta.lit {
+                            syn::Lit::Str(a) => Some(a.parse::<syn::Type>().unwrap()),
+                            _ => unreachable!(),
+                        }
+                    } else {
+                        None
                     }
-                } else {
-                    None
                 }
-            }
-            _ => None,
-        }
-    });
+                _ => None,
+            });
     return_type.next().unwrap()
 }
 
-fn file_fields(fields: FieldsNamed) -> Option<FileFields> {
-    let fields: Vec<_> = fields.named.into_iter().filter_map(|field| {
-        let field_name = field.ident.unwrap();
-        match field.ty {
-            Type::Path(ty) => {
-                file_field(ty).map(|(field_type, is_optional)| {
-                    FileField {
-                        field_type,
-                        is_optional,
-                        field_name,
-                    }
-                })
-            },
-            _ => unreachable!(),
-        }
-    }).collect();
+fn file_fields(fields: FieldsNamed) -> Option<Box<ToTokens>> {
+    let fields: Vec<_> = fields
+        .named
+        .into_iter()
+        .filter_map(|field| {
+            let field_name = field.ident.unwrap();
+            match field.ty {
+                Type::Path(ty) => file_field(ty).map(|(field_type, is_optional)| FileField {
+                    field_type,
+                    is_optional,
+                    field_name,
+                }),
+                _ => unreachable!(),
+            }
+        }).collect();
     if fields.is_empty() {
         None
     } else {
-        Some(FileFields(fields))
+        Some(Box::new(FileFields(fields)))
     }
 }
 
 fn file_field(ty: TypePath) -> Option<(Ident, bool)> {
     let mut is_optional = false;
     for segment in ty.path.segments.into_iter() {
-        if segment.ident == "Option" { is_optional = true };
+        if segment.ident == "Option" {
+            is_optional = true
+        };
 
         match segment.arguments {
             PathArguments::AngleBracketed(args) => {
                 for arg in args.args.into_iter() {
                     match arg {
-                        GenericArgument::Type(Type::Path(ty)) => {
-                            match file_field(ty) {
-                                Some((ident, _)) => return Some((ident, is_optional)),
-                                _ => (),
-                            }
+                        GenericArgument::Type(Type::Path(ty)) => match file_field(ty) {
+                            Some((ident, _)) => return Some((ident, is_optional)),
+                            _ => (),
                         },
                         _ => (),
                     }
                 }
-            },
+            }
             _ => (),
         };
 
         let segment_string = segment.ident.to_string();
         if segment_string.starts_with("InputFile") || segment_string.starts_with("InputMedia") {
-            return Some((segment.ident, is_optional))
+            return Some((segment.ident, is_optional));
         }
     }
     None
@@ -214,7 +227,7 @@ impl ToTokens for FileFields {
                             #expanded
                         }
                     }
-                },
+                }
                 "InputFileOrString" => {
                     let expanded = expand_input_file_or_string_field(field.is_optional);
                     quote! {
@@ -230,7 +243,7 @@ impl ToTokens for FileFields {
                             #expanded
                         }
                     }
-                },
+                }
                 _ => {
                     let expanded = expand_input_media_photo_or_video_field(field.is_optional);
                     quote! {
