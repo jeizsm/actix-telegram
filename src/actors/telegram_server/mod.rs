@@ -34,7 +34,7 @@ pub struct TelegramServer {
 
 impl TelegramServer {
     pub fn new(addr: String, token: String, apps: Vec<App>) -> Self {
-        TelegramServer {
+        Self {
             addr,
             host: None,
             url: None,

@@ -1,20 +1,7 @@
-use super::TelegramApi;
+use super::{TelegramApi, App};
 use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
 use types::Update;
-
-type UpdateFunction = Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static;
-
-pub struct App(pub(crate) Box<UpdateFunction>);
-
-impl App {
-    pub fn new<F>(f: F) -> Self
-    where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static,
-    {
-        App(Box::new(f))
-    }
-}
 
 pub struct TelegramWorker {
     apps: Arc<Vec<App>>,
@@ -22,8 +9,8 @@ pub struct TelegramWorker {
 }
 
 impl TelegramWorker {
-    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<Vec<App>>) -> TelegramWorker {
-        TelegramWorker { apps, telegram_api }
+    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<Vec<App>>) -> Self {
+        Self { apps, telegram_api }
     }
 }
 

@@ -22,7 +22,7 @@ pub struct TelegramBot {
 impl TelegramBot {
     pub fn new(token: String, timeout: u16, apps: Vec<App>) -> Self {
         let timeout = Duration::from_secs(u64::from(timeout));
-        TelegramBot {
+        Self {
             token,
             timeout,
             offset: None,
