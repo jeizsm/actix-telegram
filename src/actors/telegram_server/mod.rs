@@ -2,7 +2,7 @@
 mod tls_server;
 mod types;
 
-use self::types::ReqState;
+use self::types::{ReqState, OptionFlags};
 use super::{App, TelegramApi};
 use actix::{Actor, Addr, Context, Handler};
 use actix_web::{
@@ -13,7 +13,7 @@ use actix_web::{
 use futures::Future;
 use methods::SetWebhook;
 use std::sync::Arc;
-use types::{True, Update};
+use types::{InputFile, True, Update};
 
 pub use self::types::ServerSetWebhook;
 
@@ -22,38 +22,35 @@ pub use self::tls_server::*;
 
 pub struct TelegramServer {
     addr: String,
-    host: Option<String>,
+    host: String,
     url: Option<String>,
     token: String,
     threads: usize,
     apps: Arc<Vec<App>>,
     server: Option<Addr<Server>>,
+    options: OptionFlags,
     #[cfg(feature = "tls-server")]
-    certificate: Option<CertAndKey>,
+    cert_and_key: Option<CertAndKey>,
 }
 
 impl TelegramServer {
-    pub fn new(addr: String, token: String, apps: Vec<App>) -> Self {
+    pub fn new(addr: String, token: String, host: String, apps: Vec<App>) -> Self {
         Self {
             addr,
-            host: None,
+            host,
             url: None,
             threads: 1,
             apps: Arc::new(apps),
             server: None,
             token,
             #[cfg(feature = "tls-server")]
-            certificate: None,
+            cert_and_key: None,
+            options: OptionFlags::default(),
         }
     }
 
-    pub fn workers(mut self, num: usize) -> Self {
+    pub fn set_workers(mut self, num: usize) -> Self {
         self.threads = num;
-        self
-    }
-
-    pub fn host(mut self, host: String) -> Self {
-        self.host = Some(host);
         self
     }
 
@@ -62,13 +59,30 @@ impl TelegramServer {
         self
     }
 
-    fn url(&self) -> &str {
-        self.url.as_ref().map_or(&self.token, |url| url)
+    pub fn url(&self) -> &str {
+        self.url.as_ref().map_or(self.token.as_str(), |url| url)
+    }
+
+    pub fn full_url(&self) -> String {
+        format!("{}/{}", self.host, self.url())
     }
 
     #[cfg(feature = "tls-server")]
-    pub fn certificate_and_key(mut self, certificate: CertAndKey) -> Self {
-        self.certificate = Some(certificate);
+    pub fn set_certificate_and_key(mut self, cert_and_key: CertAndKey, self_signed: bool) -> Self {
+        self.cert_and_key = Some(cert_and_key);
+        self.options.set(OptionFlags::SELF_SIGNED, self_signed);
+        self
+    }
+
+    #[cfg(feature = "tls-server")]
+    pub fn certificate_input_file(&self) -> Option<InputFile> {
+        self.cert_and_key
+            .as_ref()
+            .map(|cert_and_key| cert_and_key.cert.input_file())
+    }
+
+    pub fn set_send_set_webhook(mut self, send_set_webhook: bool) -> Self {
+        self.options.set(OptionFlags::SEND_SET_WEBHOOK, send_set_webhook);
         self
     }
 }
@@ -81,9 +95,11 @@ impl Actor for TelegramServer {
         let token = self.token.clone();
         let url = self.url().to_owned();
         let apps = self.apps.clone();
+        let telegram_api = TelegramApi::new(token, 10).start();
+        let clone = telegram_api.clone();
         let mut server = HttpServer::new(move || {
-            let telegram_api = TelegramApi::new((&token).to_owned(), 10).start();
             let apps = apps.clone();
+            let telegram_api = clone.clone();
             let state = ReqState { telegram_api, apps };
             ActixApp::with_state(state).resource(&url, |r| {
                 r.method(Method::POST)
@@ -105,17 +121,24 @@ impl Actor for TelegramServer {
                         HttpResponse::Ok()
                     })
             })
-        }).workers(self.threads);
-        if let Some(host) = self.host.clone() {
-            server = server.server_hostname(host);
-        }
+        }).workers(self.threads)
+        .server_hostname(self.host.clone());
+        let mut set_webhook = SetWebhook {
+            url: self.full_url(),
+            certificate: None,
+            max_connections: None,
+            allowed_updates: None,
+        };
         #[cfg(feature = "tls-server")]
         {
-            match self.certificate.as_ref() {
-                Some(certificate) => {
+            match self.cert_and_key.as_ref() {
+                Some(cert_and_key) => {
                     server = server
-                        .bind_with(self.addr.clone(), certificate.get_acceptor())
+                        .bind_with(self.addr.clone(), cert_and_key.get_acceptor())
                         .unwrap();
+                    if !self.options.contains(OptionFlags::SELF_SIGNED) {
+                        set_webhook.certificate = Some(cert_and_key.cert.input_file());
+                    }
                 }
                 _ => {
                     server = server.bind(self.addr.clone()).unwrap();
@@ -125,6 +148,9 @@ impl Actor for TelegramServer {
         #[cfg(not(feature = "tls-server"))]
         {
             server = server.bind(self.addr.clone()).unwrap();
+        }
+        if self.options.contains(OptionFlags::SEND_SET_WEBHOOK) {
+            telegram_api.do_send(set_webhook);
         }
         self.server = Some(server.start());
     }
@@ -139,23 +165,16 @@ impl Handler<ServerSetWebhook> for TelegramServer {
 
     fn handle(&mut self, msg: ServerSetWebhook, _: &mut Context<Self>) -> Self::Result {
         let telegram_api = TelegramApi::new(self.token.clone(), 10).start();
-        let url = self
-            .host
-            .as_ref()
-            .map_or(String::new(), |host| format!("{}/{}", host, self.url()));
         #[cfg(feature = "tls-server")]
         let certificate = if msg.send_certificate {
-            self
-                .certificate
-                .as_ref()
-                .map(|certificate| certificate.cert.input_file())
+            self.certificate_input_file()
         } else {
             None
         };
         #[cfg(not(feature = "tls-server"))]
         let certificate = None;
         let set_webhook = SetWebhook {
-            url,
+            url: self.full_url(),
             certificate,
             max_connections: msg.max_connections,
             allowed_updates: msg.allowed_updates,

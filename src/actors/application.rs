@@ -1,6 +1,6 @@
-use types::Update;
-use actix::Addr;
 use super::TelegramApi;
+use actix::Addr;
+use types::Update;
 
 type UpdateFunction = Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static;
 

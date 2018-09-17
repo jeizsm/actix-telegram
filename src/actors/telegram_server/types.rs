@@ -5,6 +5,26 @@ use std::sync::Arc;
 use types::AllowedUpdate;
 use types::True;
 
+bitflags! {
+    pub(crate) struct OptionFlags: u8 {
+        const SEND_SET_WEBHOOK = 0b00000001;
+        #[cfg(feature = "tls-server")]
+        const SELF_SIGNED = 0b00000010;
+    }
+}
+
+impl Default for OptionFlags {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl OptionFlags {
+    fn new() -> Self {
+        OptionFlags::SEND_SET_WEBHOOK
+    }
+}
+
 pub(super) struct ReqState {
     pub(super) telegram_api: Addr<TelegramApi>,
     pub(super) apps: Arc<Vec<App>>,
@@ -19,19 +39,12 @@ pub struct ServerSetWebhook {
 }
 
 impl ServerSetWebhook {
-    #[cfg(feature = "tls-server")]
-    pub fn new(send_certificate: bool) -> Self {
-        Self {
-            max_connections: None,
-            allowed_updates: None,
-            send_certificate
-        }
-    }
-    #[cfg(not(feature = "tls-server"))]
     pub fn new() -> Self {
         Self {
             max_connections: None,
-            allowed_updates: None
+            allowed_updates: None,
+            #[cfg(feature = "tls-server")]
+            send_certificate: false,
         }
     }
 
@@ -42,6 +55,12 @@ impl ServerSetWebhook {
 
     pub fn allowed_updates(mut self, updates: Vec<AllowedUpdate>) -> Self {
         self.allowed_updates = Some(updates);
+        self
+    }
+
+    #[cfg(feature = "tls-server")]
+    pub fn send_certificate(mut self, send_certificate: bool) -> Self {
+        self.send_certificate = send_certificate;
         self
     }
 }

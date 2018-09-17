@@ -17,6 +17,8 @@ extern crate native_tls;
 extern crate openssl;
 #[cfg(all(feature = "rust-tls", feature = "tls-server"))]
 extern crate rustls;
+#[macro_use]
+extern crate bitflags;
 
 pub mod actors;
 pub mod methods;

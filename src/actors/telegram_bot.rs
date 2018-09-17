@@ -33,7 +33,7 @@ impl TelegramBot {
         }
     }
 
-    pub fn workers(mut self, num: usize) -> Self {
+    pub fn set_workers(mut self, num: usize) -> Self {
         self.threads = num;
         self
     }

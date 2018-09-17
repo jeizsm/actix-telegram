@@ -237,7 +237,9 @@ impl CertAndKey {
         builder
             .set_private_key_file(self.key.key(), SslFiletype::PEM)
             .unwrap();
-        builder.set_certificate_chain_file(self.cert.cert()).unwrap();
+        builder
+            .set_certificate_chain_file(self.cert.cert())
+            .unwrap();
         OpensslAcceptor::new(builder).unwrap()
     }
 
