@@ -2,7 +2,7 @@
 mod tls_server;
 mod types;
 
-use self::types::{ReqState, OptionFlags};
+use self::types::{OptionFlags, ReqState};
 use super::{App, TelegramApi};
 use actix::{Actor, Addr, Context, Handler};
 use actix_web::{
@@ -82,7 +82,8 @@ impl TelegramServer {
     }
 
     pub fn set_send_set_webhook(mut self, send_set_webhook: bool) -> Self {
-        self.options.set(OptionFlags::SEND_SET_WEBHOOK, send_set_webhook);
+        self.options
+            .set(OptionFlags::SEND_SET_WEBHOOK, send_set_webhook);
         self
     }
 }

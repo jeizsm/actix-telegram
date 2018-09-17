@@ -80,3 +80,6 @@ pub enum AllowedUpdate {
     ShippingQuery,
     PreCheckoutQuery,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct CallbackGame;

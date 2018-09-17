@@ -22,6 +22,7 @@ extern crate bitflags;
 
 pub mod actors;
 pub mod methods;
+pub(crate) mod raw;
 pub mod types;
 
 pub use actors::{App, TelegramApi, TelegramBot};
