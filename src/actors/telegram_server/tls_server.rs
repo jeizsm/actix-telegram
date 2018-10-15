@@ -1,13 +1,7 @@
 #[cfg(feature = "tls")]
-use actix_web::server::NativeTlsAcceptor;
-#[cfg(feature = "alpn")]
-use actix_web::server::OpensslAcceptor;
-#[cfg(feature = "rust-tls")]
-use actix_web::server::RustlsAcceptor;
-#[cfg(feature = "tls")]
 use native_tls::{Identity, Protocol, TlsAcceptor};
-#[cfg(feature = "alpn")]
-use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
+#[cfg(feature = "ssl")]
+use openssl::ssl::{SslAcceptor, SslAcceptorBuilder, SslFiletype, SslMethod};
 #[cfg(feature = "rust-tls")]
 use rustls::{
     internal::pemfile::{certs, pkcs8_private_keys, rsa_private_keys},
@@ -23,7 +17,7 @@ use types::InputFile;
 pub enum Key {
     #[cfg(feature = "rust-tls")]
     Rustls(RustlsKey),
-    #[cfg(feature = "alpn")]
+    #[cfg(feature = "ssl")]
     Openssl(OpensslKey),
     #[cfg(feature = "tls")]
     NativeTls(NativeTlsKey),
@@ -41,7 +35,7 @@ pub struct RustlsKey {
     kind: KeyKind,
 }
 
-#[cfg(feature = "alpn")]
+#[cfg(feature = "ssl")]
 pub struct OpensslKey {
     key: PathBuf,
 }
@@ -89,7 +83,7 @@ impl Key {
         }
     }
 
-    #[cfg(feature = "alpn")]
+    #[cfg(feature = "ssl")]
     fn key(&self) -> &Path {
         match self {
             Key::Openssl(OpensslKey { key }) => key.as_path(),
@@ -107,7 +101,7 @@ impl Key {
 pub enum Cert {
     #[cfg(feature = "rust-tls")]
     Rustls(RustlsCert),
-    #[cfg(feature = "alpn")]
+    #[cfg(feature = "ssl")]
     Openssl(OpensslCert),
     #[cfg(feature = "tls")]
     NativeTls(NativeTlsCert),
@@ -118,7 +112,7 @@ pub struct RustlsCert {
     cert: PathBuf,
 }
 
-#[cfg(feature = "alpn")]
+#[cfg(feature = "ssl")]
 pub struct OpensslCert {
     cert: PathBuf,
 }
@@ -168,7 +162,7 @@ impl Cert {
         }
     }
 
-    #[cfg(feature = "alpn")]
+    #[cfg(feature = "ssl")]
     fn cert(&self) -> &Path {
         match self {
             Cert::Openssl(OpensslCert { cert }) => cert.as_path(),
@@ -193,7 +187,7 @@ impl Cert {
         }
     }
 
-    #[cfg(feature = "alpn")]
+    #[cfg(feature = "ssl")]
     pub(super) fn input_file(&self) -> InputFile {
         match self {
             Cert::Openssl(OpensslCert { cert }) => InputFile::Disk {
@@ -223,16 +217,16 @@ impl CertAndKey {
     }
 
     #[cfg(feature = "rust-tls")]
-    pub(super) fn get_acceptor(&self) -> RustlsAcceptor {
+    pub(super) fn get_acceptor(&self) -> ServerConfig {
         let mut config = ServerConfig::new(NoClientAuth::new());
         config
             .set_single_cert(self.cert.cert(), self.key.key())
             .unwrap();
-        RustlsAcceptor::new(config)
+        config
     }
 
-    #[cfg(feature = "alpn")]
-    pub(super) fn get_acceptor(&self) -> OpensslAcceptor {
+    #[cfg(feature = "ssl")]
+    pub(super) fn get_acceptor(&self) -> SslAcceptorBuilder {
         let mut builder = SslAcceptor::mozilla_modern(SslMethod::tls()).unwrap();
         builder
             .set_private_key_file(self.key.key(), SslFiletype::PEM)
@@ -240,15 +234,15 @@ impl CertAndKey {
         builder
             .set_certificate_chain_file(self.cert.cert())
             .unwrap();
-        OpensslAcceptor::new(builder).unwrap()
+        builder
     }
 
     #[cfg(feature = "tls")]
-    pub(super) fn get_acceptor(&self) -> NativeTlsAcceptor {
+    pub(super) fn get_acceptor(&self) -> TlsAcceptor {
         let identity = Identity::from_pkcs12(&self.cert.cert(), self.key.key()).unwrap();
-        let acceptor = TlsAcceptor::builder(identity)
+        TlsAcceptor::builder(identity)
             .min_protocol_version(Some(Protocol::Tlsv12))
-            .build();
-        NativeTlsAcceptor::new(acceptor.unwrap())
+            .build()
+            .unwrap()
     }
 }

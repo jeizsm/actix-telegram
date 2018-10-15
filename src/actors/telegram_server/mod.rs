@@ -7,9 +7,10 @@ use super::{App, TelegramApi};
 use actix::{Actor, Addr, Context, Handler};
 use actix_web::{
     http::Method,
-    server::{HttpServer, Server},
+    server::HttpServer,
     App as ActixApp, HttpResponse, Json, State,
 };
+use actix_net::server::Server;
 use futures::Future;
 use methods::SetWebhook;
 use std::sync::Arc;
@@ -134,9 +135,24 @@ impl Actor for TelegramServer {
         {
             match self.cert_and_key.as_ref() {
                 Some(cert_and_key) => {
-                    server = server
-                        .bind_with(self.addr.clone(), cert_and_key.get_acceptor())
-                        .unwrap();
+                    #[cfg(feature = "rust-tls")]
+                    {
+                        server = server
+                            .bind_rustls(self.addr.clone(), cert_and_key.get_acceptor())
+                            .unwrap();
+                    }
+                    #[cfg(feature = "ssl")]
+                    {
+                        server = server
+                            .bind_ssl(self.addr.clone(), cert_and_key.get_acceptor())
+                            .unwrap();
+                    }
+                    #[cfg(feature = "tls")]
+                    {
+                        server = server
+                            .bind_tls(self.addr.clone(), cert_and_key.get_acceptor())
+                            .unwrap();
+                    }
                     if !self.options.contains(OptionFlags::SELF_SIGNED) {
                         set_webhook.certificate = Some(cert_and_key.cert.input_file());
                     }

@@ -1,5 +1,6 @@
 extern crate actix;
 extern crate actix_web;
+extern crate actix_net;
 extern crate futures;
 extern crate tokio;
 #[macro_use]
@@ -13,7 +14,7 @@ extern crate actix_telegram_derive;
 extern crate multipart_rfc7578;
 #[cfg(all(feature = "tls", feature = "tls-server"))]
 extern crate native_tls;
-#[cfg(all(feature = "alpn", feature = "tls-server"))]
+#[cfg(all(feature = "ssl", feature = "tls-server"))]
 extern crate openssl;
 #[cfg(all(feature = "rust-tls", feature = "tls-server"))]
 extern crate rustls;
