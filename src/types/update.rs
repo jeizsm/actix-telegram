@@ -16,25 +16,26 @@ pub enum Update {
     Unknown(UnknownUpdate),
 }
 
-pub enum UpdateKind {
+#[derive(Debug)]
+pub enum UpdateKind<'a> {
     /// New incoming message of any kind — text, photo, sticker, etc.
-    Message(Message),
+    Message(&'a Message),
     /// New version of a message that is known to the bot and was edited
-    EditedMessage(Message),
+    EditedMessage(&'a Message),
     /// New incoming channel post of any kind — text, photo, sticker, etc.
-    ChannelPost(Message),
+    ChannelPost(&'a Message),
     /// New version of a channel post that is known to the bot and was edited
-    EditedChannelPost(Message),
+    EditedChannelPost(&'a Message),
     /// New incoming inline query
-    InlineQuery(InlineQuery),
+    InlineQuery(&'a InlineQuery),
     /// The result of an inline query that was chosen by a user and sent to their chat partner. Please see our documentation on the feedback collecting for details on how to enable these updates for your bot.
-    ChosenInlineResult(ChosenInlineResult),
+    ChosenInlineResult(&'a ChosenInlineResult),
     /// New incoming callback query
-    CallbackQuery(CallbackQuery),
+    CallbackQuery(&'a CallbackQuery),
     /// New incoming shipping query. Only for invoices with flexible price
-    ShippingQuery(ShippingQuery),
+    ShippingQuery(&'a ShippingQuery),
     /// New incoming pre-checkout query. Contains full information about checkout
-    PreCheckoutQuery(PreCheckoutQuery),
+    PreCheckoutQuery(&'a PreCheckoutQuery),
     /// Uknown update. Should not happen
     Unknown,
 }
@@ -58,22 +59,22 @@ impl Update {
     }
 
     #[inline]
-    pub fn kind(self) -> UpdateKind {
+    pub fn kind(&self) -> UpdateKind {
         match self {
-            Update::Message(update) => UpdateKind::Message(update.message),
-            Update::EditedMessage(update) => UpdateKind::EditedMessage(update.edited_message),
-            Update::ChannelPost(update) => UpdateKind::ChannelPost(update.channel_post),
+            Update::Message(update) => UpdateKind::Message(&update.message),
+            Update::EditedMessage(update) => UpdateKind::EditedMessage(&update.edited_message),
+            Update::ChannelPost(update) => UpdateKind::ChannelPost(&update.channel_post),
             Update::EditedChannelPost(update) => {
-                UpdateKind::EditedChannelPost(update.edited_channel_post)
+                UpdateKind::EditedChannelPost(&update.edited_channel_post)
             }
-            Update::InlineQuery(update) => UpdateKind::InlineQuery(update.inline_query),
+            Update::InlineQuery(update) => UpdateKind::InlineQuery(&update.inline_query),
             Update::ChosenInlineResult(update) => {
-                UpdateKind::ChosenInlineResult(update.chosen_inline_result)
+                UpdateKind::ChosenInlineResult(&update.chosen_inline_result)
             }
-            Update::CallbackQuery(update) => UpdateKind::CallbackQuery(update.callback_query),
-            Update::ShippingQuery(update) => UpdateKind::ShippingQuery(update.shipping_query),
+            Update::CallbackQuery(update) => UpdateKind::CallbackQuery(&update.callback_query),
+            Update::ShippingQuery(update) => UpdateKind::ShippingQuery(&update.shipping_query),
             Update::PreCheckoutQuery(update) => {
-                UpdateKind::PreCheckoutQuery(update.pre_checkout_query)
+                UpdateKind::PreCheckoutQuery(&update.pre_checkout_query)
             }
             Update::Unknown(_) => UpdateKind::Unknown,
         }
