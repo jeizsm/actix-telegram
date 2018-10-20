@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a shipping address.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ShippingAddress {
     /// ISO 3166-1 alpha-2 country code
     pub country_code: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PassportElementErrorTranslationFiles {
     /// Error source, must be translation_files
     pub source: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents an incoming update.At most one of the optional parameters can be present in any given update.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 #[serde(untagged)]
 pub enum Update {
     Message(MessageUpdate),
@@ -16,7 +16,7 @@ pub enum Update {
     Unknown(UnknownUpdate),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateKind<'a> {
     /// New incoming message of any kind — text, photo, sticker, etc.
     Message(&'a Message),
@@ -81,7 +81,7 @@ impl Update {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MessageUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -89,7 +89,7 @@ pub struct MessageUpdate {
     pub message: Message,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditedMessageUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -97,7 +97,7 @@ pub struct EditedMessageUpdate {
     pub edited_message: Message,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChannelPostUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -105,7 +105,7 @@ pub struct ChannelPostUpdate {
     pub channel_post: Message,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct EditedChannelPostUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -113,7 +113,7 @@ pub struct EditedChannelPostUpdate {
     pub edited_channel_post: Message,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct InlineQueryUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -121,7 +121,7 @@ pub struct InlineQueryUpdate {
     pub inline_query: InlineQuery,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ChosenInlineResultUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -129,7 +129,7 @@ pub struct ChosenInlineResultUpdate {
     pub chosen_inline_result: ChosenInlineResult,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CallbackQueryUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -137,7 +137,7 @@ pub struct CallbackQueryUpdate {
     pub callback_query: CallbackQuery,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct ShippingQueryUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -145,7 +145,7 @@ pub struct ShippingQueryUpdate {
     pub shipping_query: ShippingQuery,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct PreCheckoutQueryUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,
@@ -153,7 +153,7 @@ pub struct PreCheckoutQueryUpdate {
     pub pre_checkout_query: PreCheckoutQuery,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct UnknownUpdate {
     /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     pub update_id: UpdateId,

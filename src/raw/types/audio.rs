@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents an audio file to be treated as music by the Telegram clients.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Audio {
     /// Unique identifier for this file
     pub file_id: String,

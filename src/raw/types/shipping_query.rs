@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object contains information about an incoming shipping query.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ShippingQuery {
     /// Unique query identifier
     pub id: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents the content of a location message to be sent as the result of an inline query.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct InputLocationMessageContent {
     /// Latitude of the location in degrees
     pub latitude: Float,

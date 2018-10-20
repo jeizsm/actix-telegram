@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a sticker set.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct StickerSet {
     /// Sticker set name
     pub name: String,

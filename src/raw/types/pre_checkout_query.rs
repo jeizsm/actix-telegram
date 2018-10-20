@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object contains information about an incoming pre-checkout query.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PreCheckoutQuery {
     /// Unique query identifier
     pub id: String,

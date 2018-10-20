@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a video message (available in Telegram apps as of v.4.0).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct VideoNote {
     /// Unique identifier for this file
     pub file_id: String,

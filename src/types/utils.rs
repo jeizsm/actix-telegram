@@ -81,5 +81,5 @@ pub enum AllowedUpdate {
     PreCheckoutQuery,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CallbackGame;

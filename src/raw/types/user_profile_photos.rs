@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represent a user's profile pictures.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UserProfilePhotos {
     /// Total number of profile pictures the target user has
     pub total_count: Integer,

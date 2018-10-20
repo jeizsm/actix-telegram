@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PassportElementErrorFiles {
     /// Error source, must be files
     pub source: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object describes the position on faces where a mask should be placed by default.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MaskPosition {
     /// The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
     pub point: String,

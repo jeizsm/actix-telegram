@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents information about an order.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct OrderInfo {
     /// User name
     #[serde(skip_serializing_if = "Option::is_none")]

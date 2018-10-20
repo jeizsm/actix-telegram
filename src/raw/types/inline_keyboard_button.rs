@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct InlineKeyboardButton {
     /// Label text on the button
     pub text: String,

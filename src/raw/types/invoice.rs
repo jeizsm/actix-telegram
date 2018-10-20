@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object contains basic information about an invoice.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Invoice {
     /// Product name
     pub title: String,

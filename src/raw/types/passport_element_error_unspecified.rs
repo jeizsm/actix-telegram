@@ -1,7 +1,7 @@
 use types::*;
 
 /// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PassportElementErrorUnspecified {
     /// Error source, must be unspecified
     pub source: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object contains information about one member of a chat.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ChatMember {
     /// Information about the user
     pub user: User,

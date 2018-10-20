@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a Telegram user or bot.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct User {
     /// Unique identifier for this user or bot
     pub id: Integer,

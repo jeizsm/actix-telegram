@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents an animation file (GIF or H.264/MPEG-4 AVC video without sound).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Animation {
     /// Unique file identifier
     pub file_id: String,

@@ -1,6 +1,6 @@
 use types::*;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum ReplyMarkup {
     InlineKeyboardMarkup(InlineKeyboardMarkup),

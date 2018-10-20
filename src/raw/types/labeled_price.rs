@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a portion of the price for goods or services.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct LabeledPrice {
     /// Portion label
     pub label: String,

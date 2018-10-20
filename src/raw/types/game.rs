@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Game {
     /// Title of the game
     pub title: String,

@@ -1,7 +1,7 @@
 use types::*;
 
 /// This object represents a sticker.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Sticker {
     /// Unique identifier for this file
     pub file_id: String,
