@@ -7,9 +7,9 @@ use types::True;
 
 bitflags! {
     pub(crate) struct OptionFlags: u8 {
-        const SEND_SET_WEBHOOK = 0b00000001;
+        const SEND_SET_WEBHOOK = 0b0000_0001;
         #[cfg(feature = "tls-server")]
-        const SELF_SIGNED = 0b00000010;
+        const SELF_SIGNED = 0b0000_0010;
     }
 }
 
