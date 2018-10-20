@@ -5,12 +5,9 @@ mod types;
 use self::types::{OptionFlags, ReqState};
 use super::{App, TelegramApi};
 use actix::{Actor, Addr, Context, Handler};
-use actix_web::{
-    http::Method,
-    server::HttpServer,
-    App as ActixApp, HttpResponse, Json, State,
-};
 use actix_net::server::Server;
+use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
+use actix_web::dev::HttpResponseBuilder;
 use futures::Future;
 use methods::SetWebhook;
 use std::sync::Arc;
@@ -103,26 +100,7 @@ impl Actor for TelegramServer {
             let apps = apps.clone();
             let telegram_api = clone.clone();
             let state = ReqState { telegram_api, apps };
-            ActixApp::with_state(state).resource(&url, |r| {
-                r.method(Method::POST)
-                    .with(|(update, state): (Json<Update>, State<ReqState>)| {
-                        let mut msg = update.into_inner();
-                        debug!("TelegramServer.Update received {:?}", msg);
-                        for app in state.apps.iter() {
-                            msg = match (app.0)(msg, &state.telegram_api) {
-                                Ok(()) => {
-                                    debug!("ok");
-                                    return HttpResponse::Ok();
-                                }
-                                Err(msg) => {
-                                    debug!("next");
-                                    msg
-                                }
-                            };
-                        }
-                        HttpResponse::Ok()
-                    })
-            })
+            ActixApp::with_state(state).resource(&url, |r| r.method(Method::POST).with(handler))
         }).workers(self.threads)
         .server_hostname(self.host.clone());
         let mut set_webhook = SetWebhook {
@@ -204,4 +182,22 @@ impl Handler<ServerSetWebhook> for TelegramServer {
                 .and_then(|response| response),
         )
     }
+}
+
+fn handler((update, state): (Json<Update>, State<ReqState>)) -> HttpResponseBuilder {
+    let mut msg = update.into_inner();
+    debug!("TelegramServer.Update received {:?}", msg);
+    for app in state.apps.iter() {
+        msg = match (app.0)(msg, &state.telegram_api) {
+            Ok(()) => {
+                debug!("ok");
+                return HttpResponse::Ok();
+            }
+            Err(msg) => {
+                debug!("next");
+                msg
+            }
+        };
+    }
+    HttpResponse::Ok()
 }
