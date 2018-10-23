@@ -81,5 +81,11 @@ pub enum AllowedUpdate {
     PreCheckoutQuery,
 }
 
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum ParseMode {
+    Markdown,
+    HTML,
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CallbackGame;
