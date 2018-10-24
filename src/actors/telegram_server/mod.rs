@@ -13,8 +13,6 @@ use methods::SetWebhook;
 use std::sync::Arc;
 use types::{InputFile, True, Update};
 
-pub use self::types::ServerSetWebhook;
-
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;
 
@@ -103,12 +101,7 @@ impl Actor for TelegramServer {
             ActixApp::with_state(state).resource(&url, |r| r.method(Method::POST).with(handler))
         }).workers(self.threads)
         .server_hostname(self.host.clone());
-        let mut set_webhook = SetWebhook {
-            url: self.full_url(),
-            certificate: None,
-            max_connections: None,
-            allowed_updates: None,
-        };
+        let mut set_webhook = SetWebhook::new(self.full_url());
         #[cfg(feature = "tls-server")]
         {
             match self.cert_and_key.as_ref() {
@@ -132,7 +125,7 @@ impl Actor for TelegramServer {
                             .unwrap();
                     }
                     if !self.options.contains(OptionFlags::SELF_SIGNED) {
-                        set_webhook.certificate = Some(cert_and_key.cert.input_file());
+                        set_webhook.ref_set_certificate(cert_and_key.cert.input_file());
                     }
                 }
                 _ => {
@@ -155,29 +148,15 @@ impl Actor for TelegramServer {
     }
 }
 
-impl Handler<ServerSetWebhook> for TelegramServer {
+impl Handler<SetWebhook> for TelegramServer {
     type Result = Box<Future<Item = True, Error = ()>>;
 
-    fn handle(&mut self, msg: ServerSetWebhook, _: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, msg: SetWebhook, _: &mut Context<Self>) -> Self::Result {
         let telegram_api = TelegramApi::new(self.token.clone(), 10).start();
-        #[cfg(feature = "tls-server")]
-        let certificate = if msg.send_certificate {
-            self.certificate_input_file()
-        } else {
-            None
-        };
-        #[cfg(not(feature = "tls-server"))]
-        let certificate = None;
-        let set_webhook = SetWebhook {
-            url: self.full_url(),
-            certificate,
-            max_connections: msg.max_connections,
-            allowed_updates: msg.allowed_updates,
-        };
-        println!("set webhook {:?}", set_webhook);
+        println!("set webhook {:?}", msg);
         Box::new(
             telegram_api
-                .send(set_webhook)
+                .send(msg)
                 .map_err(|err| debug!("err {:?}", err))
                 .and_then(|response| response),
         )
