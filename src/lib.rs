@@ -11,6 +11,8 @@ extern crate serde_json;
 extern crate log;
 #[macro_use]
 extern crate actix_telegram_derive;
+#[macro_use]
+extern crate getset;
 extern crate multipart_rfc7578;
 #[cfg(all(feature = "tls", feature = "tls-server"))]
 extern crate native_tls;
