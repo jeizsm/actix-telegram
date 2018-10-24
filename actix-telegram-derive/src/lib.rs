@@ -10,40 +10,6 @@ use proc_macro::TokenStream;
 use quote::ToTokens;
 use syn::*;
 
-#[proc_macro_derive(NewType)]
-pub fn new_type_macro_derive(input: TokenStream) -> TokenStream {
-    let input: DeriveInput = syn::parse2(input.into()).unwrap();
-    let name = input.ident;
-    let newtype = match input.data {
-        Data::Struct(data_struct) => match data_struct.fields {
-            Fields::Unnamed(fields) => {
-                let unnamed = fields.unnamed;
-                if unnamed.len() > 1 || unnamed.len() == 0 {
-                    panic!("works only on newtypes")
-                } else {
-                    unnamed.first().unwrap().into_value().clone()
-                }
-            }
-            _ => panic!("works only on unnamed structs"),
-        },
-        _ => panic!("works only on struct"),
-    };
-
-    let expanded = quote! {
-        impl #name {
-            pub fn new(field: #newtype) -> Self {
-               #name(field)
-            }
-
-            pub fn get(self) -> #newtype {
-                self.0
-            }
-        }
-    };
-
-    expanded.into()
-}
-
 #[proc_macro_derive(TelegramApi, attributes(return_type))]
 pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
     let input: DeriveInput = syn::parse2(input.into()).unwrap();

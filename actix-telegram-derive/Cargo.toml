@@ -1,6 +1,6 @@
 [package]
 name = "actix-telegram-derive"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 description = "derive for actix-telegram"
 repository = "https://github.com/jeizsm/actix-telegram"
@@ -10,6 +10,6 @@ license = "MIT"
 proc-macro = true
 
 [dependencies]
-syn = "0.14.8"
-quote = "0.6.6"
-proc-macro2 = "0.4.12"
+syn = "0.15"
+quote = "0.6"
+proc-macro2 = "0.4"
