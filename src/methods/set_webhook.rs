@@ -5,7 +5,9 @@ use types::*;
 /// If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path in the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot‘s token, you can be pretty sure it’s us.
 #[derive(Debug, Serialize, TelegramApi, Setters, RefSetters, New)]
 #[return_type = "True"]
-#[set = "pub"] #[ref_set = "pub"]
+#[set = "pub"]
+#[ref_set = "pub"]
+#[new = "pub"]
 pub struct SetWebhook {
     /// HTTPS url to send updates to. Use an empty string to remove webhook integration
     url: String,
