@@ -36,22 +36,16 @@ fn print_update(update: Update, _: &Addr<TelegramApi>) -> Result<(), Update> {
 
 fn greet(update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
     if let UpdateKind::Message(message) = update.kind() {
-        if let Some(ref members) = message.new_chat_members {
+        if let Some(ref members) = message.new_chat_members() {
             println!("{:?}", members);
             let member = members.first().unwrap();
-            if !member.is_bot {
-                let message = SendMessage {
-                    chat_id: ChatIdOrUsername::Id(message.chat.id),
-                    text: "Welcome".to_string(),
-                    reply_to_message_id: Some(message.message_id),
-                    parse_mode: None,
-                    disable_web_page_preview: None,
-                    reply_markup: None,
-                    disable_notification: None,
-                };
+            if !member.is_bot() {
+                let chat_id = ChatIdOrUsername::Id(*message.chat().id());
+                let mut send_message = SendMessage::new(chat_id, "Welcome");
+                send_message.set_reply_to_message_id(*message.message_id());
                 actix::spawn(
                     telegram_api
-                        .send(message)
+                        .send(send_message)
                         .map(|response| println!("send message {:?}", response))
                         .map_err(|e| println!("Actor is probably died: {}", e)),
                 )

@@ -67,7 +67,7 @@ impl Debug for InputFile {
     }
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Clone, Copy)]
 #[serde(rename_all = "snake_case")]
 pub enum AllowedUpdate {
     Message,

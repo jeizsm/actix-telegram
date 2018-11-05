@@ -74,7 +74,7 @@ impl TelegramServer {
     pub fn certificate_input_file(&self) -> Option<InputFile> {
         self.cert_and_key
             .as_ref()
-            .map(|cert_and_key| cert_and_key.cert.input_file())
+            .map(|cert_and_key| cert_and_key.into())
     }
 
     pub fn set_send_set_webhook(mut self, send_set_webhook: bool) -> Self {
@@ -125,7 +125,7 @@ impl Actor for TelegramServer {
                             .unwrap();
                     }
                     if !self.options.contains(OptionFlags::SELF_SIGNED) {
-                        set_webhook.ref_set_certificate(cert_and_key.cert.input_file());
+                        set_webhook.set_certificate(cert_and_key);
                     }
                 }
                 _ => {

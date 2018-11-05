@@ -177,10 +177,20 @@ impl Cert {
             }
         }
     }
+}
 
+impl<'a> From<&'a CertAndKey> for InputFile {
+    #[inline(always)]
+    fn from(cert_and_key: &CertAndKey) -> Self {
+        From::from(&cert_and_key.cert)
+    }
+}
+
+impl<'a> From<&'a Cert> for InputFile {
     #[cfg(feature = "rust-tls")]
-    pub(super) fn input_file(&self) -> InputFile {
-        match self {
+    #[inline(always)]
+    fn from(cert: &Cert) -> InputFile {
+        match cert {
             Cert::Rustls(RustlsCert { cert }) => InputFile::Disk {
                 path: cert.to_string_lossy().to_string(),
             },
@@ -188,8 +198,9 @@ impl Cert {
     }
 
     #[cfg(feature = "ssl")]
-    pub(super) fn input_file(&self) -> InputFile {
-        match self {
+    #[inline(always)]
+    fn from(cert: &Cert) -> InputFile {
+        match cert {
             Cert::Openssl(OpensslCert { cert }) => InputFile::Disk {
                 path: cert.to_string_lossy().to_string(),
             },
@@ -197,8 +208,9 @@ impl Cert {
     }
 
     #[cfg(feature = "tls")]
-    pub(super) fn input_file(&self) -> InputFile {
-        match self {
+    #[inline(always)]
+    fn from(cert: &Cert) -> InputFile {
+        match cert {
             Cert::NativeTls(NativeTlsCert { cert_pem, .. }) => InputFile::Disk {
                 path: cert_pem.to_string_lossy().to_string(),
             },
@@ -207,7 +219,7 @@ impl Cert {
 }
 
 pub struct CertAndKey {
-    pub(super) cert: Cert,
+    cert: Cert,
     key: Key,
 }
 
