@@ -1,14 +1,15 @@
 use types::*;
 
 /// This object contains information about an incoming shipping query.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct ShippingQuery {
     /// Unique query identifier
-    pub id: String,
+    id: String,
     /// User who sent the query
-    pub from: User,
+    from: User,
     /// Bot specified invoice payload
-    pub invoice_payload: String,
+    invoice_payload: String,
     /// User specified shipping address
-    pub shipping_address: ShippingAddress,
+    shipping_address: ShippingAddress,
 }

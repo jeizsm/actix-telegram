@@ -1,23 +1,24 @@
 use types::*;
 
 /// This object represents a video file.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct Video {
     /// Unique identifier for this file
-    pub file_id: String,
+    file_id: String,
     /// Video width as defined by sender
-    pub width: Integer,
+    width: Integer,
     /// Video height as defined by sender
-    pub height: Integer,
+    height: Integer,
     /// Duration of the video in seconds as defined by sender
-    pub duration: Integer,
+    duration: Integer,
     /// Video thumbnail
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumb: Option<PhotoSize>,
+    thumb: Option<PhotoSize>,
     /// Mime type of a file as defined by sender
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub mime_type: Option<String>,
+    mime_type: Option<String>,
     /// File size
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_size: Option<Integer>,
+    file_size: Option<Integer>,
 }

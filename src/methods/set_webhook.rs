@@ -3,11 +3,10 @@ use types::*;
 
 /// Use this method to specify a url and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
 /// If you'd like to make sure that the Webhook request comes from Telegram, we recommend using a secret path in the URL, e.g. https://www.example.com/<token>. Since nobody else knows your bot‘s token, you can be pretty sure it’s us.
-#[derive(Debug, Serialize, TelegramApi, Setters, RefSetters, New)]
+#[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
-#[set = "pub"]
-#[ref_set = "pub"]
-#[new = "pub"]
+#[set(vis = "pub", optional)]
+#[new(vis = "pub")]
 pub struct SetWebhook {
     /// HTTPS url to send updates to. Use an empty string to remove webhook integration
     url: String,
@@ -22,19 +21,12 @@ pub struct SetWebhook {
     allowed_updates: Option<Vec<AllowedUpdate>>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Copy, Clone)]
 pub struct MaxConnections(NonZeroU8);
 
 impl From<u8> for MaxConnections {
-    #[inline]
+    #[inline(always)]
     fn from(from: u8) -> Self {
         unsafe { MaxConnections(NonZeroU8::new_unchecked(from)) }
-    }
-}
-
-impl Into<u8> for MaxConnections {
-    #[inline]
-    fn into(self) -> u8 {
-        self.0.get()
     }
 }

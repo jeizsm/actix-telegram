@@ -1,8 +1,10 @@
 use types::*;
 
 /// Use this method to send photos. On success, the sent Message is returned.
-#[derive(Debug, Serialize, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "Message"]
+#[set(vis = "pub", optional)]
+#[new(vis = "pub")]
 pub struct SendPhoto {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
     pub chat_id: ChatIdOrUsername,

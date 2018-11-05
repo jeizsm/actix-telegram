@@ -1,16 +1,17 @@
 use types::*;
 
 /// Represents a Game.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct InlineQueryResultGame {
     /// Type of the result, must be game
     #[serde(rename = "type")]
-    pub type_: String,
+    type_: String,
     /// Unique identifier for this result, 1-64 bytes
-    pub id: String,
+    id: String,
     /// Short name of the game
-    pub game_short_name: String,
+    game_short_name: String,
     /// Inline keyboard attached to the message
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reply_markup: Option<InlineKeyboardMarkup>,
+    reply_markup: Option<InlineKeyboardMarkup>,
 }

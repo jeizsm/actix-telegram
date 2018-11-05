@@ -1,12 +1,13 @@
 use types::*;
 
 /// This object represents one shipping option.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct ShippingOption {
     /// Shipping option identifier
-    pub id: String,
+    id: String,
     /// Option title
-    pub title: String,
+    title: String,
     /// List of price portions
-    pub prices: Vec<LabeledPrice>,
+    prices: Vec<LabeledPrice>,
 }

@@ -1,8 +1,10 @@
 use types::*;
 
 /// Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
-#[derive(Debug, Serialize, TelegramApi)]
+#[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "Message"]
+#[set(vis = "pub", optional)]
+#[new(vis = "pub")]
 pub struct SendVideo {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
     pub chat_id: ChatIdOrUsername,

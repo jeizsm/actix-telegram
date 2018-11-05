@@ -1,18 +1,19 @@
 use types::*;
 
 /// This object represents a video message (available in Telegram apps as of v.4.0).
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct VideoNote {
     /// Unique identifier for this file
-    pub file_id: String,
+    file_id: String,
     /// Video width and height (diameter of the video message) as defined by sender
-    pub length: Integer,
+    length: Integer,
     /// Duration of the video in seconds as defined by sender
-    pub duration: Integer,
+    duration: Integer,
     /// Video thumbnail
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thumb: Option<PhotoSize>,
+    thumb: Option<PhotoSize>,
     /// File size
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_size: Option<Integer>,
+    file_size: Option<Integer>,
 }

@@ -1,14 +1,15 @@
 use types::*;
 
 /// This object represents a sticker set.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[get(vis = "pub")]
 pub struct StickerSet {
     /// Sticker set name
-    pub name: String,
+    name: String,
     /// Sticker set title
-    pub title: String,
+    title: String,
     /// True, if the sticker set contains masks
-    pub contains_masks: bool,
+    contains_masks: bool,
     /// List of all set stickers
-    pub stickers: Vec<Sticker>,
+    stickers: Vec<Sticker>,
 }
