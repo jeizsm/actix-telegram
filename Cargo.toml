@@ -10,7 +10,7 @@ license = "MIT"
 actix = "0.7"
 actix-web = { version = "0.7.14" }
 actix-net = { version = "0.2" }
-actix-telegram-derive = { path="./actix-telegram-derive", version="0.1" }
+actix-telegram-derive = { path="./actix-telegram-derive", version="0.2" }
 multipart-rfc7578 = { version = "0.6", features=["actix-web"] }
 futures = "0.1"
 serde = "1.0"
