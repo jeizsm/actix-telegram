@@ -125,7 +125,7 @@ impl Actor for TelegramServer {
                             .unwrap();
                     }
                     if !self.options.contains(OptionFlags::SELF_SIGNED) {
-                        set_webhook.set_certificate(cert_and_key);
+                        set_webhook.set_certificate(Some(cert_and_key));
                     }
                 }
                 _ => {

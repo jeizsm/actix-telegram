@@ -12,12 +12,16 @@ pub type Float = f64;
 pub struct UpdateId(NonZeroU32);
 
 impl UpdateId {
-    pub fn new(update_id: u32) -> Self {
-        unsafe { UpdateId(NonZeroU32::new_unchecked(update_id)) }
-    }
-
+    #[inline(always)]
     pub fn get(self) -> u32 {
         self.0.get()
+    }
+}
+
+impl From<u32> for UpdateId {
+    #[inline(always)]
+    fn from(from: u32) -> Self {
+        unsafe { UpdateId(NonZeroU32::new_unchecked(from)) }
     }
 }
 

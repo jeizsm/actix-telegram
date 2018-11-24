@@ -42,7 +42,7 @@ fn greet(update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update>
             if !member.is_bot() {
                 let chat_id = ChatIdOrUsername::Id(*message.chat().id());
                 let mut send_message = SendMessage::new(chat_id, "Welcome");
-                send_message.set_reply_to_message_id(*message.message_id());
+                send_message.set_reply_to_message_id(Some(*message.message_id()));
                 actix::spawn(
                     telegram_api
                         .send(send_message)

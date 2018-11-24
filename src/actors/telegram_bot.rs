@@ -69,7 +69,8 @@ impl Actor for TelegramBot {
 impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
     fn handle(&mut self, _: PollUpdates, ctx: &mut Context<Self>) {
         let timeout = self.timeout.as_secs() as u16;
-        let msg = OptimizedGetUpdates::new(timeout, self.offset);
+        let mut msg = OptimizedGetUpdates::new();
+        msg.set_offset(self.offset).set_timeout(Some(timeout));
         debug!("TelegramBot.GetUpdates {:?}", msg);
 
         let telegram_api = self.telegram_api.as_ref().unwrap();
@@ -80,9 +81,7 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                 let _ = response
                     .map(|response| {
                         debug!("response received {:?}", response);
-                        actor.offset = response
-                            .last()
-                            .map(|i| UpdateId::new(i.update_id().get() + 1));
+                        actor.offset = response.last().map(|i| (i.update_id().get() + 1).into());
                         for (i, result) in response.into_iter().enumerate() {
                             actor.workers[i % actor.threads].do_send(result);
                         }

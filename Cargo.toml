@@ -8,8 +8,8 @@ license = "MIT"
 
 [dependencies]
 actix = "0.7"
-actix-web = { version = "0.7.13" }
-actix-net = { version = "0.1" }
+actix-web = { version = "0.7.14" }
+actix-net = { version = "0.2" }
 actix-telegram-derive = { path="./actix-telegram-derive", version="0.1" }
 multipart-rfc7578 = { version = "0.6", features=["actix-web"] }
 futures = "0.1"
@@ -18,12 +18,11 @@ serde_derive = "1.0"
 serde_json = "1.0"
 tokio = "0.1"
 log = "0.4"
-env_logger = "0.5"
+env_logger = "0.6"
 rustls = { version = "0.14", optional = true }
 openssl = { version = "0.10", optional = true }
 native-tls = { version = "0.2", optional = true }
 bitflags = "1.0"
-getset = { git="https://github.com/jeizsm/getset", branch = "new"  }
 
 [features]
 default = ["tls-server", "rust-tls"]
