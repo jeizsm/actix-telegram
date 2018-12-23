@@ -352,20 +352,15 @@ fn file_field(ty: TypePath) -> Option<(Ident, bool)> {
             is_optional = true
         };
 
-        match segment.arguments {
-            PathArguments::AngleBracketed(args) => {
-                for arg in args.args.into_iter() {
-                    match arg {
-                        GenericArgument::Type(Type::Path(ty)) => match file_field(ty) {
-                            Some((ident, _)) => return Some((ident, is_optional)),
-                            _ => (),
-                        },
-                        _ => (),
+        if let PathArguments::AngleBracketed(args) = segment.arguments {
+            for arg in args.args.into_iter() {
+                if let GenericArgument::Type(Type::Path(ty)) = arg {
+                    if let Some((ident, _)) = file_field(ty) {
+                        return Some((ident, is_optional))
                     }
                 }
             }
-            _ => (),
-        };
+        }
 
         let segment_string = segment.ident.to_string();
         if segment_string.starts_with("InputFile") || segment_string.starts_with("InputMedia") {

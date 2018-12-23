@@ -52,7 +52,8 @@ impl Actor for TelegramBot {
                 let clone = telegram_api.clone();
                 let arc = self.apps.clone();
                 Arbiter::start(move |_a| TelegramWorker::new(clone, arc))
-            }).collect();
+            })
+            .collect();
         self.workers = workers;
         self.telegram_api = Some(telegram_api);
 
@@ -85,8 +86,10 @@ impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
                         for (i, result) in response.into_iter().enumerate() {
                             actor.workers[i % actor.threads].do_send(result);
                         }
-                    }).map_err(|e| error!("response error {:?}", e));
-            }).map_err(|e, _actor, _ctx| error!("mailbox error {:?}", e));
+                    })
+                    .map_err(|e| error!("response error {:?}", e));
+            })
+            .map_err(|e, _actor, _ctx| error!("mailbox error {:?}", e));
         ctx.wait(actor_future);
     }
 }

@@ -99,7 +99,8 @@ impl Actor for TelegramServer {
             let telegram_api = clone.clone();
             let state = ReqState { telegram_api, apps };
             ActixApp::with_state(state).resource(&url, |r| r.method(Method::POST).with(handler))
-        }).workers(self.threads)
+        })
+        .workers(self.threads)
         .server_hostname(self.host.clone());
         let mut set_webhook = SetWebhook::new(self.full_url());
         #[cfg(feature = "tls-server")]

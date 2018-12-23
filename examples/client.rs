@@ -25,7 +25,8 @@ fn main() {
                 println!("{:?}", a);
                 actix::System::current().stop();
                 ()
-            }).map_err(|_| ()),
+            })
+            .map_err(|_| ()),
     );
     sys.run();
 }
