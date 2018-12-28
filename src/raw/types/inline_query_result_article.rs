@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a link to an article or web page.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

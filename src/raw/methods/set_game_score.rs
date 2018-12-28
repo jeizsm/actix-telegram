@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to set the score of the specified user in a game. On success, if the message was sent by the bot, returns the edited Message, otherwise returns True. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

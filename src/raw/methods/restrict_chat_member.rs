@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate admin rights. Pass True for all boolean parameters to lift restrictions from a user. Returns True on success.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

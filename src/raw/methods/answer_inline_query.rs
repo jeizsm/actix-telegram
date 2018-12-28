@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to send answers to an inline query. On success, True is returned.No more than 50 results per query are allowed.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

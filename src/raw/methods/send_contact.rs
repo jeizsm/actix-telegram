@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to send phone contacts. On success, the sent Message is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

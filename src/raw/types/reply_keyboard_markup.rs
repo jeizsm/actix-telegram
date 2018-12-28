@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

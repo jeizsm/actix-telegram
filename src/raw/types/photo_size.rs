@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

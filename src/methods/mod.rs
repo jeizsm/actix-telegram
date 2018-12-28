@@ -27,4 +27,4 @@ pub use self::send_photo::SendPhoto;
 pub use self::send_video::SendVideo;
 pub use self::send_voice::SendVoice;
 pub use self::set_webhook::SetWebhook;
-pub use raw::methods::*;
+pub use crate::raw::methods::*;

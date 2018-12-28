@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a point on the map.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

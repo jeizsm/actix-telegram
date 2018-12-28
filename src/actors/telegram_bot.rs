@@ -2,11 +2,11 @@ use super::{TelegramApi, TelegramWorker};
 use crate::application::App;
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
-use methods::OptimizedGetUpdates;
+use crate::methods::OptimizedGetUpdates;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
-use types::UpdateId;
+use crate::types::UpdateId;
 
 struct PollUpdates;
 

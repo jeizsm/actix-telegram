@@ -1,4 +1,4 @@
-use types::User;
+use crate::types::User;
 
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "User"]

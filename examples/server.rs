@@ -5,8 +5,9 @@ extern crate futures;
 extern crate log;
 extern crate serde_json;
 
-use actix_telegram::actors::{telegram_server::*, App, TelegramApi};
+use actix_telegram::actors::{telegram_server::*, TelegramApi};
 use actix_telegram::types::update::Update;
+use actix_telegram::App;
 use actix_web::actix::{Actor, Addr, System};
 use std::env;
 

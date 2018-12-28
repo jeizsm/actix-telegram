@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Contains information about Telegram Passport data shared with the bot by the user.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

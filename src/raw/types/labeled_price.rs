@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a portion of the price for goods or services.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

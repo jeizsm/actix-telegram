@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object describes the position on faces where a mask should be placed by default.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

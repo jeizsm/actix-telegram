@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to get the number of members in a chat. Returns Int on success.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

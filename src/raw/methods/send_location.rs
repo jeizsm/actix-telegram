@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to send point on the map. On success, the sent Message is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

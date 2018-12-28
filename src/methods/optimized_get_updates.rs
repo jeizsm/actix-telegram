@@ -1,9 +1,9 @@
 use actix::{Context, Handler, Message};
-use actors::TelegramApi;
+use crate::actors::TelegramApi;
 use futures::Future;
 use std::num::{NonZeroU16, NonZeroU8};
 use std::time::Duration;
-use types::{Update, UpdateId};
+use crate::types::{Update, UpdateId};
 
 /// Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.
 #[derive(Serialize, Debug, Setters, New)]

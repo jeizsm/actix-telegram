@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a Game.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

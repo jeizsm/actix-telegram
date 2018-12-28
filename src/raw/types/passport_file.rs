@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a file uploaded to Telegram Passport. Currently all Telegram Passport files are in JPEG format when decrypted and don't exceed 10MB.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

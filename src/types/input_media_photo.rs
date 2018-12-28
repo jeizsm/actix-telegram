@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a photo to be sent.
 #[derive(Debug, Serialize)]

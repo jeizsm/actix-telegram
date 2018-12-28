@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

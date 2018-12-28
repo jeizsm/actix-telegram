@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents the content of a location message to be sent as the result of an inline query.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

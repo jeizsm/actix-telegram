@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Contains information about the current status of a webhook.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

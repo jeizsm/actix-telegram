@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents an incoming update.At most one of the optional parameters can be present in any given update.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

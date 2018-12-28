@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to forward messages of any kind. On success, the sent Message is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

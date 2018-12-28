@@ -5,7 +5,7 @@ use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
 use std::fmt::Debug;
 use std::time::Duration;
-use types::TelegramResponse;
+use crate::types::TelegramResponse;
 
 pub struct TelegramApi {
     pub(crate) token: String,

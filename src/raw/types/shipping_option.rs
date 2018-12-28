@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents one shipping option.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

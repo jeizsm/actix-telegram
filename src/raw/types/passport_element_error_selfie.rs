@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

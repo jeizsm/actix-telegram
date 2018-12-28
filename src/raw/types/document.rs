@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

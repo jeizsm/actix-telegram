@@ -1,4 +1,4 @@
-use types::True;
+use crate::types::True;
 
 #[derive(Serialize, Debug, TelegramApi)]
 #[return_type = "True"]

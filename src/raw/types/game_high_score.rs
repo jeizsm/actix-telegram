@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents one row of the high scores table for a game.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

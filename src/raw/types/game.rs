@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

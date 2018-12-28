@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

@@ -10,9 +10,9 @@ use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
 use futures::Future;
-use methods::SetWebhook;
+use crate::methods::SetWebhook;
 use std::sync::Arc;
-use types::{InputFile, True, Update};
+use crate::types::{InputFile, True, Update};
 
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;

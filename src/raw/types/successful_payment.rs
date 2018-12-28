@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object contains basic information about a successful payment.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

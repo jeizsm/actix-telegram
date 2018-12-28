@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

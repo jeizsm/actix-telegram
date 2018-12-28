@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object contains information about an incoming pre-checkout query.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a link to a voice recording in an .ogg container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

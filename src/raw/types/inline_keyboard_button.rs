@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

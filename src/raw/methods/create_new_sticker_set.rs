@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to create new sticker set owned by a user. The bot will be able to edit the created sticker set. Returns True on success.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

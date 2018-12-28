@@ -43,4 +43,4 @@ pub use self::input_media_video::InputMediaVideo;
 pub use self::input_text_message_content::InputTextMessageContent;
 pub use self::update::Update;
 pub use self::utils::*;
-pub use raw::types::*;
+pub use crate::raw::types::*;

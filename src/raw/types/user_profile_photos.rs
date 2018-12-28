@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represent a user's profile pictures.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

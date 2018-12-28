@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Contains information about why a request was unsuccessful.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

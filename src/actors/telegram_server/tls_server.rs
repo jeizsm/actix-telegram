@@ -12,7 +12,7 @@ use std::fs::{self, File};
 #[allow(unused_imports)]
 use std::io::BufReader;
 use std::path::{Path, PathBuf};
-use types::InputFile;
+use crate::types::InputFile;
 
 pub enum Key {
     #[cfg(feature = "rust-tls")]

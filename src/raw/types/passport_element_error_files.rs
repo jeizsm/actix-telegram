@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

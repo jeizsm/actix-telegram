@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

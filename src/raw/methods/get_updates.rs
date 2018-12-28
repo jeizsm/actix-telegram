@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

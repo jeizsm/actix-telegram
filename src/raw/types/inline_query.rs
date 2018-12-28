@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

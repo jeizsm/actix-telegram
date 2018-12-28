@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object contains information about an incoming shipping query.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

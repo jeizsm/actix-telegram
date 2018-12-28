@@ -27,8 +27,8 @@ pub(crate) mod raw;
 pub mod types;
 pub mod application;
 
-pub use actors::{TelegramApi, TelegramBot};
-pub use application::App;
+pub use crate::actors::{TelegramApi, TelegramBot};
+pub use crate::application::App;
 
 #[cfg(feature = "server")]
-pub use actors::TelegramServer;
+pub use crate::actors::TelegramServer;

@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Represents a general file to be sent.
 #[derive(Debug, Serialize)]

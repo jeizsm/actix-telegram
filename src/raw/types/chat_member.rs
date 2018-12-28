@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object contains information about one member of a chat.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

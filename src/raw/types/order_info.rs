@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// This object represents information about an order.
 #[derive(Debug, Serialize, Getters, Deserialize, Clone)]

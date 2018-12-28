@@ -1,4 +1,4 @@
-use types::*;
+use crate::types::*;
 
 /// Use this method to send a group of photos or videos as an album. On success, an array of the sent Messages is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
