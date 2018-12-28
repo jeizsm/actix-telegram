@@ -17,11 +17,11 @@ pub struct TelegramBot {
     telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
-    apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
+    apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
 }
 
 impl TelegramBot {
-    pub fn new(token: String, timeout: u16, apps: Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>) -> Self {
+    pub fn new(token: String, timeout: u16, apps: Arc<dyn UpdateHandler + Sync + Send + 'static>) -> Self {
         let timeout = Duration::from_secs(u64::from(timeout));
         Self {
             token,
@@ -30,7 +30,7 @@ impl TelegramBot {
             telegram_api: None,
             workers: Vec::new(),
             threads: 1,
-            apps: Arc::new(apps),
+            apps,
         }
     }
 

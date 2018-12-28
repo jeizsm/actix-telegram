@@ -12,6 +12,7 @@ use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, Addr, System};
 use futures::future::Future;
 use std::env;
+use std::sync::Arc;
 
 fn main() {
     env_logger::init();
@@ -25,7 +26,7 @@ fn main() {
     );
     let print_update = App::new(print_update);
     let greeter = App::new(greet);
-    let _telegram = TelegramBot::new(token, 30, vec![Box::new(greeter), Box::new(print_update)]).start();
+    let _telegram = TelegramBot::new(token, 30, Arc::new(vec![greeter, print_update])).start();
     sys.run();
 }
 

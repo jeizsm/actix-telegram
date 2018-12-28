@@ -23,7 +23,7 @@ pub struct TelegramServer {
     url: Option<String>,
     token: String,
     threads: usize,
-    apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
+    apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
     server: Option<Addr<Server>>,
     options: OptionFlags,
     #[cfg(feature = "tls-server")]
@@ -31,13 +31,13 @@ pub struct TelegramServer {
 }
 
 impl TelegramServer {
-    pub fn new(addr: String, token: String, host: String, apps: Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>) -> Self {
+    pub fn new(addr: String, token: String, host: String, apps: Arc<dyn UpdateHandler + Sync + Send + 'static>) -> Self {
         Self {
             addr,
             host,
             url: None,
             threads: 1,
-            apps: Arc::new(apps),
+            apps,
             server: None,
             token,
             #[cfg(feature = "tls-server")]
@@ -168,17 +168,6 @@ impl Handler<SetWebhook> for TelegramServer {
 fn handler((update, state): (Json<Update>, State<ReqState>)) -> HttpResponseBuilder {
     let mut msg = update.into_inner();
     debug!("TelegramServer.Update received {:?}", msg);
-    for app in state.apps.iter() {
-        msg = match app.handle(msg, &state.telegram_api) {
-            Ok(()) => {
-                debug!("ok");
-                return HttpResponse::Ok();
-            }
-            Err(msg) => {
-                debug!("next");
-                msg
-            }
-        };
-    }
+    state.apps.handle(msg, &state.telegram_api);
     HttpResponse::Ok()
 }

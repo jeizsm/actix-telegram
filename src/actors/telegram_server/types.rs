@@ -25,5 +25,5 @@ impl OptionFlags {
 
 pub(super) struct ReqState {
     pub(super) telegram_api: Addr<TelegramApi>,
-    pub(super) apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
+    pub(super) apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
 }

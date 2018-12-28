@@ -24,3 +24,21 @@ impl UpdateHandler for App {
         (self.0)(update, telegram_api)
     }
 }
+
+impl UpdateHandler for Vec<App> {
+    fn handle(&self, mut update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
+        for app in self {
+            update = match app.handle(update, telegram_api) {
+                Ok(()) => {
+                    debug!("ok");
+                    return Ok(());
+                }
+                Err(update) => {
+                    debug!("next");
+                    update
+                }
+            };
+        };
+        Ok(())
+    }
+}
