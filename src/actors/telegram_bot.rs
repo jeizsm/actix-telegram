@@ -1,4 +1,5 @@
-use super::{App, TelegramApi, TelegramWorker};
+use super::{TelegramApi, TelegramWorker};
+use crate::application::App;
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
 use methods::OptimizedGetUpdates;

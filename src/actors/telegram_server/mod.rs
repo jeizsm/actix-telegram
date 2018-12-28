@@ -3,7 +3,8 @@ mod tls_server;
 mod types;
 
 use self::types::{OptionFlags, ReqState};
-use super::{App, TelegramApi};
+use super::TelegramApi;
+use crate::application::App;
 use actix::{Actor, Addr, Context, Handler};
 use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;

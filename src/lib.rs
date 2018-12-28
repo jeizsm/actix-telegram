@@ -25,8 +25,10 @@ pub mod actors;
 pub mod methods;
 pub(crate) mod raw;
 pub mod types;
+pub mod application;
 
-pub use actors::{App, TelegramApi, TelegramBot};
+pub use actors::{TelegramApi, TelegramBot};
+pub use application::App;
 
 #[cfg(feature = "server")]
 pub use actors::TelegramServer;

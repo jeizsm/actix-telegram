@@ -1,4 +1,5 @@
-use super::{App, TelegramApi};
+use super::TelegramApi;
+use crate::application::App;
 use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
 use types::Update;
