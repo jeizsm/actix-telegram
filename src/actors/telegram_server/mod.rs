@@ -4,7 +4,7 @@ mod types;
 
 use self::types::{OptionFlags, ReqState};
 use super::TelegramApi;
-use crate::application::App;
+use crate::application::UpdateHandler;
 use crate::methods::SetWebhook;
 use crate::types::{InputFile, True, Update};
 use actix::{Actor, Addr, Context, Handler};
@@ -23,7 +23,7 @@ pub struct TelegramServer {
     url: Option<String>,
     token: String,
     threads: usize,
-    apps: Arc<Vec<App>>,
+    apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
     server: Option<Addr<Server>>,
     options: OptionFlags,
     #[cfg(feature = "tls-server")]
@@ -31,7 +31,7 @@ pub struct TelegramServer {
 }
 
 impl TelegramServer {
-    pub fn new(addr: String, token: String, host: String, apps: Vec<App>) -> Self {
+    pub fn new(addr: String, token: String, host: String, apps: Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>) -> Self {
         Self {
             addr,
             host,
@@ -169,7 +169,7 @@ fn handler((update, state): (Json<Update>, State<ReqState>)) -> HttpResponseBuil
     let mut msg = update.into_inner();
     debug!("TelegramServer.Update received {:?}", msg);
     for app in state.apps.iter() {
-        msg = match (app.0)(msg, &state.telegram_api) {
+        msg = match app.handle(msg, &state.telegram_api) {
             Ok(()) => {
                 debug!("ok");
                 return HttpResponse::Ok();

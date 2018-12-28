@@ -1,5 +1,5 @@
 use super::{TelegramApi, TelegramWorker};
-use crate::application::App;
+use crate::application::UpdateHandler;
 use crate::methods::OptimizedGetUpdates;
 use crate::types::UpdateId;
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
@@ -17,11 +17,11 @@ pub struct TelegramBot {
     telegram_api: Option<Addr<TelegramApi>>,
     workers: Vec<Addr<TelegramWorker>>,
     threads: usize,
-    apps: Arc<Vec<App>>,
+    apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
 }
 
 impl TelegramBot {
-    pub fn new(token: String, timeout: u16, apps: Vec<App>) -> Self {
+    pub fn new(token: String, timeout: u16, apps: Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>) -> Self {
         let timeout = Duration::from_secs(u64::from(timeout));
         Self {
             token,

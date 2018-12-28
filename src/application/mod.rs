@@ -14,3 +14,13 @@ impl App {
         App(Box::new(f))
     }
 }
+
+pub trait UpdateHandler {
+    fn handle(&self, Update, &Addr<TelegramApi>) -> Result<(), Update>;
+}
+
+impl UpdateHandler for App {
+    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
+        (self.0)(update, telegram_api)
+    }
+}

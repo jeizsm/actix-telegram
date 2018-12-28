@@ -1,16 +1,16 @@
 use super::TelegramApi;
-use crate::application::App;
+use crate::application::UpdateHandler;
 use crate::types::Update;
 use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
 
 pub struct TelegramWorker {
-    apps: Arc<Vec<App>>,
+    apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
     telegram_api: Addr<TelegramApi>,
 }
 
 impl TelegramWorker {
-    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<Vec<App>>) -> Self {
+    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>) -> Self {
         Self { apps, telegram_api }
     }
 }
@@ -33,7 +33,7 @@ impl Handler<Update> for TelegramWorker {
     fn handle(&mut self, mut msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
         for app in self.apps.iter() {
-            msg = match (app.0)(msg, &self.telegram_api) {
+            msg = match app.handle(msg, &self.telegram_api) {
                 Ok(()) => {
                     debug!("ok");
                     return Ok(());

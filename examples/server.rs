@@ -20,7 +20,7 @@ fn main() {
     let cert = Cert::new(env::var("CERTIFICATE_PEM").unwrap());
     let host = env::var("WEBHOOK_HOST").unwrap();
     let cert_and_key = CertAndKey::new(cert, key);
-    let _server = TelegramServer::new("127.0.0.1:59080".to_owned(), token, host, vec![print])
+    let _server = TelegramServer::new("127.0.0.1:59080".to_owned(), token, host, vec![Box::new(print)])
         .set_certificate_and_key(cert_and_key, true)
         .start();
     sys.run();

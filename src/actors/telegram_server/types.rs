@@ -1,5 +1,5 @@
 use crate::actors::TelegramApi;
-use crate::application::App;
+use crate::application::UpdateHandler;
 use actix::Addr;
 use std::sync::Arc;
 
@@ -25,5 +25,5 @@ impl OptionFlags {
 
 pub(super) struct ReqState {
     pub(super) telegram_api: Addr<TelegramApi>,
-    pub(super) apps: Arc<Vec<App>>,
+    pub(super) apps: Arc<Vec<Box<dyn UpdateHandler + Sync + Send + 'static>>>,
 }
