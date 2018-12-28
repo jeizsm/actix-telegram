@@ -1,6 +1,6 @@
-use actix::Addr;
 use crate::actors::TelegramApi;
 use crate::application::App;
+use actix::Addr;
 use std::sync::Arc;
 
 bitflags! {

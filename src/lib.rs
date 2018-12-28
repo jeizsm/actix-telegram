@@ -22,10 +22,10 @@ extern crate rustls;
 extern crate bitflags;
 
 pub mod actors;
+pub mod application;
 pub mod methods;
 pub(crate) mod raw;
 pub mod types;
-pub mod application;
 
 pub use crate::actors::{TelegramApi, TelegramBot};
 pub use crate::application::App;

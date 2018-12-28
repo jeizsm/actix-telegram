@@ -5,14 +5,14 @@ mod types;
 use self::types::{OptionFlags, ReqState};
 use super::TelegramApi;
 use crate::application::App;
+use crate::methods::SetWebhook;
+use crate::types::{InputFile, True, Update};
 use actix::{Actor, Addr, Context, Handler};
 use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
 use futures::Future;
-use crate::methods::SetWebhook;
 use std::sync::Arc;
-use crate::types::{InputFile, True, Update};
 
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;

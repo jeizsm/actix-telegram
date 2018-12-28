@@ -1,3 +1,4 @@
+use crate::types::TelegramResponse;
 use actix::{Actor, Context};
 use actix_web::{client, HttpMessage};
 use futures::Future;
@@ -5,7 +6,6 @@ use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
 use std::fmt::Debug;
 use std::time::Duration;
-use crate::types::TelegramResponse;
 
 pub struct TelegramApi {
     pub(crate) token: String,

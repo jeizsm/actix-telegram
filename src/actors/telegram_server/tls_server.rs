@@ -1,3 +1,4 @@
+use crate::types::InputFile;
 #[cfg(feature = "tls")]
 use native_tls::{Identity, Protocol, TlsAcceptor};
 #[cfg(feature = "ssl")]
@@ -12,7 +13,6 @@ use std::fs::{self, File};
 #[allow(unused_imports)]
 use std::io::BufReader;
 use std::path::{Path, PathBuf};
-use crate::types::InputFile;
 
 pub enum Key {
     #[cfg(feature = "rust-tls")]

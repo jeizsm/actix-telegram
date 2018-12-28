@@ -1,8 +1,8 @@
 use super::TelegramApi;
 use crate::application::App;
+use crate::types::Update;
 use actix::{Actor, Addr, Context, Handler, Message};
 use std::sync::Arc;
-use crate::types::Update;
 
 pub struct TelegramWorker {
     apps: Arc<Vec<App>>,
