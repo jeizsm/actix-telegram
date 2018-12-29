@@ -1,17 +1,22 @@
 use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
+use std::rc::Rc;
+use std::sync::Arc;
 
-type UpdateFunction = Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static;
-
-pub struct App(pub(crate) Box<UpdateFunction>);
+#[derive(Clone)]
+pub struct App {
+    inner: Arc<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Send + Sync + 'static>,
+}
 
 impl App {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Sync + Send + 'static,
+        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Send + Sync + 'static,
     {
-        App(Box::new(f))
+        App {
+            inner: Arc::new(f),
+        }
     }
 }
 
@@ -21,7 +26,7 @@ pub trait UpdateHandler {
 
 impl UpdateHandler for App {
     fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
-        (self.0)(update, telegram_api)
+        (self.inner)(update, telegram_api)
     }
 }
 
@@ -39,6 +44,6 @@ impl UpdateHandler for Vec<App> {
                 }
             };
         }
-        Ok(())
+        Err(update)
     }
 }
