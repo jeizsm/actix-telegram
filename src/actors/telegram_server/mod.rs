@@ -12,32 +12,39 @@ use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
 use futures::Future;
-use std::sync::Arc;
 
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;
 
-pub struct TelegramServer {
+pub struct TelegramServer<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     addr: String,
     host: String,
     url: Option<String>,
     token: String,
     threads: usize,
-    apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
+    factory: F,
     server: Option<Addr<Server>>,
     options: OptionFlags,
     #[cfg(feature = "tls-server")]
     cert_and_key: Option<CertAndKey>,
 }
 
-impl TelegramServer {
-    pub fn new(addr: String, token: String, host: String, apps: Arc<dyn UpdateHandler + Sync + Send + 'static>) -> Self {
+impl<F, H> TelegramServer<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
+    pub fn new(addr: String, token: String, host: String, factory: F) -> Self {
         Self {
             addr,
             host,
             url: None,
             threads: 1,
-            apps,
+            factory,
             server: None,
             token,
             #[cfg(feature = "tls-server")]
@@ -85,18 +92,22 @@ impl TelegramServer {
     }
 }
 
-impl Actor for TelegramServer {
+impl<F, H> Actor for TelegramServer<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     type Context = Context<Self>;
 
     fn started(&mut self, _ctx: &mut Context<Self>) {
         debug!("TelegramServer is alive");
         let token = self.token.clone();
         let url = self.url().to_owned();
-        let apps = self.apps.clone();
+        let apps = self.factory.clone();
         let telegram_api = TelegramApi::new(token, 10).start();
         let clone = telegram_api.clone();
         let mut server = HttpServer::new(move || {
-            let apps = apps.clone();
+            let apps = (apps)();
             let telegram_api = clone.clone();
             let state = ReqState { telegram_api, apps };
             ActixApp::with_state(state).resource(&url, |r| r.method(Method::POST).with(handler))
@@ -150,7 +161,11 @@ impl Actor for TelegramServer {
     }
 }
 
-impl Handler<SetWebhook> for TelegramServer {
+impl<F, H> Handler<SetWebhook> for TelegramServer<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     type Result = Box<Future<Item = True, Error = ()>>;
 
     fn handle(&mut self, msg: SetWebhook, _: &mut Context<Self>) -> Self::Result {
@@ -165,8 +180,11 @@ impl Handler<SetWebhook> for TelegramServer {
     }
 }
 
-fn handler((update, state): (Json<Update>, State<ReqState>)) -> HttpResponseBuilder {
-    let mut msg = update.into_inner();
+fn handler<H>((update, state): (Json<Update>, State<ReqState<H>>)) -> HttpResponseBuilder
+where
+    H: UpdateHandler + 'static,
+{
+    let msg = update.into_inner();
     debug!("TelegramServer.Update received {:?}", msg);
     state.apps.handle(msg, &state.telegram_api);
     HttpResponse::Ok()

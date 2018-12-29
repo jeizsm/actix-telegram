@@ -2,20 +2,28 @@ use super::TelegramApi;
 use crate::application::UpdateHandler;
 use crate::types::Update;
 use actix::{Actor, Addr, Context, Handler, Message};
-use std::sync::Arc;
 
-pub struct TelegramWorker {
-    apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
+pub struct TelegramWorker<H>
+where
+    H: UpdateHandler + 'static,
+{
+    apps: H,
     telegram_api: Addr<TelegramApi>,
 }
 
-impl TelegramWorker {
-    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: Arc<dyn UpdateHandler + Sync + Send + 'static>) -> Self {
+impl<H> TelegramWorker<H>
+where
+    H: UpdateHandler + 'static,
+{
+    pub(crate) fn new(telegram_api: Addr<TelegramApi>, apps: H) -> Self {
         Self { apps, telegram_api }
     }
 }
 
-impl Actor for TelegramWorker {
+impl<H> Actor for TelegramWorker<H>
+where
+    H: UpdateHandler + 'static,
+{
     type Context = Context<Self>;
 
     fn started(&mut self, _ctx: &mut Context<Self>) {
@@ -27,10 +35,13 @@ impl Actor for TelegramWorker {
     }
 }
 
-impl Handler<Update> for TelegramWorker {
+impl<H> Handler<Update> for TelegramWorker<H>
+where
+    H: UpdateHandler + 'static,
+{
     type Result = Result<(), ()>;
 
-    fn handle(&mut self, mut msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
+    fn handle(&mut self, msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
         self.apps.handle(msg, &self.telegram_api).map_err(|_| ())
     }

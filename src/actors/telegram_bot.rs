@@ -4,24 +4,31 @@ use crate::methods::OptimizedGetUpdates;
 use crate::types::UpdateId;
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
 use futures::Stream;
-use std::sync::Arc;
 use std::time::{Duration, Instant};
 use tokio::timer::{self, Interval};
 
 struct PollUpdates;
 
-pub struct TelegramBot {
+pub struct TelegramBot<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     token: String,
     timeout: Duration,
     offset: Option<UpdateId>,
     telegram_api: Option<Addr<TelegramApi>>,
-    workers: Vec<Addr<TelegramWorker>>,
+    workers: Vec<Addr<TelegramWorker<H>>>,
     threads: usize,
-    apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
+    factory: F,
 }
 
-impl TelegramBot {
-    pub fn new(token: String, timeout: u16, apps: Arc<dyn UpdateHandler + Sync + Send + 'static>) -> Self {
+impl<F, H> TelegramBot<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
+    pub fn new(token: String, timeout: u16, factory: F) -> Self {
         let timeout = Duration::from_secs(u64::from(timeout));
         Self {
             token,
@@ -30,7 +37,7 @@ impl TelegramBot {
             telegram_api: None,
             workers: Vec::new(),
             threads: 1,
-            apps,
+            factory,
         }
     }
 
@@ -40,7 +47,11 @@ impl TelegramBot {
     }
 }
 
-impl Actor for TelegramBot {
+impl<F, H> Actor for TelegramBot<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     type Context = Context<Self>;
 
     fn started(&mut self, ctx: &mut Context<Self>) {
@@ -51,8 +62,11 @@ impl Actor for TelegramBot {
         let workers = (0..self.threads)
             .map(|_i| {
                 let clone = telegram_api.clone();
-                let arc = self.apps.clone();
-                Arbiter::start(move |_a| TelegramWorker::new(clone, arc))
+                let apps = self.factory.clone();
+                Arbiter::start(move |_a| {
+                    let apps = (apps)();
+                    TelegramWorker::new(clone, apps)
+                })
             })
             .collect();
         self.workers = workers;
@@ -68,7 +82,11 @@ impl Actor for TelegramBot {
     }
 }
 
-impl StreamHandler<PollUpdates, timer::Error> for TelegramBot {
+impl<F, H> StreamHandler<PollUpdates, timer::Error> for TelegramBot<F, H>
+where
+    H: UpdateHandler + 'static,
+    F: Fn() -> H + Send + Clone + 'static,
+{
     fn handle(&mut self, _: PollUpdates, ctx: &mut Context<Self>) {
         let timeout = self.timeout.as_secs() as u16;
         let mut msg = OptimizedGetUpdates::new();

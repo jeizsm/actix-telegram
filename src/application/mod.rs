@@ -38,7 +38,7 @@ impl UpdateHandler for Vec<App> {
                     update
                 }
             };
-        };
+        }
         Ok(())
     }
 }

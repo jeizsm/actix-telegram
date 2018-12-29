@@ -1,7 +1,6 @@
 use crate::actors::TelegramApi;
 use crate::application::UpdateHandler;
 use actix::Addr;
-use std::sync::Arc;
 
 bitflags! {
     pub(crate) struct OptionFlags: u8 {
@@ -23,7 +22,10 @@ impl OptionFlags {
     }
 }
 
-pub(super) struct ReqState {
+pub(super) struct ReqState<H>
+where
+    H: UpdateHandler + 'static,
+{
     pub(super) telegram_api: Addr<TelegramApi>,
-    pub(super) apps: Arc<dyn UpdateHandler + Sync + Send + 'static>,
+    pub(super) apps: H,
 }
