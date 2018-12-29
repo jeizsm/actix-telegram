@@ -11,7 +11,9 @@ use actix_telegram::types::ChatIdOrUsername;
 use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, Addr, System};
 use futures::future::Future;
+use std::collections::HashMap;
 use std::env;
+use std::sync::Arc;
 
 fn main() {
     env_logger::init();
@@ -23,7 +25,14 @@ fn main() {
             .map(|response| println!("removed webhook {:?}", response))
             .map_err(|e| println!("Actor is probably died: {}", e)),
     );
-    let _telegram = TelegramBot::new(token, 30, move || vec![App::new(print_update), App::new(greet)]).start();
+    let _telegram = TelegramBot::new(token, 30, move || {
+        let state: Arc<HashMap<String, String>> = Arc::new(HashMap::new());
+        vec![
+            App::new(print_update, state.clone()),
+            App::new(greet, state.clone()),
+        ]
+    })
+    .start();
     sys.run();
 }
 
