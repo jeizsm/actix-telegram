@@ -186,6 +186,13 @@ where
 {
     let msg = update.into_inner();
     debug!("TelegramServer.Update received {:?}", msg);
-    state.apps.handle(msg, &state.telegram_api);
+    match state.apps.handle(msg, &state.telegram_api) {
+        Ok(()) => {
+            debug!("handled");
+        }
+        Err(_) => {
+            debug!("not handled");
+        }
+    }
     HttpResponse::Ok()
 }
