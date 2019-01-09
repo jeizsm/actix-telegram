@@ -28,8 +28,8 @@ fn main() {
     let _telegram = TelegramBot::new(token, 30, move || {
         let state: Rc<HashMap<String, String>> = Rc::new(HashMap::new());
         vec![
-            App::new(print_update, state.clone()),
-            App::new(greet, state.clone()),
+            App::with_state(print_update, state.clone()),
+            App::with_state(greet, state.clone()),
         ]
     })
     .start();

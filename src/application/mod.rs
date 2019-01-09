@@ -1,27 +1,34 @@
 use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
-use std::sync::Arc;
 
 pub struct TelegramApplication<S> {
     state: S,
-    inner: Arc<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Send + Sync + 'static>,
+    inner: Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
 }
 
-#[derive(Clone)]
-pub struct App<S> {
+pub struct App<S = ()> {
     state: S,
-    inner: Arc<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Send + Sync + 'static>,
+    inner: Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
+}
+
+impl App<()> {
+    pub fn new<F>(f: F) -> Self
+    where
+        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static
+    {
+        App::with_state(f, ())
+    }
 }
 
 impl<S> App<S> {
-    pub fn new<F>(f: F, state: S) -> Self
+    pub fn with_state<F>(f: F, state: S) -> Self
     where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + Send + Sync + 'static,
+        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static,
     {
         Self {
             state,
-            inner: Arc::new(f),
+            inner: Box::new(f),
         }
     }
 }
