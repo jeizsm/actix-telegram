@@ -13,7 +13,7 @@ use actix_web::actix::{self, Actor, Addr, System};
 use futures::future::Future;
 use std::collections::HashMap;
 use std::env;
-use std::sync::Arc;
+use std::rc::Rc;
 
 fn main() {
     env_logger::init();
@@ -26,7 +26,7 @@ fn main() {
             .map_err(|e| println!("Actor is probably died: {}", e)),
     );
     let _telegram = TelegramBot::new(token, 30, move || {
-        let state: Arc<HashMap<String, String>> = Arc::new(HashMap::new());
+        let state: Rc<HashMap<String, String>> = Rc::new(HashMap::new());
         vec![
             App::new(print_update, state.clone()),
             App::new(greet, state.clone()),

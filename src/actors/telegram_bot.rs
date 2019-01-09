@@ -1,5 +1,5 @@
 use super::{TelegramApi, TelegramWorker};
-use crate::application::UpdateHandler;
+use crate::application::{IntoUpdateHandler, UpdateHandler};
 use crate::methods::OptimizedGetUpdates;
 use crate::types::UpdateId;
 use actix::{Actor, ActorFuture, Addr, Arbiter, AsyncContext, Context, StreamHandler, WrapFuture};
@@ -9,23 +9,25 @@ use tokio::timer::{self, Interval};
 
 struct PollUpdates;
 
-pub struct TelegramBot<F, H>
+pub struct TelegramBot<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     token: String,
     timeout: Duration,
     offset: Option<UpdateId>,
     telegram_api: Option<Addr<TelegramApi>>,
-    workers: Vec<Addr<TelegramWorker<H>>>,
+    workers: Vec<Addr<TelegramWorker<UH>>>,
     threads: usize,
     factory: F,
 }
 
-impl<F, H> TelegramBot<F, H>
+impl<F, H, UH> TelegramBot<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     pub fn new(token: String, timeout: u16, factory: F) -> Self {
@@ -47,10 +49,11 @@ where
     }
 }
 
-impl<F, H> Actor for TelegramBot<F, H>
+impl<F, H, UH> Actor for TelegramBot<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
 {
     type Context = Context<Self>;
 
@@ -64,7 +67,7 @@ where
                 let clone = telegram_api.clone();
                 let apps = self.factory.clone();
                 Arbiter::start(move |_a| {
-                    let apps = (apps)();
+                    let apps = (apps)().into_handler();
                     TelegramWorker::new(clone, apps)
                 })
             })
@@ -82,9 +85,10 @@ where
     }
 }
 
-impl<F, H> StreamHandler<PollUpdates, timer::Error> for TelegramBot<F, H>
+impl<F, H, UH> StreamHandler<PollUpdates, timer::Error> for TelegramBot<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     fn handle(&mut self, _: PollUpdates, ctx: &mut Context<Self>) {
