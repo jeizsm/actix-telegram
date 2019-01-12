@@ -2,42 +2,28 @@ use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
 
-pub struct TelegramApplication<S> {
-    state: S,
+pub struct TelegramApplication {
     inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
 }
 
-pub struct App<S = ()> {
-    state: S,
+pub struct App {
     inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
 }
 
-impl App<()> {
+impl App {
     pub fn new<F>(f: F) -> Self
     where
         F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static
     {
-        App::with_state(f, ())
-    }
-}
-
-impl<S> App<S> {
-    pub fn with_state<F>(f: F, state: S) -> Self
-    where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static,
-    {
-        Self {
-            state,
-            inner: Box::new(f),
-        }
+        App { inner: Box::new(f) }
     }
 }
 
 pub trait UpdateHandler {
-    fn handle(&self, Update, &Addr<TelegramApi>) -> Result<(), Update>;
+    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update>;
 }
 
-impl<S> UpdateHandler for TelegramApplication<S> {
+impl UpdateHandler for TelegramApplication {
     fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
         (self.inner)(update, telegram_api)
     }
@@ -67,12 +53,11 @@ pub trait IntoUpdateHandler {
     fn into_handler(self) -> Self::Handler;
 }
 
-impl<S> IntoUpdateHandler for App<S> {
-    type Handler = TelegramApplication<S>;
+impl IntoUpdateHandler for App {
+    type Handler = TelegramApplication;
 
-    fn into_handler(self) -> TelegramApplication<S> {
+    fn into_handler(self) -> TelegramApplication {
         TelegramApplication {
-            state: self.state,
             inner: self.inner,
         }
     }
