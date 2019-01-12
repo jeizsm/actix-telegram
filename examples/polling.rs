@@ -9,9 +9,10 @@ use actix_telegram::methods::{DeleteWebhook, SendMessage};
 use actix_telegram::types::update::{Update, UpdateKind};
 use actix_telegram::types::ChatIdOrUsername;
 use actix_telegram::{App, TelegramApi, TelegramBot};
-use actix_web::actix::{self, Actor, Addr, System};
+use actix_web::actix::{self, Actor, System};
 use futures::future::Future;
 use std::env;
+use actix_telegram::application::Resource;
 
 fn main() {
     env_logger::init();
@@ -24,35 +25,39 @@ fn main() {
             .map_err(|e| println!("Actor is probably died: {}", e)),
     );
     let _telegram = TelegramBot::new(token, 30, move || {
-        vec![App::new(print_update), App::new(greet)]
+        vec![App::new(print_update, ()), App::new(greet, ())]
     })
     .start();
     sys.run();
 }
 
-fn print_update(update: Update, _: &Addr<TelegramApi>) -> Result<(), Update> {
-    println!("{:?}", update);
-    Ok(())
+fn print_update(resource: Resource<&Update, ()>) -> bool {
+    resource.f(|update, _, _| {
+        println!("{:?}", update);
+        true
+    })
 }
 
-fn greet(update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
-    if let UpdateKind::Message(message) = update.kind() {
-        if let Some(ref members) = message.new_chat_members() {
-            println!("{:?}", members);
-            let member = members.first().unwrap();
-            if !member.is_bot() {
-                let chat_id = ChatIdOrUsername::Id(*message.chat().id());
-                let mut send_message = SendMessage::new(chat_id, "Welcome");
-                send_message.set_reply_to_message_id(Some(*message.message_id()));
-                actix::spawn(
-                    telegram_api
-                        .send(send_message)
-                        .map(|response| println!("send message {:?}", response))
-                        .map_err(|e| println!("Actor is probably died: {}", e)),
-                )
+fn greet(resource: Resource<&Update, ()>) -> bool {
+    resource.f(|update, telegram_api, _| {
+        if let UpdateKind::Message(message) = update.kind() {
+            if let Some(ref members) = message.new_chat_members() {
+                println!("{:?}", members);
+                let member = members.first().unwrap();
+                if !member.is_bot() {
+                    let chat_id = ChatIdOrUsername::Id(*message.chat().id());
+                    let mut send_message = SendMessage::new(chat_id, "Welcome");
+                    send_message.set_reply_to_message_id(Some(*message.message_id()));
+                    actix::spawn(
+                        telegram_api
+                            .send(send_message)
+                            .map(|response| println!("send message {:?}", response))
+                            .map_err(|e| println!("Actor is probably died: {}", e)),
+                    )
+                }
+                return true;
             }
-            return Ok(());
         }
-    }
-    Err(update)
+        false
+    })
 }

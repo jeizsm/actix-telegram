@@ -1,21 +1,26 @@
+mod resourse;
+
 use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
+pub use self::resourse::Resource;
 
-pub struct TelegramApplication {
-    inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
+pub struct TelegramApplication<S> {
+    state: S,
+    inner: Box<dyn Fn(Resource<&Update, S>) -> bool + 'static>,
 }
 
-pub struct App {
-    inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
+pub struct App<S> {
+    state: S,
+    inner: Box<dyn Fn(Resource<&Update, S>) -> bool + 'static>,
 }
 
-impl App {
-    pub fn new<F>(f: F) -> Self
+impl<S> App<S> {
+    pub fn new<F>(f: F, state: S) -> Self
     where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static,
+        F: Fn(Resource<&Update, S>) -> bool + 'static,
     {
-        App { inner: Box::new(f) }
+        App { inner: Box::new(f), state }
     }
 }
 
@@ -23,9 +28,21 @@ pub trait UpdateHandler {
     fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update>;
 }
 
-impl UpdateHandler for TelegramApplication {
+impl<S> UpdateHandler for TelegramApplication<S> {
     fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
-        (self.inner)(update, telegram_api)
+        let res = {
+            let resource = Resource {
+                value: &update,
+                state: &self.state,
+                telegram_api: telegram_api,
+            };
+            (self.inner)(resource)
+        };
+        if res {
+            Ok(())
+        } else {
+            Err(update)
+        }
     }
 }
 
@@ -53,11 +70,11 @@ pub trait IntoUpdateHandler {
     fn into_handler(self) -> Self::Handler;
 }
 
-impl IntoUpdateHandler for App {
-    type Handler = TelegramApplication;
+impl<S> IntoUpdateHandler for App<S> {
+    type Handler = TelegramApplication<S>;
 
-    fn into_handler(self) -> TelegramApplication {
-        TelegramApplication { inner: self.inner }
+    fn into_handler(self) -> TelegramApplication<S> {
+        TelegramApplication { inner: self.inner, state: self.state }
     }
 }
 
