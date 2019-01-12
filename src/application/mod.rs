@@ -4,12 +4,12 @@ use actix::Addr;
 
 pub struct TelegramApplication<S> {
     state: S,
-    inner: Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
+    inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
 }
 
 pub struct App<S = ()> {
     state: S,
-    inner: Box<Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
+    inner: Box<dyn Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static>,
 }
 
 impl App<()> {
