@@ -137,7 +137,7 @@ where
                             .bind_tls(self.addr.clone(), cert_and_key.get_acceptor())
                             .unwrap();
                     }
-                    if !self.options.contains(OptionFlags::SELF_SIGNED) {
+                    if self.options.contains(OptionFlags::SELF_SIGNED) {
                         set_webhook.set_certificate(Some(cert_and_key));
                     }
                 }
