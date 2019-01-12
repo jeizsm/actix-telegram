@@ -13,7 +13,7 @@ pub struct App {
 impl App {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static
+        F: Fn(Update, &Addr<TelegramApi>) -> Result<(), Update> + 'static,
     {
         App { inner: Box::new(f) }
     }
@@ -57,9 +57,7 @@ impl IntoUpdateHandler for App {
     type Handler = TelegramApplication;
 
     fn into_handler(self) -> TelegramApplication {
-        TelegramApplication {
-            inner: self.inner,
-        }
+        TelegramApplication { inner: self.inner }
     }
 }
 

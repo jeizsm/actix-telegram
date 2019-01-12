@@ -11,9 +11,7 @@ use actix_telegram::types::ChatIdOrUsername;
 use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, Addr, System};
 use futures::future::Future;
-use std::collections::HashMap;
 use std::env;
-use std::rc::Rc;
 
 fn main() {
     env_logger::init();
@@ -26,11 +24,7 @@ fn main() {
             .map_err(|e| println!("Actor is probably died: {}", e)),
     );
     let _telegram = TelegramBot::new(token, 30, move || {
-        let state: Rc<HashMap<String, String>> = Rc::new(HashMap::new());
-        vec![
-            App::with_state(print_update, state.clone()),
-            App::with_state(greet, state.clone()),
-        ]
+        vec![App::new(print_update), App::new(greet)]
     })
     .start();
     sys.run();
