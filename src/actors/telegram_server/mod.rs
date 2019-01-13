@@ -4,7 +4,7 @@ mod types;
 
 use self::types::{OptionFlags, ReqState};
 use super::TelegramApi;
-use crate::application::UpdateHandler;
+use crate::application::{IntoUpdateHandler, UpdateHandler};
 use crate::methods::SetWebhook;
 use crate::types::{InputFile, True, Update};
 use actix::{Actor, Addr, Context, Handler};
@@ -16,9 +16,10 @@ use futures::Future;
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;
 
-pub struct TelegramServer<F, H>
+pub struct TelegramServer<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     addr: String,
@@ -33,9 +34,10 @@ where
     cert_and_key: Option<CertAndKey>,
 }
 
-impl<F, H> TelegramServer<F, H>
+impl<F, H, UH> TelegramServer<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     pub fn new(addr: String, token: String, host: String, factory: F) -> Self {
@@ -92,9 +94,10 @@ where
     }
 }
 
-impl<F, H> Actor for TelegramServer<F, H>
+impl<F, H, UH> Actor for TelegramServer<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     type Context = Context<Self>;
@@ -107,7 +110,7 @@ where
         let telegram_api = TelegramApi::new(token, 10).start();
         let clone = telegram_api.clone();
         let mut server = HttpServer::new(move || {
-            let apps = (apps)();
+            let apps = (apps)().into_handler();
             let telegram_api = clone.clone();
             let state = ReqState { telegram_api, apps };
             ActixApp::with_state(state).resource(&url, |r| r.method(Method::POST).with(handler))
@@ -161,9 +164,10 @@ where
     }
 }
 
-impl<F, H> Handler<SetWebhook> for TelegramServer<F, H>
+impl<F, H, UH> Handler<SetWebhook> for TelegramServer<F, H, UH>
 where
-    H: UpdateHandler + 'static,
+    H: IntoUpdateHandler<Handler = UH> + 'static,
+    UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
     type Result = Box<Future<Item = True, Error = ()>>;

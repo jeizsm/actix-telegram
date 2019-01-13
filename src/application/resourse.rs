@@ -1,5 +1,8 @@
 use crate::actors::TelegramApi;
-use crate::types::Message;
+use crate::types::{
+    update::{Update, UpdateKind},
+    Message,
+};
 use actix::Addr;
 
 pub struct Resource<'a, U, S> {
@@ -28,29 +31,8 @@ impl<'a, V, S> Resource<'a, V, S> {
     }
 }
 
-impl<'a, S> Resource<'a, Option<Message>, S> {
-    pub fn command<F>(self, starts_with: &str, function: F) -> bool
-    where
-        F: FnOnce(Message, &'a Addr<TelegramApi>, &'a S) -> bool,
-    {
-        if let Some(message) = self.value {
-            if message
-                .text()
-                .as_ref()
-                .map_or(false, |text| text.starts_with(starts_with))
-            {
-                function(message, self.telegram_api, self.state)
-            } else {
-                false
-            }
-        } else {
-            false
-        }
-    }
-}
-
 impl<'a, S> Resource<'a, Option<&'a Message>, S> {
-    pub fn command<F>(self, starts_with: &str, function: F) -> bool
+    pub fn command<F>(self, function: F, starts_with: &str) -> bool
     where
         F: FnOnce(&'a Message, &'a Addr<TelegramApi>, &'a S) -> bool,
     {
@@ -60,12 +42,27 @@ impl<'a, S> Resource<'a, Option<&'a Message>, S> {
                 .as_ref()
                 .map_or(false, |text| text.starts_with(starts_with))
             {
-                function(message, self.telegram_api, self.state)
-            } else {
-                false
+                return function(message, self.telegram_api, self.state);
+            }
+        }
+        false
+    }
+}
+
+impl<'a, S> Resource<'a, &'a Update, S> {
+    pub fn message(self) -> Resource<'a, Option<&'a Message>, S> {
+        if let UpdateKind::Message(message) = self.value.kind() {
+            Resource {
+                value: Some(message),
+                state: self.state,
+                telegram_api: self.telegram_api,
             }
         } else {
-            false
+            Resource {
+                value: None,
+                state: self.state,
+                telegram_api: self.telegram_api,
+            }
         }
     }
 }

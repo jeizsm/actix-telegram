@@ -1,9 +1,9 @@
 mod resourse;
 
+pub use self::resourse::Resource;
 use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
-pub use self::resourse::Resource;
 
 pub struct TelegramApplication<S> {
     state: S,
@@ -20,7 +20,10 @@ impl<S> App<S> {
     where
         F: Fn(Resource<&Update, S>) -> bool + 'static,
     {
-        App { inner: Box::new(f), state }
+        App {
+            inner: Box::new(f),
+            state,
+        }
     }
 }
 
@@ -74,7 +77,10 @@ impl<S> IntoUpdateHandler for App<S> {
     type Handler = TelegramApplication<S>;
 
     fn into_handler(self) -> TelegramApplication<S> {
-        TelegramApplication { inner: self.inner, state: self.state }
+        TelegramApplication {
+            inner: self.inner,
+            state: self.state,
+        }
     }
 }
 

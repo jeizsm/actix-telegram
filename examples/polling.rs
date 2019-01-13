@@ -5,6 +5,7 @@ extern crate futures;
 extern crate log;
 extern crate serde_json;
 
+use actix_telegram::application::Resource;
 use actix_telegram::methods::{DeleteWebhook, SendMessage};
 use actix_telegram::types::update::{Update, UpdateKind};
 use actix_telegram::types::ChatIdOrUsername;
@@ -12,7 +13,6 @@ use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, System};
 use futures::future::Future;
 use std::env;
-use actix_telegram::application::Resource;
 
 fn main() {
     env_logger::init();
