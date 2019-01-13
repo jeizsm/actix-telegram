@@ -4,10 +4,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "ChatMember"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct GetChatMember {
     /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// Unique identifier of the target user
-    user_id: Integer,
+    pub(crate) user_id: Integer,
 }

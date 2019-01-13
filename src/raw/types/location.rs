@@ -1,11 +1,11 @@
 use crate::types::*;
 
 /// This object represents a point on the map.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct Location {
     /// Longitude as defined by sender
-    longitude: Float,
+    pub(crate) longitude: Float,
     /// Latitude as defined by sender
-    latitude: Float,
+    pub(crate) latitude: Float,
 }

@@ -8,10 +8,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SendChatAction {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_audio or upload_audio for audio files, upload_document for general files, find_location for location data, record_video_note or upload_video_note for video notes.
-    action: String,
+    pub(crate) action: String,
 }

@@ -4,10 +4,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SetChatStickerSet {
     /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// Name of the sticker set to be set as the group sticker set
-    sticker_set_name: String,
+    pub(crate) sticker_set_name: String,
 }

@@ -4,25 +4,25 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "MessageOrTrue"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SetGameScore {
     /// User identifier
-    user_id: Integer,
+    pub(crate) user_id: Integer,
     /// New score, must be non-negative
-    score: Integer,
+    pub(crate) score: Integer,
     /// Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
     #[serde(skip_serializing_if = "Option::is_none")]
-    force: Option<bool>,
+    pub(crate) force: Option<bool>,
     /// Pass True, if the game message should not be automatically edited to include the current scoreboard
     #[serde(skip_serializing_if = "Option::is_none")]
-    disable_edit_message: Option<bool>,
+    pub(crate) disable_edit_message: Option<bool>,
     /// Required if inline_message_id is not specified. Unique identifier for the target chat
     #[serde(skip_serializing_if = "Option::is_none")]
-    chat_id: Option<Integer>,
+    pub(crate) chat_id: Option<Integer>,
     /// Required if inline_message_id is not specified. Identifier of the sent message
     #[serde(skip_serializing_if = "Option::is_none")]
-    message_id: Option<Integer>,
+    pub(crate) message_id: Option<Integer>,
     /// Required if chat_id and message_id are not specified. Identifier of the inline message
     #[serde(skip_serializing_if = "Option::is_none")]
-    inline_message_id: Option<String>,
+    pub(crate) inline_message_id: Option<String>,
 }

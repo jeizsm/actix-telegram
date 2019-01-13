@@ -4,25 +4,25 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct RestrictChatMember {
     /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// Unique identifier of the target user
-    user_id: Integer,
+    pub(crate) user_id: Integer,
     /// Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
     #[serde(skip_serializing_if = "Option::is_none")]
-    until_date: Option<Integer>,
+    pub(crate) until_date: Option<Integer>,
     /// Pass True, if the user can send text messages, contacts, locations and venues
     #[serde(skip_serializing_if = "Option::is_none")]
-    can_send_messages: Option<bool>,
+    pub(crate) can_send_messages: Option<bool>,
     /// Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
     #[serde(skip_serializing_if = "Option::is_none")]
-    can_send_media_messages: Option<bool>,
+    pub(crate) can_send_media_messages: Option<bool>,
     /// Pass True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
     #[serde(skip_serializing_if = "Option::is_none")]
-    can_send_other_messages: Option<bool>,
+    pub(crate) can_send_other_messages: Option<bool>,
     /// Pass True, if the user may add web page previews to their messages, implies can_send_media_messages
     #[serde(skip_serializing_if = "Option::is_none")]
-    can_add_web_page_previews: Option<bool>,
+    pub(crate) can_add_web_page_previews: Option<bool>,
 }

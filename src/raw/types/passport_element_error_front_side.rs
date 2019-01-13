@@ -1,16 +1,17 @@
 use crate::types::*;
 
 /// Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
-#[get(vis = "pub")]
+#[derive(Debug, Serialize, Setters, New)]
+#[new(vis = "pub")]
+#[set(vis = "pub")]
 pub struct PassportElementErrorFrontSide {
     /// Error source, must be front_side
-    source: String,
+    pub(crate) source: String,
     /// The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
     #[serde(rename = "type")]
-    type_: String,
+    pub(crate) type_: String,
     /// Base64-encoded hash of the file with the front side of the document
-    file_hash: String,
+    pub(crate) file_hash: String,
     /// Error message
-    message: String,
+    pub(crate) message: String,
 }

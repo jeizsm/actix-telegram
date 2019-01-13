@@ -1,13 +1,14 @@
 use crate::types::*;
 
 /// This object represents one shipping option.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
-#[get(vis = "pub")]
+#[derive(Debug, Serialize, Setters, New)]
+#[new(vis = "pub")]
+#[set(vis = "pub")]
 pub struct ShippingOption {
     /// Shipping option identifier
-    id: String,
+    pub(crate) id: String,
     /// Option title
-    title: String,
+    pub(crate) title: String,
     /// List of price portions
-    prices: Vec<LabeledPrice>,
+    pub(crate) prices: Vec<LabeledPrice>,
 }

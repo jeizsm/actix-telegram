@@ -1,19 +1,19 @@
 use crate::types::*;
 
 /// This object represents information about an order.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct OrderInfo {
     /// User name
     #[serde(skip_serializing_if = "Option::is_none")]
-    name: Option<String>,
+    pub(crate) name: Option<String>,
     /// User's phone number
     #[serde(skip_serializing_if = "Option::is_none")]
-    phone_number: Option<String>,
+    pub(crate) phone_number: Option<String>,
     /// User email
     #[serde(skip_serializing_if = "Option::is_none")]
-    email: Option<String>,
+    pub(crate) email: Option<String>,
     /// User shipping address
     #[serde(skip_serializing_if = "Option::is_none")]
-    shipping_address: Option<ShippingAddress>,
+    pub(crate) shipping_address: Option<ShippingAddress>,
 }

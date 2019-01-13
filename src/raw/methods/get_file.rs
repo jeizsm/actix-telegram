@@ -4,8 +4,8 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "File"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct GetFile {
     /// File identifier to get info about
-    file_id: String,
+    pub(crate) file_id: String,
 }

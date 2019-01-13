@@ -1,9 +1,10 @@
 use crate::types::*;
 
 /// This object represents an inline keyboard that appears right next to the message it belongs to.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
-#[get(vis = "pub")]
+#[derive(Debug, Serialize, Setters, New)]
+#[new(vis = "pub")]
+#[set(vis = "pub")]
 pub struct InlineKeyboardMarkup {
     /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
-    inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
+    pub(crate) inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
 }

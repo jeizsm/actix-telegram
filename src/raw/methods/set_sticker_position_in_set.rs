@@ -4,10 +4,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SetStickerPositionInSet {
     /// File identifier of the sticker
-    sticker: String,
+    pub(crate) sticker: String,
     /// New sticker position in the set, zero-based
-    position: Integer,
+    pub(crate) position: Integer,
 }

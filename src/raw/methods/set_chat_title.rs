@@ -6,10 +6,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SetChatTitle {
     /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// New chat title, 1-255 characters
-    title: String,
+    pub(crate) title: String,
 }

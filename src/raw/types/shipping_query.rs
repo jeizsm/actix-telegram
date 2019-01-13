@@ -1,15 +1,15 @@
 use crate::types::*;
 
 /// This object contains information about an incoming shipping query.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct ShippingQuery {
     /// Unique query identifier
-    id: String,
+    pub(crate) id: String,
     /// User who sent the query
-    from: User,
+    pub(crate) from: User,
     /// Bot specified invoice payload
-    invoice_payload: String,
+    pub(crate) invoice_payload: String,
     /// User specified shipping address
-    shipping_address: ShippingAddress,
+    pub(crate) shipping_address: ShippingAddress,
 }

@@ -5,10 +5,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct SetPassportDataErrors {
     /// User identifier
-    user_id: Integer,
+    pub(crate) user_id: Integer,
     /// A JSON-serialized array describing the errors
-    errors: Vec<PassportElementError>,
+    pub(crate) errors: Vec<PassportElementError>,
 }

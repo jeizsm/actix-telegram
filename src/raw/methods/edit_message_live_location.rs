@@ -4,22 +4,22 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "MessageOrTrue"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct EditMessageLiveLocation {
     /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
     #[serde(skip_serializing_if = "Option::is_none")]
-    chat_id: Option<ChatIdOrUsername>,
+    pub(crate) chat_id: Option<ChatIdOrUsername>,
     /// Required if inline_message_id is not specified. Identifier of the sent message
     #[serde(skip_serializing_if = "Option::is_none")]
-    message_id: Option<Integer>,
+    pub(crate) message_id: Option<Integer>,
     /// Required if chat_id and message_id are not specified. Identifier of the inline message
     #[serde(skip_serializing_if = "Option::is_none")]
-    inline_message_id: Option<String>,
+    pub(crate) inline_message_id: Option<String>,
     /// Latitude of new location
-    latitude: Float,
+    pub(crate) latitude: Float,
     /// Longitude of new location
-    longitude: Float,
+    pub(crate) longitude: Float,
     /// A JSON-serialized object for a new inline keyboard.
     #[serde(skip_serializing_if = "Option::is_none")]
-    reply_markup: Option<InlineKeyboardMarkup>,
+    pub(crate) reply_markup: Option<InlineKeyboardMarkup>,
 }

@@ -1,15 +1,15 @@
 use crate::types::*;
 
 /// This object represents a sticker set.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct StickerSet {
     /// Sticker set name
-    name: String,
+    pub(crate) name: String,
     /// Sticker set title
-    title: String,
+    pub(crate) title: String,
     /// True, if the sticker set contains masks
-    contains_masks: bool,
+    pub(crate) contains_masks: bool,
     /// List of all set stickers
-    stickers: Vec<Sticker>,
+    pub(crate) stickers: Vec<Sticker>,
 }

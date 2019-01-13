@@ -4,10 +4,10 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "File"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct UploadStickerFile {
     /// User identifier of sticker file owner
-    user_id: Integer,
+    pub(crate) user_id: Integer,
     /// Png image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. More info on Sending Files »
-    png_sticker: InputFile,
+    pub(crate) png_sticker: InputFile,
 }

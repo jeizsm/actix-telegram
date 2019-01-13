@@ -1,24 +1,24 @@
 use crate::types::*;
 
 /// This object represents a video file.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct Video {
     /// Unique identifier for this file
-    file_id: String,
+    pub(crate) file_id: String,
     /// Video width as defined by sender
-    width: Integer,
+    pub(crate) width: Integer,
     /// Video height as defined by sender
-    height: Integer,
+    pub(crate) height: Integer,
     /// Duration of the video in seconds as defined by sender
-    duration: Integer,
+    pub(crate) duration: Integer,
     /// Video thumbnail
     #[serde(skip_serializing_if = "Option::is_none")]
-    thumb: Option<PhotoSize>,
+    pub(crate) thumb: Option<PhotoSize>,
     /// Mime type of a file as defined by sender
     #[serde(skip_serializing_if = "Option::is_none")]
-    mime_type: Option<String>,
+    pub(crate) mime_type: Option<String>,
     /// File size
     #[serde(skip_serializing_if = "Option::is_none")]
-    file_size: Option<Integer>,
+    pub(crate) file_size: Option<Integer>,
 }

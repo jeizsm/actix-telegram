@@ -1,17 +1,18 @@
 use crate::types::*;
 
 /// Represents the content of a contact message to be sent as the result of an inline query.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
-#[get(vis = "pub")]
+#[derive(Debug, Serialize, Setters, New)]
+#[new(vis = "pub")]
+#[set(vis = "pub")]
 pub struct InputContactMessageContent {
     /// Contact's phone number
-    phone_number: String,
+    pub(crate) phone_number: String,
     /// Contact's first name
-    first_name: String,
+    pub(crate) first_name: String,
     /// Contact's last name
     #[serde(skip_serializing_if = "Option::is_none")]
-    last_name: Option<String>,
+    pub(crate) last_name: Option<String>,
     /// Additional data about the contact in the form of a vCard, 0-2048 bytes
     #[serde(skip_serializing_if = "Option::is_none")]
-    vcard: Option<String>,
+    pub(crate) vcard: Option<String>,
 }

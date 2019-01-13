@@ -1,6 +1,6 @@
 use crate::types::*;
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 #[serde(untagged)]
 pub enum MessageOrTrue {
     Message(Message),

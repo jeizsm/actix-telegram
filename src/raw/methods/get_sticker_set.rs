@@ -4,8 +4,8 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "StickerSet"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct GetStickerSet {
     /// Name of the sticker set
-    name: String,
+    pub(crate) name: String,
 }

@@ -1,19 +1,19 @@
 use crate::types::*;
 
 /// This object represents a shipping address.
-#[derive(Debug, Serialize, Getters, Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone, Getters)]
 #[get(vis = "pub")]
 pub struct ShippingAddress {
     /// ISO 3166-1 alpha-2 country code
-    country_code: String,
+    pub(crate) country_code: String,
     /// State, if applicable
-    state: String,
+    pub(crate) state: String,
     /// City
-    city: String,
+    pub(crate) city: String,
     /// First line for the address
-    street_line1: String,
+    pub(crate) street_line1: String,
     /// Second line for the address
-    street_line2: String,
+    pub(crate) street_line2: String,
     /// Address post code
-    post_code: String,
+    pub(crate) post_code: String,
 }

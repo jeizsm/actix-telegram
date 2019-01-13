@@ -6,13 +6,13 @@ use crate::types::*;
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
 #[return_type = "True"]
 #[new(vis = "pub")]
-#[set(vis = "pub", optional)]
+#[set(vis = "pub")]
 pub struct KickChatMember {
     /// Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
-    chat_id: ChatIdOrUsername,
+    pub(crate) chat_id: ChatIdOrUsername,
     /// Unique identifier of the target user
-    user_id: Integer,
+    pub(crate) user_id: Integer,
     /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
     #[serde(skip_serializing_if = "Option::is_none")]
-    until_date: Option<Integer>,
+    pub(crate) until_date: Option<Integer>,
 }
