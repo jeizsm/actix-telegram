@@ -65,4 +65,12 @@ impl<'a, S> Resource<'a, &'a Update, S> {
             }
         }
     }
+
+    #[inline(always)]
+    pub fn command<F>(self, function: F, starts_with: &str) -> bool
+    where
+        F: FnOnce(&'a Message, &'a Addr<TelegramApi>, &'a S) -> bool,
+    {
+        self.message().command(function, starts_with)
+    }
 }

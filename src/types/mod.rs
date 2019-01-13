@@ -1,3 +1,4 @@
+pub mod enums;
 mod inline_query_result_audio;
 mod inline_query_result_cached_audio;
 mod inline_query_result_cached_document;
@@ -21,6 +22,7 @@ mod input_text_message_content;
 pub mod update;
 mod utils;
 
+pub use self::enums::ChatIdOrUsername;
 pub use self::inline_query_result_audio::InlineQueryResultAudio;
 pub use self::inline_query_result_cached_audio::InlineQueryResultCachedAudio;
 pub use self::inline_query_result_cached_document::InlineQueryResultCachedDocument;

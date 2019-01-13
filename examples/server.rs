@@ -7,7 +7,7 @@ extern crate serde_json;
 
 use actix_telegram::actors::{telegram_server::*, TelegramApi};
 use actix_telegram::methods::{GetMe, SendMessage};
-use actix_telegram::types::{ChatIdOrUsername, Message};
+use actix_telegram::types::Message;
 use actix_telegram::App;
 use actix_web::actix::{Actor, Addr, System};
 use futures::Future;
@@ -41,8 +41,7 @@ fn handle(
     telegram_api: &Addr<TelegramApi>,
     state: &Arc<Mutex<HashMap<i64, ()>>>,
 ) -> bool {
-    let id = *message.chat().id();
-    let chat_id = ChatIdOrUsername::Id(id);
+    let chat_id = *message.chat().id();
     let message_id = *message.message_id();
     let clone = telegram_api.clone();
     actix::spawn(
