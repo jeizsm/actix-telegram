@@ -92,7 +92,7 @@ pub fn global_attr(attrs: &[syn::Attribute], attribute_name: &str) -> Vec<Meta> 
     attrs
         .iter()
         .filter_map(|v| {
-            let (attr_name, meta) = attr_tuple(v).expect("attribute");
+            let (attr_name, meta) = attr_tuple(v)?;
             if attr_name == attribute_name {
                 Some(meta)
             } else {

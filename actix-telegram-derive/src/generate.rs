@@ -15,7 +15,7 @@ pub fn implement(field: &Field, mode: &GenMode, params: &GenParams) -> TokenStre
         .attrs
         .iter()
         .filter_map(|v| {
-            let (attr_name, meta) = parse::attr_tuple(v).expect("attribute");
+            let (attr_name, meta) = parse::attr_tuple(v)?;
             if attr_name == "doc" {
                 doc.push(v);
                 None
