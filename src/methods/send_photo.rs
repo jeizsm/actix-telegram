@@ -1,4 +1,6 @@
-use crate::types::*;
+use crate::types::{
+    ChatIdOrUsername, InputFile, InputFileOrString, Integer, Message, ParseMode, ReplyMarkup,
+};
 
 /// Use this method to send photos. On success, the sent Message is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{InputFileOrString, Integer, ParseMode};
 
 /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
 #[derive(Debug, Serialize, Setters, New)]

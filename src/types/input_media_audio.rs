@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{InputFileOrString, Integer, ParseMode};
 
 /// Represents an audio file to be treated as music to be sent.
 #[derive(Debug, Serialize, Setters, New)]

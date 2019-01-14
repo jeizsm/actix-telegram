@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::ParseMode;
 
 /// Represents the content of a text message to be sent as the result of an inline query.
 #[derive(Debug, Serialize, Deserialize, Clone)]

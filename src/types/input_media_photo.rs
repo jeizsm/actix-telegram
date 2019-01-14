@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{InputFileOrString, ParseMode};
 
 /// Represents a photo to be sent.
 #[derive(Debug, Serialize, Setters, New)]

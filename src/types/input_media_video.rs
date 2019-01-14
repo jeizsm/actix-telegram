@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{InputFileOrString, Integer, ParseMode};
 
 /// Represents a video to be sent.
 #[derive(Debug, Serialize, Setters, New)]

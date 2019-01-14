@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{ChatIdOrUsername, Integer, Message, ParseMode, ReplyMarkup};
 
 /// Use this method to send text messages. On success, the sent Message is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]

@@ -1,4 +1,7 @@
-use crate::types::*;
+use crate::types::{
+    CallbackQuery, ChosenInlineResult, InlineQuery, Message, PreCheckoutQuery, ShippingQuery,
+    UpdateId,
+};
 
 /// This object represents an incoming update.At most one of the optional parameters can be present in any given update.
 #[derive(Deserialize, Debug, Clone)]

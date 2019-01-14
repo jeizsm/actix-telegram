@@ -1,4 +1,4 @@
-use crate::types::*;
+use crate::types::{ChatIdOrUsername, InlineKeyboardMarkup, Integer, MessageOrTrue, ParseMode};
 
 /// Use this method to edit text and game messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
 #[derive(Debug, Serialize, TelegramApi, Setters, New)]
