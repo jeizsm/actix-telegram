@@ -12,6 +12,7 @@ pub struct Resource<'a, U, S> {
 }
 
 impl<'a, V, S> Resource<'a, V, S> {
+    #[inline]
     pub fn map<M, F>(self, function: F) -> Resource<'a, M, S>
     where
         F: FnOnce(V) -> M,
@@ -23,6 +24,7 @@ impl<'a, V, S> Resource<'a, V, S> {
         }
     }
 
+    #[inline]
     pub fn f<F>(self, function: F) -> bool
     where
         F: FnOnce(V, &'a Addr<TelegramApi>, &'a S) -> bool,
@@ -32,16 +34,13 @@ impl<'a, V, S> Resource<'a, V, S> {
 }
 
 impl<'a, S> Resource<'a, Option<&'a Message>, S> {
-    pub fn command<F>(self, function: F, starts_with: &str) -> bool
+    #[inline]
+    pub fn command<F>(self, function: F, command: &str) -> bool
     where
         F: FnOnce(&'a Message, &'a Addr<TelegramApi>, &'a S) -> bool,
     {
         if let Some(message) = self.value {
-            if message
-                .text()
-                .as_ref()
-                .map_or(false, |text| text.starts_with(starts_with))
-            {
+            if message.bot_command(command).is_some() {
                 return function(message, self.telegram_api, self.state);
             }
         }
@@ -50,6 +49,7 @@ impl<'a, S> Resource<'a, Option<&'a Message>, S> {
 }
 
 impl<'a, S> Resource<'a, &'a Update, S> {
+    #[inline]
     pub fn message(self) -> Resource<'a, Option<&'a Message>, S> {
         if let UpdateKind::Message(message) = self.value.kind() {
             Resource {

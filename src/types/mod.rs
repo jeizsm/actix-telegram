@@ -19,8 +19,10 @@ mod input_media_document;
 mod input_media_photo;
 mod input_media_video;
 mod input_text_message_content;
+mod message;
+pub mod message_entity;
 pub mod update;
-mod utils;
+pub mod utils;
 
 pub use self::enums::ChatIdOrUsername;
 pub use self::inline_query_result_audio::InlineQueryResultAudio;
@@ -43,7 +45,9 @@ pub use self::input_media_document::InputMediaDocument;
 pub use self::input_media_photo::InputMediaPhoto;
 pub use self::input_media_video::InputMediaVideo;
 pub use self::input_text_message_content::InputTextMessageContent;
-pub use self::update::Update;
+pub use self::message::Message;
+pub use self::message_entity::{MessageEntity, MessageEntityType};
+pub use self::update::{Update, UpdateKind};
 pub use self::utils::{
     AllowedUpdate, CallbackGame, Float, InputFile, Integer, ParseMode, TelegramResponse, True,
     UpdateId,
