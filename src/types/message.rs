@@ -146,7 +146,7 @@ impl Message {
     }
 
     #[inline]
-    pub fn bot_commands<'a>(&'a self) -> Option<impl Iterator<Item = &'a str>> {
+    pub fn bot_commands(&self) -> Option<impl Iterator<Item = &str>> {
         self.entities.as_ref().map(|entities| {
             entities
                 .iter()

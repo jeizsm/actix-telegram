@@ -6,6 +6,7 @@ use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
 use std::fmt::Debug;
 use std::time::Duration;
+use failure::Error;
 
 pub struct TelegramApi {
     pub(crate) token: String,
@@ -13,6 +14,7 @@ pub struct TelegramApi {
 }
 
 impl TelegramApi {
+    #[inline]
     pub fn new(token: String, timeout: u16) -> Self {
         let timeout = Duration::from_secs(u64::from(timeout));
         Self { token, timeout }
@@ -23,7 +25,7 @@ impl TelegramApi {
         method: &str,
         timeout: Duration,
         item: &T,
-    ) -> Box<Future<Item = R, Error = ()>>
+    ) -> Box<Future<Item = R, Error = Error>>
     where
         R: DeserializeOwned + Debug + 'static,
         T: Serialize,
@@ -34,25 +36,22 @@ impl TelegramApi {
             .json(item)
             .unwrap()
             .send()
-            .map_err(|e| error!("request error {:?}", e))
+            .from_err()
             .and_then(|response| {
                 response
                     .json()
-                    .then(|response: Result<TelegramResponse<R>, _>| match response {
-                        Ok(response) => {
-                            debug!("response {:?}", response);
-                            if response.ok {
-                                Ok(response.result.unwrap())
-                            } else {
-                                error!("telegram error {:?}", response.description);
-                                Err(())
-                            }
-                        }
-                        Err(e) => {
-                            error!("parsing json error {:?}", e);
-                            Err(())
+                    .from_err()
+                    .and_then(|response: TelegramResponse<R>| {
+                        debug!("response {:?}", response);
+                        if response.ok {
+                            Ok(response.result.unwrap())
+                        } else {
+                            bail!(response.description.unwrap_or_else(|| "no description".into()))
                         }
                     })
+            }).map_err(|err| {
+                error!("send request error: {}", err);
+                err
             });
         Box::new(future)
     }
@@ -62,7 +61,7 @@ impl TelegramApi {
         method: &str,
         timeout: Duration,
         item: Form,
-    ) -> Box<Future<Item = R, Error = ()>>
+    ) -> Box<Future<Item = R, Error = Error>>
     where
         R: DeserializeOwned + Debug + 'static,
     {
@@ -72,25 +71,22 @@ impl TelegramApi {
             .set_body(request.timeout(timeout))
             .unwrap()
             .send()
-            .map_err(|e| error!("request error {:?}", e))
+            .from_err()
             .and_then(|response| {
                 response
                     .json()
-                    .then(|response: Result<TelegramResponse<R>, _>| match response {
-                        Ok(response) => {
-                            debug!("response {:?}", response);
-                            if response.ok {
-                                Ok(response.result.unwrap())
-                            } else {
-                                error!("telegram error {:?}", response.description);
-                                Err(())
-                            }
-                        }
-                        Err(e) => {
-                            error!("parsing json error {:?}", e);
-                            Err(())
+                    .from_err()
+                    .and_then(|response: TelegramResponse<R>| {
+                        debug!("response {:?}", response);
+                        if response.ok {
+                            Ok(response.result.unwrap())
+                        } else {
+                            bail!(response.description.unwrap_or_else(|| "no description".into()))
                         }
                     })
+            }).map_err(|err| {
+                error!("send request error: {}", err);
+                err
             });
         Box::new(future)
     }

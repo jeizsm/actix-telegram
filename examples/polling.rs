@@ -4,6 +4,7 @@ extern crate env_logger;
 extern crate futures;
 extern crate log;
 extern crate serde_json;
+extern crate failure;
 
 use actix_telegram::methods::{DeleteWebhook, SendMessage};
 use actix_telegram::types::update::{Update, UpdateKind};
@@ -11,6 +12,7 @@ use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, Addr, System};
 use futures::future::Future;
 use std::env;
+use failure::{Error, bail};
 
 fn main() {
     env_logger::init();
@@ -32,12 +34,12 @@ fn main() {
     sys.run();
 }
 
-fn print_update(update: &Update, _: &Addr<TelegramApi>, _: &()) -> bool {
+fn print_update(update: &Update, _: &Addr<TelegramApi>, _: &()) -> Result<(), Error> {
     println!("{:?}", update);
-    true
+    Ok(())
 }
 
-fn greet(update: &Update, telegram_api: &Addr<TelegramApi>, _: &()) -> bool {
+fn greet(update: &Update, telegram_api: &Addr<TelegramApi>, _: &()) -> Result<(), Error> {
     if let UpdateKind::Message(message) = update.kind() {
         if let Some(ref members) = message.new_chat_members() {
             println!("{:?}", members);
@@ -53,8 +55,8 @@ fn greet(update: &Update, telegram_api: &Addr<TelegramApi>, _: &()) -> bool {
                         .map_err(|e| println!("Actor is probably died: {}", e)),
                 )
             }
-            return true;
+            return Ok(());
         }
     }
-    false
+    bail!("is not a message");
 }

@@ -279,6 +279,7 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
         use actix::{Context, Handler, Message as ActixMessage};
         use actors::TelegramApi;
         use futures::Future;
+        use failure::Error;
 
         #[allow(unused_imports)]
         use multipart_rfc7578::Form;
@@ -288,11 +289,11 @@ pub fn telegram_api_macro_derive(input: TokenStream) -> TokenStream {
         use std::path::Path;
 
         impl ActixMessage for #struct_name {
-            type Result = Result<#return_type, ()>;
+            type Result = Result<#return_type, Error>;
         }
 
         impl Handler<#struct_name> for TelegramApi {
-            type Result = Box<Future<Item = #return_type, Error = ()>>;
+            type Result = Box<Future<Item = #return_type, Error = Error>>;
 
             fn handle(&mut self, msg: #struct_name, _ctx: &mut Context<Self>) -> Self::Result {
                 #request

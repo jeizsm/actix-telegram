@@ -12,6 +12,7 @@ use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
 use futures::Future;
+use failure::Error;
 
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;
@@ -170,7 +171,7 @@ where
     UH: UpdateHandler + 'static,
     F: Fn() -> H + Send + Clone + 'static,
 {
-    type Result = Box<Future<Item = True, Error = ()>>;
+    type Result = Box<Future<Item = True, Error = Error>>;
 
     fn handle(&mut self, msg: SetWebhook, _: &mut Context<Self>) -> Self::Result {
         let telegram_api = TelegramApi::new(self.token.clone(), 10).start();
@@ -178,8 +179,8 @@ where
         Box::new(
             telegram_api
                 .send(msg)
-                .map_err(|err| debug!("err {:?}", err))
-                .and_then(|response| response),
+                .from_err()
+                .and_then(|res| res)
         )
     }
 }
@@ -191,10 +192,10 @@ where
     let msg = update.into_inner();
     debug!("TelegramServer.Update received {:?}", msg);
     match state.apps.handle(msg, &state.telegram_api) {
-        Ok(()) => {
+        None => {
             debug!("handled");
         }
-        Err(_) => {
+        Some(_) => {
             debug!("not handled");
         }
     }

@@ -4,6 +4,7 @@ extern crate env_logger;
 extern crate futures;
 extern crate log;
 extern crate serde_json;
+extern crate failure;
 
 use actix_telegram::actors::{telegram_server::*, TelegramApi};
 use actix_telegram::methods::{GetMe, SendMessage};
@@ -14,6 +15,7 @@ use futures::Future;
 use std::collections::HashMap;
 use std::env;
 use std::sync::{Arc, Mutex};
+use failure::Error;
 
 fn main() {
     env_logger::init();
@@ -26,7 +28,7 @@ fn main() {
     let arc = Arc::new(Mutex::new(HashMap::new()));
     let _server = TelegramServer::new("127.0.0.1:59080".to_owned(), token, host, move || {
         App::new(
-            |resource| resource.message().command(handle, "/new"),
+            |resource| resource.message()?.command(handle, "/new"),
             arc.clone(),
         )
     })
@@ -40,7 +42,7 @@ fn handle(
     message: &Message,
     telegram_api: &Addr<TelegramApi>,
     state: &Arc<Mutex<HashMap<i64, ()>>>,
-) -> bool {
+) -> Result<(), Error> {
     let chat_id = *message.chat().id();
     let message_id = *message.message_id();
     let clone = telegram_api.clone();
@@ -64,5 +66,5 @@ fn handle(
     hash_map
         .entry(*message.from().as_ref().unwrap().id())
         .or_insert(());
-    true
+    Ok(())
 }

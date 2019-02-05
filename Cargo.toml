@@ -1,6 +1,6 @@
 [package]
 name = "actix-telegram"
-version = "0.0.3"
+version = "0.0.4"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 description = "telegram bot api lib based on actix"
 repository = "https://github.com/jeizsm/actix-telegram"
@@ -23,6 +23,7 @@ rustls = { version = "0.14", optional = true }
 openssl = { version = "0.10", optional = true }
 native-tls = { version = "0.2", optional = true }
 bitflags = "1.0"
+failure = "0.1"
 
 [features]
 default = ["tls-server", "rust-tls"]

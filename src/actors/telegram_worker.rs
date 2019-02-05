@@ -43,7 +43,12 @@ where
 
     fn handle(&mut self, msg: Update, _ctx: &mut Context<Self>) -> Self::Result {
         debug!("TelegramWorker.Update received {:?}", msg);
-        self.apps.handle(msg, &self.telegram_api).map_err(|_| ())
+        if self.apps.handle(msg, &self.telegram_api).is_some() {
+            debug!("update is not handled");
+            Err(())
+        } else {
+            Ok(())
+        }
     }
 }
 
