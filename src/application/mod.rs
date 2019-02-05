@@ -4,21 +4,22 @@ pub use self::resourse::Resource;
 use super::TelegramApi;
 use crate::types::Update;
 use actix::Addr;
+use failure::Error;
 
 pub struct TelegramApplication<S> {
     state: S,
-    inner: Box<dyn Fn(Resource<&Update, S>) -> bool + 'static>,
+    inner: Box<dyn Fn(Resource<&Update, S>) -> Result<(), Error> + 'static>,
 }
 
 pub struct App<S> {
     state: S,
-    inner: Box<dyn Fn(Resource<&Update, S>) -> bool + 'static>,
+    inner: Box<dyn Fn(Resource<&Update, S>) -> Result<(), Error> + 'static>,
 }
 
 impl<S> App<S> {
     pub fn new<F>(f: F, state: S) -> Self
     where
-        F: Fn(Resource<&Update, S>) -> bool + 'static,
+        F: Fn(Resource<&Update, S>) -> Result<(), Error> + 'static,
     {
         App {
             inner: Box::new(f),
@@ -28,11 +29,11 @@ impl<S> App<S> {
 }
 
 pub trait UpdateHandler {
-    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update>;
+    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Option<Update>;
 }
 
 impl<S> UpdateHandler for TelegramApplication<S> {
-    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
+    fn handle(&self, update: Update, telegram_api: &Addr<TelegramApi>) -> Option<Update> {
         let res = {
             let resource = Resource {
                 value: &update,
@@ -41,29 +42,29 @@ impl<S> UpdateHandler for TelegramApplication<S> {
             };
             (self.inner)(resource)
         };
-        if res {
-            Ok(())
-        } else {
-            Err(update)
+        match res {
+            Ok(_) => None,
+            Err(error) => {
+                debug!("handle error {}", error);
+                Some(update)
+            }
         }
     }
 }
 
 impl<H: UpdateHandler> UpdateHandler for Vec<H> {
-    fn handle(&self, mut update: Update, telegram_api: &Addr<TelegramApi>) -> Result<(), Update> {
+    fn handle(&self, mut update: Update, telegram_api: &Addr<TelegramApi>) -> Option<Update> {
         for app in self {
             update = match app.handle(update, telegram_api) {
-                Ok(()) => {
-                    debug!("ok");
-                    return Ok(());
+                None => {
+                    return None;
                 }
-                Err(update) => {
-                    debug!("next");
+                Some(update) => {
                     update
                 }
             };
         }
-        Err(update)
+        Some(update)
     }
 }
 

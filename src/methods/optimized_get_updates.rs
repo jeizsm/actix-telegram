@@ -4,6 +4,7 @@ use actix::{Context, Handler, Message};
 use futures::Future;
 use std::num::{NonZeroU16, NonZeroU8};
 use std::time::Duration;
+use failure::Error;
 
 /// Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.
 #[derive(Serialize, Debug, Setters, New)]
@@ -25,11 +26,11 @@ pub struct OptimizedGetUpdates {
 }
 
 impl Message for OptimizedGetUpdates {
-    type Result = Result<Vec<Update>, ()>;
+    type Result = Result<Vec<Update>, Error>;
 }
 
 impl Handler<OptimizedGetUpdates> for TelegramApi {
-    type Result = Box<Future<Item = Vec<Update>, Error = ()>>;
+    type Result = Box<Future<Item = Vec<Update>, Error = Error>>;
 
     fn handle(&mut self, msg: OptimizedGetUpdates, _ctx: &mut Context<Self>) -> Self::Result {
         let timeout = msg.timeout.map_or(self.timeout, |timeout| {

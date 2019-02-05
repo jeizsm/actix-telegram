@@ -20,6 +20,8 @@ extern crate openssl;
 extern crate rustls;
 #[macro_use]
 extern crate bitflags;
+#[macro_use]
+extern crate failure;
 
 pub mod actors;
 pub mod application;
