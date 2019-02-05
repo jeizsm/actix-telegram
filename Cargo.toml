@@ -1,6 +1,6 @@
 [package]
 name = "actix-telegram"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Marat Safin <jeizsm@gmail.com>"]
 description = "telegram bot api lib based on actix"
 repository = "https://github.com/jeizsm/actix-telegram"

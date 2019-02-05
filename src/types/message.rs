@@ -138,8 +138,11 @@ pub struct Message {
 impl Message {
     #[inline]
     pub fn bot_command<'a>(&'a self, command: &str) -> Option<&'a str> {
-        self.bot_commands()
-            .and_then(|mut bot_commands| bot_commands.find(|bot_command| bot_command.starts_with(&format!("{}@", command))))
+        self.bot_commands().and_then(|mut bot_commands| {
+            bot_commands.find(|bot_command| {
+                *bot_command == command || bot_command.starts_with(&format!("{}@", command))
+            })
+        })
     }
 
     #[inline]
