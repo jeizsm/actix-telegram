@@ -1,18 +1,18 @@
 extern crate actix_telegram;
 extern crate actix_web;
 extern crate env_logger;
+extern crate failure;
 extern crate futures;
 extern crate log;
 extern crate serde_json;
-extern crate failure;
 
 use actix_telegram::methods::{DeleteWebhook, SendMessage};
 use actix_telegram::types::update::{Update, UpdateKind};
 use actix_telegram::{App, TelegramApi, TelegramBot};
 use actix_web::actix::{self, Actor, Addr, System};
+use failure::{bail, Error};
 use futures::future::Future;
 use std::env;
-use failure::{Error, bail};
 
 fn main() {
     env_logger::init();

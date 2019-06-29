@@ -11,8 +11,8 @@ use actix::{Actor, Addr, Context, Handler};
 use actix_net::server::Server;
 use actix_web::dev::HttpResponseBuilder;
 use actix_web::{http::Method, server::HttpServer, App as ActixApp, HttpResponse, Json, State};
-use futures::Future;
 use failure::Error;
+use futures::Future;
 
 #[cfg(feature = "tls-server")]
 pub use self::tls_server::*;
@@ -176,12 +176,7 @@ where
     fn handle(&mut self, msg: SetWebhook, _: &mut Context<Self>) -> Self::Result {
         let telegram_api = TelegramApi::new(self.token.clone(), 10).start();
         println!("set webhook {:?}", msg);
-        Box::new(
-            telegram_api
-                .send(msg)
-                .from_err()
-                .and_then(|res| res)
-        )
+        Box::new(telegram_api.send(msg).from_err().and_then(|res| res))
     }
 }
 

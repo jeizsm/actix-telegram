@@ -59,9 +59,7 @@ impl<H: UpdateHandler> UpdateHandler for Vec<H> {
                 None => {
                     return None;
                 }
-                Some(update) => {
-                    update
-                }
+                Some(update) => update,
             };
         }
         Some(update)

@@ -1,12 +1,12 @@
 use crate::types::TelegramResponse;
 use actix::{Actor, Context};
 use actix_web::{client, HttpMessage};
+use failure::Error;
 use futures::Future;
 use multipart_rfc7578::{Form, SetBody};
 use serde::{de::DeserializeOwned, Serialize};
 use std::fmt::Debug;
 use std::time::Duration;
-use failure::Error;
 
 pub struct TelegramApi {
     pub(crate) token: String,
@@ -46,10 +46,13 @@ impl TelegramApi {
                         if response.ok {
                             Ok(response.result.unwrap())
                         } else {
-                            bail!(response.description.unwrap_or_else(|| "no description".into()))
+                            bail!(response
+                                .description
+                                .unwrap_or_else(|| "no description".into()))
                         }
                     })
-            }).map_err(|err| {
+            })
+            .map_err(|err| {
                 error!("send request error: {}", err);
                 err
             });
@@ -81,10 +84,13 @@ impl TelegramApi {
                         if response.ok {
                             Ok(response.result.unwrap())
                         } else {
-                            bail!(response.description.unwrap_or_else(|| "no description".into()))
+                            bail!(response
+                                .description
+                                .unwrap_or_else(|| "no description".into()))
                         }
                     })
-            }).map_err(|err| {
+            })
+            .map_err(|err| {
                 error!("send request error: {}", err);
                 err
             });

@@ -1,10 +1,10 @@
 use crate::actors::TelegramApi;
 use crate::types::{Update, UpdateId};
 use actix::{Context, Handler, Message};
+use failure::Error;
 use futures::Future;
 use std::num::{NonZeroU16, NonZeroU8};
 use std::time::Duration;
-use failure::Error;
 
 /// Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.
 #[derive(Serialize, Debug, Setters, New)]

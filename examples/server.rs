@@ -1,21 +1,21 @@
 extern crate actix_telegram;
 extern crate actix_web;
 extern crate env_logger;
+extern crate failure;
 extern crate futures;
 extern crate log;
 extern crate serde_json;
-extern crate failure;
 
 use actix_telegram::actors::{telegram_server::*, TelegramApi};
 use actix_telegram::methods::{GetMe, SendMessage};
 use actix_telegram::types::Message;
 use actix_telegram::App;
 use actix_web::actix::{Actor, Addr, System};
+use failure::Error;
 use futures::Future;
 use std::collections::HashMap;
 use std::env;
 use std::sync::{Arc, Mutex};
-use failure::Error;
 
 fn main() {
     env_logger::init();
