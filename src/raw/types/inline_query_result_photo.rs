@@ -26,7 +26,7 @@ pub struct InlineQueryResultPhoto {
     /// Short description of the result
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) description: Option<String>,
-    /// Caption of the photo to be sent, 0-200 characters
+    /// Caption of the photo to be sent, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

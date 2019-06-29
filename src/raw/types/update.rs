@@ -33,4 +33,7 @@ pub struct Update {
     /// New incoming pre-checkout query. Contains full information about checkout
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) pre_checkout_query: Option<PreCheckoutQuery>,
+    /// New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) poll: Option<Poll>,
 }

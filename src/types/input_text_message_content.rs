@@ -1,7 +1,9 @@
 use crate::types::ParseMode;
 
 /// Represents the content of a text message to be sent as the result of an inline query.
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Setters, New)]
+#[new(vis = "pub")]
+#[set(vis = "pub")]
 pub struct InputTextMessageContent {
     /// Text of the message to be sent, 1-4096 characters
     pub(crate) message_text: String,

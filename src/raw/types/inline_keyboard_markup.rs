@@ -1,7 +1,8 @@
 use crate::types::*;
 
 /// This object represents an inline keyboard that appears right next to the message it belongs to.
-#[derive(Debug, Serialize, Setters, New)]
+#[derive(Debug, Deserialize, Clone, Getters, Serialize, Setters, New)]
+#[get(vis = "pub")]
 #[new(vis = "pub")]
 #[set(vis = "pub")]
 pub struct InlineKeyboardMarkup {

@@ -30,10 +30,10 @@ pub struct Chat {
     /// Description, for supergroups and channel chats. Returned only in getChat.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) description: Option<String>,
-    /// Chat invite link, for supergroups and channel chats. Returned only in getChat.
+    /// Chat invite link, for supergroups and channel chats. Each administrator in a chat generates their own invite links, so the bot must first generate the link using exportChatInviteLink. Returned only in getChat.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) invite_link: Option<String>,
-    /// Pinned message, for supergroups and channel chats. Returned only in getChat.
+    /// Pinned message, for groups, supergroups and channels. Returned only in getChat.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) pinned_message: Option<Box<Message>>,
     /// For supergroups, name of group sticker set. Returned only in getChat.

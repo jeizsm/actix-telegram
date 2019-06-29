@@ -10,7 +10,7 @@ pub struct SendVoice {
     pub(crate) chat_id: ChatIdOrUsername,
     /// Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More info on Sending Files »
     pub(crate) voice: InputFileOrString,
-    /// Voice message caption, 0-200 characters
+    /// Voice message caption, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

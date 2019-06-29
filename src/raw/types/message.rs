@@ -25,6 +25,9 @@ pub struct Message {
     /// For messages forwarded from channels, signature of the post author if present
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) forward_signature: Option<String>,
+    /// Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) forward_sender_name: Option<String>,
     /// For forwarded messages, date the original message was sent in Unix time
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) forward_date: Option<Integer>,
@@ -76,7 +79,7 @@ pub struct Message {
     /// Message is a video note, information about the video message
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) video_note: Option<VideoNote>,
-    /// Caption for the audio, document, photo, video or voice, 0-200 characters
+    /// Caption for the animation, audio, document, photo, video or voice, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Message is a shared contact, information about the contact
@@ -88,6 +91,9 @@ pub struct Message {
     /// Message is a venue, information about the venue
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) venue: Option<Venue>,
+    /// Message is a native poll, information about the poll
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) poll: Option<Poll>,
     /// New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) new_chat_members: Option<Vec<User>>,
@@ -133,4 +139,7 @@ pub struct Message {
     /// Telegram Passport data
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) passport_data: Option<PassportData>,
+    /// Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) reply_markup: Option<InlineKeyboardMarkup>,
 }

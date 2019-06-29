@@ -12,7 +12,7 @@ pub struct InlineQueryResultDocument {
     pub(crate) id: String,
     /// Title for the result
     pub(crate) title: String,
-    /// Caption of the document to be sent, 0-200 characters
+    /// Caption of the document to be sent, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

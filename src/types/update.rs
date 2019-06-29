@@ -1,5 +1,5 @@
 use crate::types::{
-    CallbackQuery, ChosenInlineResult, InlineQuery, Message, PreCheckoutQuery, ShippingQuery,
+    CallbackQuery, ChosenInlineResult, InlineQuery, Message, Poll, PreCheckoutQuery, ShippingQuery,
     UpdateId,
 };
 
@@ -17,6 +17,7 @@ pub enum Update {
     CallbackQuery(CallbackQueryUpdate),
     ShippingQuery(ShippingQueryUpdate),
     PreCheckoutQuery(PreCheckoutQueryUpdate),
+    Poll(PollUpdate),
     Unknown(UnknownUpdate),
 }
 
@@ -40,6 +41,8 @@ pub enum UpdateKind<'a> {
     ShippingQuery(&'a ShippingQuery),
     /// New incoming pre-checkout query. Contains full information about checkout
     PreCheckoutQuery(&'a PreCheckoutQuery),
+    /// New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    Poll(&'a Poll),
     /// Uknown update. Should not happen
     Unknown,
 }
@@ -58,6 +61,7 @@ impl Update {
             Update::CallbackQuery(update) => update.update_id,
             Update::ShippingQuery(update) => update.update_id,
             Update::PreCheckoutQuery(update) => update.update_id,
+            Update::Poll(update) => update.update_id,
             Update::Unknown(update) => update.update_id,
         }
     }
@@ -80,6 +84,7 @@ impl Update {
             Update::PreCheckoutQuery(update) => {
                 UpdateKind::PreCheckoutQuery(&update.pre_checkout_query)
             }
+            Update::Poll(update) => UpdateKind::Poll(&update.poll),
             Update::Unknown(_) => UpdateKind::Unknown,
         }
     }
@@ -155,6 +160,14 @@ pub struct PreCheckoutQueryUpdate {
     pub update_id: UpdateId,
     /// New incoming pre-checkout query. Contains full information about checkout
     pub pre_checkout_query: PreCheckoutQuery,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct PollUpdate {
+    /// The update‘s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you’re using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    pub update_id: UpdateId,
+    /// New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    pub poll: Poll,
 }
 
 #[derive(Deserialize, Debug, Clone)]

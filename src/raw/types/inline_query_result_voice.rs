@@ -14,7 +14,7 @@ pub struct InlineQueryResultVoice {
     pub(crate) voice_url: String,
     /// Recording title
     pub(crate) title: String,
-    /// Caption, 0-200 characters
+    /// Caption, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

@@ -1,7 +1,7 @@
 use crate::types::*;
 
 /// Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
-///
+/// 
 /// If an InlineQueryResultVideo message contains an embedded video (e.g., YouTube), you must replace its content using input_message_content.
 #[derive(Debug, Serialize, Setters, New)]
 #[new(vis = "pub")]
@@ -20,7 +20,7 @@ pub struct InlineQueryResultVideo {
     pub(crate) thumb_url: String,
     /// Title for the result
     pub(crate) title: String,
-    /// Caption of the video to be sent, 0-200 characters
+    /// Caption of the video to be sent, 0-1024 characters
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) caption: Option<String>,
     /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.

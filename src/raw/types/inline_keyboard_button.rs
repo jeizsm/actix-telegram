@@ -1,7 +1,8 @@
 use crate::types::*;
 
 /// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
-#[derive(Debug, Serialize, Setters, New)]
+#[derive(Debug, Deserialize, Clone, Getters, Serialize, Setters, New)]
+#[get(vis = "pub")]
 #[new(vis = "pub")]
 #[set(vis = "pub")]
 pub struct InlineKeyboardButton {
@@ -10,6 +11,9 @@ pub struct InlineKeyboardButton {
     /// HTTP or tg:// url to be opened when button is pressed
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) url: Option<String>,
+    /// An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub(crate) login_url: Option<LoginUrl>,
     /// Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) callback_data: Option<String>,
